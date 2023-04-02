@@ -12,7 +12,7 @@ app.use(cors());
 app.use("/auth", userRouter);
 app.use("/recipes", recipesRouter);
 
-mongoose.connect("mongodb+srv://ricardotech:mongoose21@recipes.jpnreew.mongodb.net/test");
+mongoose.connect("mongodb+srv://officialreciplease:WpYgE1Qxf9nJn7ic@reciplease.gayiyzz.mongodb.net/test");
 
 app.listen(3001, () => console.log("Server started"));
 
