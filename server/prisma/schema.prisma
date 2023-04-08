@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model user {
+  id Int @default(autoincrement()) @id
+  username String @unique
+  password String
+}
+
+
+//model Account {
+//  id                String  @id
+//  userId            String
+//  type              String
+//  provider          String
+//  providerAccountId String
+//  refresh_token     String?
+//  access_token      String?
+//  expires_at        Int?
+//  token_type        String?
+//  scope             String?
+//  id_token          String?
+//  session_state     String?
+//
+//  @@unique([provider, providerAccountId])
+//}
+//
+//model Example {
+//  id        String   @id
+//  createdAt DateTime @default(now())
+//  updatedAt DateTime
+//}
+//
+//model FilterTags {
+//  id                String  @id
+//  vegan             Boolean @default(false)
+//  vegetarian        Boolean @default(false)
+//  pescatarian       Boolean @default(false)
+//  kosher            Boolean @default(false)
+//  halal             Boolean @default(false)
+//  noLactose         Boolean @default(false)
+//  noGluten          Boolean @default(false)
+//  keto              Boolean @default(false)
+//  paleo             Boolean @default(false)
+//  dairyFree         Boolean @default(false)
+//  noNuts            Boolean @default(false)
+//  noTreeNuts        Boolean @default(false)
+//  noPeanuts         Boolean @default(false)
+//  noEggs            Boolean @default(false)
+//  noFishOrShellfish Boolean @default(false)
+//  recipeId          String
+//  userId            String?
+//
+//  @@index([vegan, vegetarian, pescatarian, kosher, halal, noEggs, noFishOrShellfish, noGluten, noLactose, noNuts, noPeanuts, noTreeNuts, paleo, dairyFree, keto])
+//}
+//
+//model Ingredient {
+//  id            String @id
+//  name          String
+//  quantityInt   Int
+//  quatityString String
+//  userId        String
+//}
+//
+//model Recipe {
+//  id         String @id
+//  name       String
+//  time       Int
+//  difficulty Float
+//  avgRating  Float
+//  authorID   String
+//
+//  @@index([authorID, time, avgRating, difficulty])
+//}
+//
+//model Session {
+//  id           String   @id
+//  sessionToken String   @unique
+//  userId       String
+//  expires      DateTime
+//}
+//
+//model User {
+//  id            String    @id
+//  name          String?
+//  email         String?   @unique
+//  emailVerified DateTime?
+//  image         String?
+//}
+//
+//model VerificationToken {
+//  identifier String
+//  token      String   @unique
+//  expires    DateTime
+//
+//  @@unique([identifier, token])
+//}
+//
+//model IngredientToRecipe {
+//  A String
+//  B String
+//
+//  @@unique([A, B], map: "_IngredientToRecipe_AB_unique")
+//  @@index([B], map: "_IngredientToRecipe_B_index")
+//  @@map("_IngredientToRecipe")
+//}
+//
+//model IngredientToUser {
+//  A String
+//  B String
+//
+//  @@unique([A, B], map: "_IngredientToUser_AB_unique")
+//  @@index([B], map: "_IngredientToUser_B_index")
+//  @@map("_IngredientToUser")
+//}
+//
+//model liked {
+//  A String
+//  B String
+//
+//  @@unique([A, B], map: "_liked_AB_unique")
+//  @@index([B], map: "_liked_B_index")
+//  @@map("_liked")
+//}
+//
