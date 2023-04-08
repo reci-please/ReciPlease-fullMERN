@@ -9,7 +9,6 @@ import { verifyToken } from './users.js';
 const router = express.Router();
 const prisma = new PrismaClient();
 
-
 export { router as UserRouter };
 
 /**

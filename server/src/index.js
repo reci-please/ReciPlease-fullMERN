@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 import cors from "cors";
 import mongoose from "mongoose";
-//import { userRouter } from "./routes/users.js";
+import { userRouter } from "./routes/users.js";
 //import { recipesRouter } from "./routes/recipes.js";
 
 const app = express();
@@ -14,15 +14,29 @@ app.use(cors());
 
 
 
-//app.use("/auth", userRouter);
+app.use("/auth", userRouter);
 //app.use("/recipes", recipesRouter);
 
 
 
 //mongoose.connect("mongodb+srv://officialreciplease:WpYgE1Qxf9nJn7ic@reciplease.gayiyzz.mongodb.net/test");
 
+
+
 app.post("/", async (req, res) => {
     const { username, password } = req.body;
+
+    const foundUser = await prisma.user.findUnique({
+        where: {
+            username: username,
+        }
+    });
+
+    if (foundUser) {
+        res.json({ message: "Found someone" });
+    } else { 
+
+
     const user = await prisma.user.create({
         data: {
             username: username,
@@ -30,6 +44,9 @@ app.post("/", async (req, res) => {
         }
     });
     res.json(user);
+}
+
+
 });
 
 app.get("/", async (req, res) => { 
