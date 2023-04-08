@@ -5,14 +5,48 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+
+  relationMode = "prisma"
 }
 
 
-model user {
-  id Int @default(autoincrement()) @id
+model User {
+  id String @id @default(uuid())
   username String @unique
   password String
+  createdRecipes Recipe[]
 }
+
+model Recipe {
+  id String @id @default(uuid())
+  servings Int
+  ingredients Ingredient[]
+  ingredientQuantity Quantity[]
+  instructions String
+  imageUrl String
+  cookingTime Int
+  author User @relation(fields: [authorId], references: [id])
+  @@index([authorId])
+  authorId String
+
+}
+
+model Ingredient {
+  id String @id
+  quantity String
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  @@index([recipeId])
+  recipeId String
+}
+
+model Quantity {
+  id String @id
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  @@index([recipeId])
+  recipeId String
+
+}
+
 
 
 //model Account {

@@ -1,4 +1,5 @@
 import express from 'express';
+import { PrismaClient } from '@prisma/client';
 import mongoose from 'mongoose';
 import { RecipeModel } from "../models/Recipes.js";
 import { UserModel } from '../models/Users.js';
@@ -6,7 +7,12 @@ import { verifyToken } from './users.js';
 
 
 const router = express.Router();
+const prisma = new PrismaClient();
 
+
+export { router as UserRouter };
+
+/**
 router.get("/", async (req, res) => {
     try {
         const response = await RecipeModel.find({});
@@ -68,3 +74,4 @@ router.get("/savedRecipes/:userID", async (req, res) => {
 
 export { router as recipesRouter };
 
+*/
