@@ -15,19 +15,25 @@ model User {
   username String @unique
   password String
   createdRecipes Recipe[]
+  savedRecipes Recipe[] @relation(name: "usersSaved")
+
 }
 
 model Recipe {
   id String @id @default(uuid())
+  name String
   servings Int
   ingredients Ingredient[]
   ingredientQuantity Quantity[]
   instructions String
   imageUrl String
   cookingTime Int
+
   author User @relation(fields: [authorId], references: [id])
   @@index([authorId])
   authorId String
+
+  savedBy User[] @relation(name: "usersSaved")
 
 }
 
