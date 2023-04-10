@@ -30,7 +30,8 @@ const Login = () => {
 
             setCookies("access_token", response.data.token);
             window.localStorage.setItem("userID", response.data.userID);
-            navigate("/");
+            alert(window.localStorage.getItem("userID"));
+            navigate("/auth");
         } catch (err) {
             console.error(err);
         }
@@ -40,6 +41,8 @@ const Login = () => {
 }
 
 const Register = () => {
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
 
@@ -48,8 +51,11 @@ const Register = () => {
         try {
             await axios.post("http://localhost:3001/auth/register", { username, password });
             alert("Registration Completed! Now login.");
+            window.location.reload();
         } catch (err) {
+            alert("username already exists, please log in")
             console.error(err);
+            window.location.reload();
         }
 
     };

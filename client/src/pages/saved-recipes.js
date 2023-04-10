@@ -8,15 +8,16 @@ export const SavedRecipes = () => {
     const [savedRecipes, setSavedRecipes] = useState([]);
     const userID = useGetUserID();
 
+
     useEffect(() => {
         
 
         const fetchSavedRecipe = async () => {
             try {
                 const response = await axios.get(
-                    `http://localhost:3001/recipes/savedRecipes/${userID}`
+                    `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
                 );
-                setSavedRecipes(response.data.savedRecipes);
+                setSavedRecipes(response.data);
             } catch (err) {
                 console.error(err);
             }
@@ -26,7 +27,31 @@ export const SavedRecipes = () => {
     }, []);
 
    
+    return (
+        <div>
+            <h1>Saved Recipes</h1>
+            <ul>
+            {savedRecipes.map((recipe) => 
+                    <li key={recipe.id}>
+                        <div>
+                            <h2>{recipe.name}</h2>
+                            <p>{recipe.authorId}</p>
+                            <button>Save</button>
+                        </div>
+                        
+                        <img src={recipe.imageUrl} alt={recipe.name} />
+                        <p>{ recipe.servings}</p>
+                        <div className="instructions">
+                            <p>{recipe.instructions}</p>
+                        </div>
+                        <p>Cooking Time: {recipe.cookingTime}</p>
+                    </li>
+                )}
+            </ul>
+        </div>
+    )
 
+    /*
     return (
         <div>
             <h1> Saved Recipes </h1>
@@ -47,4 +72,5 @@ export const SavedRecipes = () => {
                 
             </ul>
         </div>)
+        */
 }

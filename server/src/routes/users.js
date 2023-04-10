@@ -7,6 +7,7 @@ const prisma = new PrismaClient();
 const router = express.Router();
 
 
+
 router.post("/register", async (req, res) => {
   const { username, password } = req.body;
   
@@ -35,6 +36,7 @@ router.post("/register", async (req, res) => {
 
 
 router.post("/login", async (req, res) => {
+
   const { username, password } = req.body;
 
   const user = await prisma.user.findUnique({
