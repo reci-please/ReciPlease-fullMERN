@@ -6,8 +6,12 @@ import { UserModel } from '../models/Users.js';
 import { verifyToken } from './users.js';
 
 
+
+
 const router = express.Router();
 const prisma = new PrismaClient();
+
+
 
 router.get("/", async (req, res) => {
     try {
@@ -18,8 +22,8 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
-    const { name, servings, instructions, imageUrl, cookingTime, authorId} = req.body;
+router.post("/:userID", async (req, res) => {
+    const { name, servings, instructions, imageUrl, cookingTime} = req.body;
     try {
         const created = await prisma.recipe.create({
             data: {
@@ -28,13 +32,13 @@ router.post("/", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
-                authorId: authorId,
+                authorId: req.params.userID,
             }           
         });
 
         res.json({message: "Recipe Created Successfully"});
     } catch (err) { 
-        res.json({message: "cannot create recipe"});
+        res.json(err);
     }
 });
 
@@ -68,10 +72,14 @@ router.get("/savedRecipes/ids/:userID", async (req, res) => {
         const user = await prisma.user.findUnique({
             where: {
                 id: req.params.userID,
-            }
-        })
+            },
+            include: {
+                savedRecipes: true,
+            },
+            
+        });
 
-        res.json({ savedRecipes: user?.savedRecipes })
+        res.json(user.savedRecipes);
     } catch (err) {
         res.json(err);
     }
@@ -85,17 +93,7 @@ router.get("/savedRecipes/:userID", async (req, res) => {
             }
         });
 
-        const saved = await prisma.recipe.findUnique({
-            where: {
-                 id: savedRecipes
-            }
-        })
-
-        const savedRecipes = await RecipeModel.find({
-            _id: { $in: user.savedRecipes },
-            
-        });
-        res.json({ savedRecipes })
+        res.json(user.savedRecipes);
     } catch (err) {
         res.json(err);
     }
