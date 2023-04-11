@@ -23,11 +23,12 @@ model Recipe {
   id String @id @default(uuid())
   name String
   servings Int
-  ingredients Ingredient[]
-  ingredientQuantity Quantity[]
   instructions String
   imageUrl String
   cookingTime Int
+  ingredients Ingredient[]
+  ingredientQuantity Quantity[]
+  
 
   author User @relation(fields: [authorId], references: [id])
   @@index([authorId])

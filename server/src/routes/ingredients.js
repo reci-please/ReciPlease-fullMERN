@@ -15,8 +15,8 @@ const prisma = new PrismaClient();
 router.post("/", async (req, res) => { 
     const { id, quantity } = req.body;
     try {
-        await prisma.single.create({
-
+        await prisma.ingredient.create({
+            id: id
         })
         res.json({message: "it worked"});
 
@@ -24,3 +24,5 @@ router.post("/", async (req, res) => {
         res.json(err);
     }
 })
+
+export {router as ingredientRouter}

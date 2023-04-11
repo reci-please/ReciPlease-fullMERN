@@ -13,7 +13,7 @@ const prisma = new PrismaClient();
 
 
 router.post("/ingredientCreate", async (req, res) => {
-    const { id, quantity } = req.body;
+    const { id, quantity} = req.body;
     try {
         const response = await prisma.ingredient.create({
             data: {
@@ -21,7 +21,7 @@ router.post("/ingredientCreate", async (req, res) => {
                 quantity: quantity,
             }
         });
-        res.json({ message: "created ingredient" });
+        res.json(response);
     } catch (err) {
         res.json(err);
     }
@@ -38,11 +38,29 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/:userID", async (req, res) => {
-
+router.post("/", async (req, res) => {
+     
     
-    const { name, servings, ingredients, instructions, imageUrl, cookingTime, authorId} = req.body;
+    const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, numIngredients} = req.body;
     try {
+
+        
+
+        let temp = "";
+
+        let ingredientArray = [];
+
+        for (let i = 0; i < numIngredients; i++) { 
+            let currIngredient = await prisma.ingredient.create({
+                data: {
+                    id: ingredients[i],
+                    quantity: "",
+                }
+            })
+            
+            ingredientArray.push(currIngredient);
+        }
+
         const created = await prisma.recipe.create({
             data: {
                 name: name,
@@ -53,28 +71,9 @@ router.post("/:userID", async (req, res) => {
                 authorId: authorId,
             }           
         });
-        const recipeWithArray = await prisma.recipe.findUnique({
-            where: {
-                id: created.id,
-            },
-            include: {
-                ingredients: true,
-            },
-            
-        });
+        
+        res.json(ingredientArray);
 
-        for (i = 0; i < ingredients.length(); i++) { 
-            const currIngredient = await prisma.ingredient.create({
-                data: {
-                    id: ingredients[i],
-                }
-            });
-            recipeWithArray.ingredients.push(currIngredient);
-            res.json(recipeWithArray);
-            
-        }
-
-        //res.json({message: "works"});
     } catch (err) { 
         res.json(err);
     }
