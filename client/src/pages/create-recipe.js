@@ -11,11 +11,12 @@ export const CreateRecipe = () => {
 
     const [recipe, setRecipe] = useState({
         name: "",
+        servings: "",
         ingredients: [],
         instructions: "",
         imageUrl: "",
         cookingTime: 0,
-        userOwner: userID,
+        authorId: userID,
     });
 
     const navigate = useNavigate();
@@ -50,6 +51,32 @@ export const CreateRecipe = () => {
         }
     };
 
+
+    return (
+        <div className="create-recipe">
+        <h2>Create Recipe</h2>
+        <form onSubmit={onSubmit}>
+            <label htmlFor="name">Name</label>
+            <input type="text" id="name" name="name" onChange={handleChange} />
+                <label htmlFor="ingredients">Ingredients</label>
+                <input type='text' id='ingredients' name='ingredients' onChange={handleChange} />
+                <label htmlFor="servings">Servings</label>
+                <input type='number' id='servings' name='servings' onChange={handleChange} />
+            <label htmlFor="instructions">Instructions</label>
+            <textarea name="instructions" id="instructions" onChange={handleChange}></textarea>
+            <label htmlFor="imageUrl">Image URL</label>
+            <input type="text" id="imageurl" name="imageUrl" onChange={handleChange}/>
+            <label htmlFor="cookingTime">Cooking Time (minutes)</label>
+                <input type="number" id="cookingTime" name="cookingTime" onChange={handleChange} />
+                
+                <button type='submit'>Create Recipe</button>
+
+        </form>
+        </div>
+    )
+
+
+    /*
     return (
         <div className="create-recipe">
         <h2>Create Recipe</h2>
@@ -79,4 +106,5 @@ export const CreateRecipe = () => {
         </form>
         </div>
     )
+    */
 }

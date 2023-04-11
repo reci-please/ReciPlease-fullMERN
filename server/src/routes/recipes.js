@@ -12,6 +12,22 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 
+router.post("/ingredientCreate", async (req, res) => {
+    const { id, quantity } = req.body;
+    try {
+        const response = await prisma.ingredient.create({
+            data: {
+                id: id,
+                quantity: quantity,
+            }
+        });
+        res.json({ message: "created ingredient" });
+    } catch (err) {
+        res.json(err);
+    }
+})
+
+
 
 router.get("/", async (req, res) => {
     try {
@@ -23,7 +39,9 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/:userID", async (req, res) => {
-    const { name, servings, instructions, imageUrl, cookingTime} = req.body;
+
+    
+    const { name, servings, ingredients, instructions, imageUrl, cookingTime, authorId} = req.body;
     try {
         const created = await prisma.recipe.create({
             data: {
@@ -32,11 +50,31 @@ router.post("/:userID", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
-                authorId: req.params.userID,
+                authorId: authorId,
             }           
         });
+        const recipeWithArray = await prisma.recipe.findUnique({
+            where: {
+                id: created.id,
+            },
+            include: {
+                ingredients: true,
+            },
+            
+        });
 
-        res.json({message: "Recipe Created Successfully"});
+        for (i = 0; i < ingredients.length(); i++) { 
+            const currIngredient = await prisma.ingredient.create({
+                data: {
+                    id: ingredients[i],
+                }
+            });
+            recipeWithArray.ingredients.push(currIngredient);
+            res.json(recipeWithArray);
+            
+        }
+
+        //res.json({message: "works"});
     } catch (err) { 
         res.json(err);
     }

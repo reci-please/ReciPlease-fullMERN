@@ -18,6 +18,7 @@ export const SavedRecipes = () => {
                     `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
                 );
                 setSavedRecipes(response.data);
+                console.log(response);
             } catch (err) {
                 console.error(err);
             }
@@ -38,7 +39,8 @@ export const SavedRecipes = () => {
                             <p>{recipe.authorId}</p>
                             <button>Save</button>
                         </div>
-                        
+                    <h4>Ingredients</h4>
+                    <p>{recipe.ingredients}</p>
                         <img src={recipe.imageUrl} alt={recipe.name} />
                         <p>{ recipe.servings}</p>
                         <div className="instructions">

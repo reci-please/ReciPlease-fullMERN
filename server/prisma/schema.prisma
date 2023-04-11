@@ -38,11 +38,9 @@ model Recipe {
 }
 
 model Ingredient {
-  id String @id
+  id String @id @unique
   quantity String
-  recipe Recipe @relation(fields: [recipeId], references: [id])
-  @@index([recipeId])
-  recipeId String
+  recipesThatHaveIngredient Recipe[]
 }
 
 model Quantity {
