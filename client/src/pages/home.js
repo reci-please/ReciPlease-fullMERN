@@ -107,16 +107,16 @@ export const Home = () => {
                             <h2>{recipe.name}</h2>
                             
                             <button onClick={() => saveRecipe(recipe._id)} disabled={isRecipeSaved(recipe.id)}>
-                                {isRecipeSaved(recipe) ? "Saved": "Save"}
+                                {isRecipeSaved(recipe.id) ? "Saved": "Save"}
                             </button>
                             
                     </div>
                     <div className="instructions">
-                            <p>{recipe.instructions}</p>
-                            <p>{recipe.id}</p>
+                            
                         </div>
                         <img src={recipe.imageUrl} alt={recipe.name} />
-                        <p>Cooking Time: {recipe.cookingTime} (minutes)</p>
+                        <h5>Cooking Time: {recipe.cookingTime} (minutes)</h5>
+                        <p>{recipe.instructions}</p>
                 </li>
                 ))}
                 
