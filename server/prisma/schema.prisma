@@ -26,7 +26,7 @@ model Recipe {
   instructions String
   imageUrl String
   cookingTime Int
-  ingredients Ingredient[]
+  ingredients IngredientsOnRecipes[]
   ingredientQuantity Quantity[]
   
 
@@ -41,7 +41,20 @@ model Recipe {
 model Ingredient {
   id String @id @unique
   quantity String
-  recipesThatHaveIngredient Recipe[]
+  recipesThatHaveIngredient IngredientsOnRecipes[]
+}
+
+model IngredientsOnRecipes {
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+
+  @@id([recipeId, ingredientId])
+
+  @@index([recipeId])
+  @@index([ingredientId])
+  
 }
 
 model Quantity {

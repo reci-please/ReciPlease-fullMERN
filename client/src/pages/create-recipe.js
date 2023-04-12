@@ -11,12 +11,14 @@ export const CreateRecipe = () => {
 
     const [recipe, setRecipe] = useState({
         name: "",
-        servings: "",
-        ingredients: [],
+        servings: 0,
         instructions: "",
         imageUrl: "",
         cookingTime: 0,
         authorId: userID,
+        ingredients: [],
+        numIngredients: 0,
+
     });
 
     const navigate = useNavigate();
@@ -43,7 +45,8 @@ export const CreateRecipe = () => {
     const onSubmit = async (event) => {
         event.preventDefault();
         try {
-            await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
+            //await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
+            await axios.post("http://localhost:3001/recipes", recipe, { headers: { authorization:  cookies.access_token} });
             alert("Recipe Created");
             navigate("/");
         } catch (err) {
@@ -52,6 +55,7 @@ export const CreateRecipe = () => {
     };
 
 
+    /*
     return (
         <div className="create-recipe">
         <h2>Create Recipe</h2>
@@ -74,9 +78,9 @@ export const CreateRecipe = () => {
         </form>
         </div>
     )
+*/
 
-
-    /*
+    
     return (
         <div className="create-recipe">
         <h2>Create Recipe</h2>
@@ -92,7 +96,11 @@ export const CreateRecipe = () => {
                         value={ingredient}
                         onChange={(event) => handleIngredientChange(event, idx)} />
                 ))}
-            <button onClick={addIngredient} type='button'>Add Ingredient</button>
+                <button onClick={addIngredient} type='button'>Add Ingredient</button>
+                <label htmlFor="servings">Servings</label>
+                <input type="number" id="servings" name="servings" onChange={handleChange} />
+                <label htmlFor="numIngredients">Number of Ingredients</label>
+                <input type="number" id="numIngredients" name="numIngredients" onChange={handleChange} />
             
             <label htmlFor="instructions">Instructions</label>
             <textarea name="instructions" id="instructions" onChange={handleChange}></textarea>
@@ -106,5 +114,5 @@ export const CreateRecipe = () => {
         </form>
         </div>
     )
-    */
+    
 }

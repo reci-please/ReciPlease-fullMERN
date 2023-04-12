@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import mongoose from 'mongoose';
+import mongoose, { connect } from 'mongoose';
 //import { RecipeModel } from "../models/Recipes.js";
 import { UserModel } from '../models/Users.js';
 import { verifyToken } from './users.js';
@@ -45,22 +45,6 @@ router.post("/", async (req, res) => {
     try {
 
         
-
-        let temp = "";
-
-        let ingredientArray = [];
-
-        for (let i = 0; i < numIngredients; i++) { 
-            let currIngredient = await prisma.ingredient.create({
-                data: {
-                    id: ingredients[i],
-                    quantity: "",
-                }
-            })
-            
-            ingredientArray.push(currIngredient);
-        }
-
         const created = await prisma.recipe.create({
             data: {
                 name: name,
@@ -68,11 +52,34 @@ router.post("/", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
-                authorId: authorId,
+                authorId: authorId
             }           
         });
+
+        for (let i = 0; i < numIngredients; i++) { 
+            const someIngredient = await prisma.ingredient.upsert({
+                where: {
+                    id: ingredients[i],
+                },
+                update: {
+                    id: ingredients[i]
+                },
+                create: {
+                    id: ingredients[i],
+                    quantity: ""
+                },
+            });
+
+            await prisma.ingredientsOnRecipes.create({
+                data: {
+                    recipeId: created.id,
+                    ingredientId: someIngredient.id,
+                }
+            })
+
+        }
         
-        res.json(ingredientArray);
+        res.json({message: "success"});
 
     } catch (err) { 
         res.json(err);
