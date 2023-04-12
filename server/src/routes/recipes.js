@@ -97,13 +97,16 @@ router.put("/", async (req, res) => {
         const user = await prisma.user.findUnique({
             where: {
                 id: req.body.userID,
-            }
+            },
+            include: {
+                savedRecipes: true,
+            },
         });
         
         user.savedRecipes.push(recipe);
         await user.save();
 
-        res.json({ savedRecipes: user.savedRecipes });
+        res.json(user.savedRecipes);
 
     } catch (err) {
         res.json(err);
@@ -123,7 +126,7 @@ router.get("/savedRecipes/ids/:userID", async (req, res) => {
             
         });
 
-        res.json(user.savedRecipes);
+        res.json(user?.savedRecipes);
     } catch (err) {
         res.json(err);
     }
