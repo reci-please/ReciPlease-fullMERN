@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import mongoose from 'mongoose';
+import mongoose, { connect } from 'mongoose';
 //import { RecipeModel } from "../models/Recipes.js";
 import { UserModel } from '../models/Users.js';
 import { verifyToken } from './users.js';
@@ -10,6 +10,22 @@ import { verifyToken } from './users.js';
 
 const router = express.Router();
 const prisma = new PrismaClient();
+
+
+router.post("/ingredientCreate", async (req, res) => {
+    const { id, quantity} = req.body;
+    try {
+        const response = await prisma.ingredient.create({
+            data: {
+                id: id,
+                quantity: quantity,
+            }
+        });
+        res.json(response);
+    } catch (err) {
+        res.json(err);
+    }
+})
 
 
 
@@ -22,9 +38,13 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/:userID", async (req, res) => {
-    const { name, servings, instructions, imageUrl, cookingTime} = req.body;
+router.post("/", async (req, res) => {
+     
+    
+    const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, numIngredients} = req.body;
     try {
+
+        
         const created = await prisma.recipe.create({
             data: {
                 name: name,
@@ -32,11 +52,35 @@ router.post("/:userID", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
-                authorId: req.params.userID,
+                authorId: authorId
             }           
         });
 
-        res.json({message: "Recipe Created Successfully"});
+        for (let i = 0; i < numIngredients; i++) { 
+            const someIngredient = await prisma.ingredient.upsert({
+                where: {
+                    id: ingredients[i],
+                },
+                update: {
+                    id: ingredients[i]
+                },
+                create: {
+                    id: ingredients[i],
+                    quantity: ""
+                },
+            });
+
+            await prisma.ingredientsOnRecipes.create({
+                data: {
+                    recipeId: created.id,
+                    ingredientId: someIngredient.id,
+                }
+            })
+
+        }
+        
+        res.json({message: "success"});
+
     } catch (err) { 
         res.json(err);
     }
@@ -90,7 +134,11 @@ router.get("/savedRecipes/:userID", async (req, res) => {
         const user = await prisma.user.findUnique({
             where: {
                 id: req.params.userID,
-            }
+            },
+            include: {
+                savedRecipes: true,
+            },
+            
         });
 
         res.json(user.savedRecipes);

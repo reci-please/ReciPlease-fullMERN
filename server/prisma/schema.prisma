@@ -23,11 +23,12 @@ model Recipe {
   id String @id @default(uuid())
   name String
   servings Int
-  ingredients Ingredient[]
-  ingredientQuantity Quantity[]
   instructions String
   imageUrl String
   cookingTime Int
+  ingredients IngredientsOnRecipes[]
+  ingredientQuantity Quantity[]
+  
 
   author User @relation(fields: [authorId], references: [id])
   @@index([authorId])
@@ -38,11 +39,22 @@ model Recipe {
 }
 
 model Ingredient {
-  id String @id
+  id String @id @unique
   quantity String
+  recipesThatHaveIngredient IngredientsOnRecipes[]
+}
+
+model IngredientsOnRecipes {
   recipe Recipe @relation(fields: [recipeId], references: [id])
-  @@index([recipeId])
   recipeId String
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+
+  @@id([recipeId, ingredientId])
+
+  @@index([recipeId])
+  @@index([ingredientId])
+  
 }
 
 model Quantity {
