@@ -15,7 +15,6 @@ model User {
   password String
   createdRecipes Recipe[]
   savedRecipes Recipe[] @relation(name: "usersSaved")
-
 }
 
 model Recipe {

@@ -19,9 +19,11 @@ router.post("/", async (req, res) => {
 
         /* Check that ingredients array is not null or empty */
         if (!Array.isArray(ingr)) {
-            return res.status(400).send("Error: Invalid search request- not array")
+            console.log("Error: Invalid search request- ingredients is not an array");
+            return res.status(400).send("Error: Invalid search request- ingredients is not an array");
         } else if (ingr.length == 0) {
-            return res.status(400).send("Error: Invalid search request- empty array")
+            console.log("Error: Invalid search request- ingredients array is empty");
+            return res.status(400).send("Error: Invalid search request- ingredients array is empty");
         }
 
         const recipes = await prisma.recipe.findMany({
@@ -44,22 +46,23 @@ router.post("/", async (req, res) => {
                 ingredients: {
                     select: {
                         ingredientId: true,
+                        quantity: true,
                     },
                 },
             }
         });
-        
-        const result = recipes.map((recipe) => {
-            return { ...recipe, ingredients: recipe.ingredients.map((ingred) => ingred.ingredientId) }
-        })
 
-        /* console.log("Results:");
-        result.forEach((rec) => {
+        // const result = recipes.map((recipe) => {
+        //     return { ...recipe, ingredients: recipe.ingredients.map((ingred) => ingred.ingredientId) }
+        // })
+
+        console.log("Results:");
+        recipes.forEach((rec) => {
             console.log("Recipe: " + rec);
             console.log("Recipe Stringify: " + JSON.stringify(rec));
-        }) */
+        })
 
-        res.json(result);
+        res.json(recipes);
 
     } catch(err) {
         console.error(err);
