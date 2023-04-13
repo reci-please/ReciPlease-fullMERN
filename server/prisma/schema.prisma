@@ -9,7 +9,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-
 model User {
   id String @id @default(uuid())
   username String @unique
@@ -29,26 +28,26 @@ model Recipe {
   ingredients IngredientsOnRecipes[]
   ingredientQuantity Quantity[]
   
-
   author User @relation(fields: [authorId], references: [id])
   @@index([authorId])
   authorId String
 
   savedBy User[] @relation(name: "usersSaved")
-
 }
 
 model Ingredient {
   id String @id @unique
-  quantity String
   recipesThatHaveIngredient IngredientsOnRecipes[]
 }
 
 model IngredientsOnRecipes {
   recipe Recipe @relation(fields: [recipeId], references: [id])
   recipeId String
+
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
   ingredientId String
+
+  quantity String
 
   @@id([recipeId, ingredientId])
 
@@ -57,14 +56,12 @@ model IngredientsOnRecipes {
   
 }
 
-model Quantity {
-  id String @id
-  recipe Recipe @relation(fields: [recipeId], references: [id])
-  @@index([recipeId])
-  recipeId String
-
-}
-
+//model Quantity {
+//  id String @id
+//  recipe Recipe @relation(fields: [recipeId], references: [id])
+//  @@index([recipeId])
+//  recipeId String
+//}
 
 
 //model Account {
