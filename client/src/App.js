@@ -5,6 +5,7 @@ import { Home } from './pages/home';
 import { Auth } from './pages/auth';
 import { CreateRecipe } from './pages/create-recipe';
 import { SavedRecipes } from './pages/saved-recipes';
+import { Search } from './pages/search';
 import { Navbar } from "./components/navbar";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/create-recipe" element={<CreateRecipe />} />
         <Route path="/saved-recipes" element={<SavedRecipes />} />
+        <Route path="/search" element={<Search />} />
       </Routes>
     </Router> </div>
   );
