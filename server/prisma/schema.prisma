@@ -26,7 +26,7 @@ model Recipe {
   imageUrl String
   cookingTime Int
   ingredients IngredientsOnRecipes[]
-  ingredientQuantity Quantity[]
+  //ingredientQuantity Quantity[]
   
   author User @relation(fields: [authorId], references: [id])
   @@index([authorId])
