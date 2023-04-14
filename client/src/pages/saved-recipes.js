@@ -17,8 +17,8 @@ export const SavedRecipes = () => {
                 const response = await axios.get(
                     `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
                 );
-                setSavedRecipes(response.data);
-                console.log(response);
+                const temp = response.data;
+                setSavedRecipes(temp);
             } catch (err) {
                 console.error(err);
             }
@@ -36,11 +36,9 @@ export const SavedRecipes = () => {
                     <li key={recipe.id}>
                         <div>
                             <h2>{recipe.name}</h2>
-                            <p>{recipe.authorId}</p>
                             <button>Save</button>
                         </div>
                     <h4>Ingredients</h4>
-                    <p>{recipe.ingredients}</p>
                         <img src={recipe.imageUrl} alt={recipe.name} />
                         <p>{ recipe.servings}</p>
                         <div className="instructions">
