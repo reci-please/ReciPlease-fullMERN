@@ -14,7 +14,8 @@ model User {
   username String @unique
   password String
   createdRecipes Recipe[]
-  savedRecipes Recipe[] @relation(name: "usersSaved")
+  savedRecipes SavedOnUsers[]
+  //savedRecipes Recipe[] @relation("saved")
 }
 
 model Recipe {
@@ -31,7 +32,8 @@ model Recipe {
   @@index([authorId])
   authorId String
 
-  savedBy User[] @relation(name: "usersSaved")
+  savedBy SavedOnUsers[]
+ // savedBy User[] @relation("saved")
 }
 
 model Ingredient {
@@ -53,6 +55,19 @@ model IngredientsOnRecipes {
   @@index([recipeId])
   @@index([ingredientId])
   
+}
+
+model SavedOnUsers {
+  savedBy User @relation(fields: [savedById], references: [id])
+  savedById String
+  
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+
+  @@id([savedById, recipeId])
+
+  @@index([savedById])
+  @@index([recipeId])
 }
 
 //model Quantity {
