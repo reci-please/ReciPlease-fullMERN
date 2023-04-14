@@ -9,7 +9,8 @@ import { SavedRecipes } from "./saved-recipes";
 export const Home = () => {
     const [recipes, setRecipes] = useState([]);
     const [savedRecipes, setSavedRecipes] = useState([]);
-    const [cookies , ] = useCookies(["access_token"]);
+    const [cookies,] = useCookies(["access_token"]);
+    const [numSaved, setNumSaved] = useState(0);
 
     const userID = useGetUserID();
 
@@ -18,8 +19,8 @@ export const Home = () => {
         const fetchRecipe = async () => {
             try {
                 const response = await axios.get("http://localhost:3001/recipes");
-                setRecipes(response.data);
-                
+                const temp = response.data;
+                setRecipes(temp);
                 
             } catch (err) {
                 console.error(err);
@@ -27,9 +28,9 @@ export const Home = () => {
         };
 
         const pushToArray = (response) => {
-            for (let i = 0; i < response.data.length; i++) {
-                if (!(savedRecipes.includes(response.data[i].recipeId))) { 
-                    savedRecipes.push(response.data[i].recipeId);
+            for (let i = 0; i < response.length; i++) {
+                if (!(savedRecipes.includes(response[i].id))) {
+                    savedRecipes.push(response[i].id);
                 }
                 
             }
@@ -39,7 +40,8 @@ export const Home = () => {
         const fetchSavedRecipe = async () => {
             try {
                 const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
-                pushToArray(response);
+                pushToArray(response.data);
+                setNumSaved(savedRecipes.length);
             } catch (err) {
                 console.error(err);
             }
@@ -47,7 +49,7 @@ export const Home = () => {
 
         fetchRecipe();
 
-        if (cookies.access_token) { fetchSavedRecipe() };
+        if (cookies.access_token) { fetchSavedRecipe(); };
     }, []);
 
 
@@ -63,13 +65,24 @@ export const Home = () => {
             const temp = savedRecipes;
             temp.push(recipeID);
             setSavedRecipes(temp);
+            setNumSaved(numSaved + 1);
         } catch (err) {
             console.error(err);
         }
     }
 
     
-    const isRecipeSaved = (id) => savedRecipes.includes(id);
+    const isRecipeSaved = (id) => {
+        let state = false;
+        for (let i = 0; i < numSaved; i++) { 
+            if (savedRecipes[i] === id) {
+                state = true;
+                break;
+            }
+        }
+
+        return state;
+    };
 
     return (
         <div>
@@ -77,7 +90,7 @@ export const Home = () => {
             <ul>
                 {recipes.map((recipe) => (
                     <li key={recipe.id}>
-                    {savedRecipes.includes(recipe.id) && <h1> ALREADY SAVED</h1>}
+                    {isRecipeSaved(recipe.id) && <h1> ALREADY SAVED</h1>}
                     <div>
                             <h2>{recipe.name}</h2>
                             <button onClick={() => SaveRecipe(recipe.id)} disabled={isRecipeSaved(recipe.id)}>
