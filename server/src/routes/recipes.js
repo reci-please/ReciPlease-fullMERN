@@ -113,6 +113,9 @@ router.get("/savedRecipes/ids/:userID", async (req, res) => {
             recipes.push(await prisma.recipe.findUnique({
                 where: {
                     id: user[i].recipeId,
+                },
+                include: {
+                    ingredients: true,
                 }
             }))
         }

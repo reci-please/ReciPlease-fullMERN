@@ -36,13 +36,26 @@ export const SavedRecipes = () => {
                     <li key={recipe.id}>
                         <div>
                             <h2>{recipe.name}</h2>
-                            <button>Save</button>
                         </div>
-                    <h4>Ingredients</h4>
+                    
                         <img src={recipe.imageUrl} alt={recipe.name} />
-                        <p>{ recipe.servings}</p>
-                        <div className="instructions">
-                            <p>{recipe.instructions}</p>
+                        <p>{ recipe.servings} Servings</p>
+                    <div className="instructions">
+                        <h3>Ingredients:</h3>
+                        
+
+                        
+                        <ul>
+            {recipe.ingredients.map((ingredient) => 
+                    <li key={ingredient.ingredientId}>
+                        
+                    <h4>{ingredient.ingredientId}</h4>
+                    <p>{ingredient.quantity}</p>
+                        
+                    </li>
+                )}
+                        </ul>
+                        <p>{recipe.instructions}</p>
                         </div>
                         <p>Cooking Time: {recipe.cookingTime}</p>
                     </li>
