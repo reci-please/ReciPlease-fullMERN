@@ -11,60 +11,25 @@ export const CreateRecipe = () => {
 
     const navigate = useNavigate();
 
-    const [name, setName] = useState("");
-    const [servings, setServings] = useState(0);
-    const [instructions, setInstructions] = useState("");
-    const [imageUrl, setImageUrl] = useState("");
-    const [cookingTime, setCookingTime] = useState(0);
-    const authorId = userID;
-    const [ingredients, setIngredients] = useState([]);
-    const [numIngredients, setNumIngredients] = useState(0);
+
+    const [recipe, setRecipe] = useState({
+        name: "mole",
+        servings: 1,
+        instructions: "yes",
+        imageUrl: "https://www.firstdayofhome.com/wp-content/uploads/2021/05/Chicken-Mole-Recipe-featureimg.jpg",
+        cookingTime: 120,
+        authorId: userID,
+        ingredients: [],
+        numIngredients: 0,
+
+    });
 
 
-    const handleName = (event) => {
-        setName(event.target.value);
-    }
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setRecipe({ ...recipe, [name]: value });
 
-    const handleServings = (event) => {
-        setServings(event.target.value);
-    }
-
-    const handleInstructions = (event) => {
-        setInstructions(event.target.value);
-    }
-
-    const handleImageUrl = (event) => {
-        setImageUrl(event.target.value);
-    }
-
-    const handleCookingTime = (event) => {
-        setCookingTime(event.target.value);
-    }
-
-
-    const handleIngredients = (event) => {
-        setIngredients(...ingredients, event.target.value);
-    }
-
-    const handleNumIngredients = (event) => {
-        setNumIngredients(event.target.value);
-    }
-
-    //const [recipe, setRecipe] = useState({
-    //    name : "new recipe",
-    //    servings: 3,
-    //    instructions : "cook",
-    //    imageUrl : "https://img.freepik.com/free-photo/chicken-wings-barbecue-sweetly-sour-sauce-picnic-summer-menu-tasty-food-top-view-flat-lay_2829-6471.jpg",
-    //    cookingTime : 10,
-    //    authorId : userID,
-    //    ingredients : ["pepper", "chile"],
-    //    numIngredients : 2,
-    //})
-    
-    //const handleChange = (event) => {
-    //    const { name, value } = event.target;
-    //    setRecipe({ ...recipe, [name]: value });
-    //};
+    };
     
 
     
@@ -72,7 +37,7 @@ export const CreateRecipe = () => {
        event.preventDefault();
        try {
            //await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
-           await axios.post("http://localhost:3001/recipes", {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, numIngredients});
+           await axios.post("http://localhost:3001/recipes", recipe);
            alert("Recipe Created");
            navigate("/");
        } catch (err) {
@@ -86,17 +51,17 @@ export const CreateRecipe = () => {
            <h2>Create Recipe</h2>
            <form onSubmit={onSubmit}>
                <label htmlFor="name">Name</label>
-               <input type="text" id="name" name="name" onChange={handleName} />
+               <input type="text" id="name" name="name" onChange={handleChange}/>
                    <label htmlFor="servings">Servings</label>
-                   <input type='number' id='servings' name='servings' onChange={handleServings} />
+                   <input type='number' id='servings' name='servings' onChange={handleChange}/>
                <label htmlFor="instructions">Instructions</label>
-               <textarea name="instructions" id="instructions" onChange={handleInstructions}></textarea>
+               <textarea name="instructions" id="instructions" ></textarea>
                <label htmlFor="imageUrl">Image URL</label>
-               <input type="text" id="imageurl" name="imageUrl" onChange={handleImageUrl}/>
+               <input type="text" id="imageurl" name="imageUrl" />
                <label htmlFor="cookingTime">Cooking Time (minutes)</label>
-                      <input type="number" id="cookingTime" name="cookingTime" onChange={handleCookingTime} />
+                      <input type="number" id="cookingTime" name="cookingTime"  />
                <label htmlFor="numIngredients">Number of Ingredients</label>
-                   <input type="number" id="numIngredients" name="numIngredients" onChange={handleNumIngredients} />
+                   <input type="number" id="numIngredients" name="numIngredients"  />
 
                    <button type='submit'>Create Recipe</button>
             
