@@ -30,6 +30,9 @@ export const CreateRecipe = () => {
         setRecipe({ ...recipe, [name]: value });
 
     };
+
+
+    
     
 
     
@@ -53,11 +56,11 @@ export const CreateRecipe = () => {
                <label htmlFor="name">Name</label>
                <input type="text" id="name" name="name" onChange={handleChange}/>
                    <label htmlFor="servings">Servings</label>
-                   <input type='number' id='servings' name='servings' onChange={handleChange}/>
+                      <input type="number" id="servings" name="servings" />
                <label htmlFor="instructions">Instructions</label>
-               <textarea name="instructions" id="instructions" ></textarea>
+               <textarea name="instructions" id="instructions" onChange={handleChange}></textarea>
                <label htmlFor="imageUrl">Image URL</label>
-               <input type="text" id="imageurl" name="imageUrl" />
+               <input type="text" id="imageurl" name="imageUrl" onChange={handleChange}/>
                <label htmlFor="cookingTime">Cooking Time (minutes)</label>
                       <input type="number" id="cookingTime" name="cookingTime"  />
                <label htmlFor="numIngredients">Number of Ingredients</label>
