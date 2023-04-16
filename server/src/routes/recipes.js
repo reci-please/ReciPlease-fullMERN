@@ -86,44 +86,38 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.put("/", async (req, res) => {
+router.put("/saveRecipe/:savedById/:recipeId", async (req, res) => {
+    try {
+        const connection = await prisma.savedOnUsers.create({
+            data: {
+                savedById: req.params.savedById,
+                recipeId: req.params.recipeId,
+            }
+        })
+        res.json(connection);
+    } catch (err) {
+        res.json(err);
+    }
+});
 
-    try { 
-        const recipe = await prisma.recipe.findUnique({
+router.get("/savedRecipes/ids/:userID", async (req, res) => {
+    try {
+        const user = await prisma.savedOnUsers.findMany({
             where: {
-                id: Number(req.body.recipeID),
-            },
-        });
-        const user = await prisma.user.findUnique({
-            where: {
-                id: req.body.userID,
+                savedById: req.params.userID,
             }
         });
-        
-        user.savedRecipes.push(recipe);
-        await user.save();
+        let recipes = [];
 
-        res.json({ savedRecipes: user.savedRecipes });
+        for (let i = 0; i < user.length; i++) {
+            recipes.push(await prisma.recipe.findUnique({
+                where: {
+                    id: user[i].recipeId,
+                }
+            }))
+        }
 
-    } catch (err) {
-        res.json(err);
-    }
-    
-});
-
-router.get("/savedRecipes/ids/:userID", async (req, res) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                id: req.params.userID,
-            },
-            include: {
-                savedRecipes: true,
-            },
-            
-        });
-
-        res.json(user.savedRecipes);
+        res.json(recipes);
     } catch (err) {
         res.json(err);
     }
@@ -150,66 +144,3 @@ router.get("/savedRecipes/:userID", async (req, res) => {
 
 export { router as recipesRouter };
 
-/**
-router.get("/", async (req, res) => {
-    try {
-        const response = await RecipeModel.find({});
-        res.json(response);
-    } catch (err) {
-        res.json(err);
-    }
-});
-
-router.post("/", verifyToken, async (req, res) => {
-
-    const recipe = new RecipeModel(req.body);
-    try {
-        const response = await recipe.save();
-        res.json(response);
-    } catch (err) {
-        res.json(err);
-    }
-});
-
-router.put("/", verifyToken, async (req, res) => {
-    
-    
-
-    try {
-        const recipe = await RecipeModel.findById(req.body.recipeID);
-        const user = await UserModel.findById(req.body.userID);
-        user.savedRecipes.push(recipe);
-        await user.save();
-        res.json({savedRecipes: user.savedRecipes});
-    } catch (err) {
-        res.json(err);
-    }
-});
-
-router.get("/savedRecipes/ids/:userID", async (req, res) => {
-    try {
-        const user = await UserModel.findById(req.params.userID);
-        res.json({ savedRecipes: user?.savedRecipes })
-    } catch (err) {
-        res.json(err);
-    }
-});
-
-router.get("/savedRecipes/:userID", async (req, res) => {
-    try {
-        const user = await UserModel.findById(req.params.userID);
-        const savedRecipes = await RecipeModel.find({
-            _id: { $in: user.savedRecipes },
-            
-        });
-        res.json({ savedRecipes })
-    } catch (err) {
-        res.json(err);
-    }
-});
-
-
-
-export { router as recipesRouter };
-
-*/

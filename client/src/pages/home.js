@@ -2,13 +2,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useCookies } from 'react-cookie';
+import { SavedRecipes } from "./saved-recipes";
 
 
 
 export const Home = () => {
     const [recipes, setRecipes] = useState([]);
     const [savedRecipes, setSavedRecipes] = useState([]);
-    const [cookies , ] = useCookies(["access_token"]);
+    const [cookies,] = useCookies(["access_token"]);
+    const [numSaved, setNumSaved] = useState(0);
 
     const userID = useGetUserID();
 
@@ -17,19 +19,29 @@ export const Home = () => {
         const fetchRecipe = async () => {
             try {
                 const response = await axios.get("http://localhost:3001/recipes");
-                setRecipes(response.data);
-                
+                const temp = response.data;
+                setRecipes(temp);
                 
             } catch (err) {
                 console.error(err);
             }
         };
 
+        const pushToArray = (response) => {
+            for (let i = 0; i < response.length; i++) {
+                if (!(savedRecipes.includes(response[i].id))) {
+                    savedRecipes.push(response[i].id);
+                }
+                
+            }
+        }
+
         
         const fetchSavedRecipe = async () => {
             try {
                 const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
-                setSavedRecipes(response.data.savedRecipes);
+                pushToArray(response.data);
+                setNumSaved(savedRecipes.length);
             } catch (err) {
                 console.error(err);
             }
@@ -37,75 +49,65 @@ export const Home = () => {
 
         fetchRecipe();
 
-        if (cookies.access_token) { fetchSavedRecipe() };
+        if (cookies.access_token) { fetchSavedRecipe(); };
     }, []);
 
 
     
 
-    const saveRecipe = async (recipeID) => {
+    const SaveRecipe = async (recipeID) => {
         try {
-            const response = await axios.put("http://localhost:3001/recipes", { recipeID, userID },
-                { headers: { authorization:  cookies.access_token} });
-            setSavedRecipes(response.data.savedRecipes);
+
+            const id = userID;
+            const recipe = recipeID;
+
+            await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
+            const temp = savedRecipes;
+            temp.push(recipeID);
+            setSavedRecipes(temp);
+            setNumSaved(numSaved + 1);
         } catch (err) {
             console.error(err);
         }
     }
 
     
-    const isRecipeSaved = (id) => savedRecipes.includes(id);
+    const isRecipeSaved = (id) => {
+        let state = false;
+        for (let i = 0; i < numSaved; i++) { 
+            if (savedRecipes[i] === id) {
+                state = true;
+                break;
+            }
+        }
 
-    return (
-        <div>
-            <h1>Recipes</h1>
-            <ul>
-                {recipes.map((recipe) => 
-                    <li key={recipe.id}>
-                        <div>
-                            <h2>{recipe.name}</h2>
-                            <p>{recipe.authorId}</p>
-                            <button>Save</button>
-                        </div>
-                        
-                        <img src={recipe.imageUrl} alt={recipe.name} />
-                        <p>{ recipe.servings}</p>
-                        <div className="instructions">
-                            <p>{recipe.instructions}</p>
-                        </div>
-                        <p>Cooking Time: {recipe.cookingTime}</p>
-                    </li>
-                )}
-            </ul>
-        </div>
-    )
-
-    /*
+        return state;
+    };
 
     return (
         <div>
             <h1> Recipes </h1>
             <ul>
                 {recipes.map((recipe) => (
-                    <li key={recipe._id}>
-                    {savedRecipes.includes(recipe._id) && <h1> ALREADY SAVED</h1>}
+                    <li key={recipe.id}>
+                    {isRecipeSaved(recipe.id) && <h1> ALREADY SAVED</h1>}
                     <div>
                             <h2>{recipe.name}</h2>
-                            
-                            <button onClick={() => saveRecipe(recipe._id)} disabled={isRecipeSaved(recipe._id)}>
-                                {isRecipeSaved(recipe._id) ? "Saved": "Save"}
+                            <button onClick={() => SaveRecipe(recipe.id)} disabled={isRecipeSaved(recipe.id)}>
+                                {isRecipeSaved(recipe.id) ? "Saved": "Save"}
                             </button>
                             
                     </div>
                     <div className="instructions">
-                        <p>{recipe.instructions}</p>
+                            
                         </div>
                         <img src={recipe.imageUrl} alt={recipe.name} />
-                        <p>Cooking Time: {recipe.cookingTime} (minutes)</p>
+                        <h5>Cooking Time: {recipe.cookingTime} (minutes)</h5>
+                        <p>{recipe.instructions}</p>
                 </li>
                 ))}
                 
             </ul>
         </div>)
-        */
+        
 }
