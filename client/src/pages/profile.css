@@ -4,6 +4,8 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
+    justify-content: center;
+    align-items: center;
   }
   
   h1 {
@@ -52,6 +54,33 @@
   .recipe-image {
     width: 30px;
     height: 30px;
+  }
+  .left-column,
+  .right-column {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .left-column {
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .right-column {
+    max-width: 800px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: right;
+  }
+  
+  .recipe-list-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
   }
   
 

@@ -34,7 +34,7 @@ export const Profile = () => {
       }
     };
     fetchAuthoredRecipes();
-  }, [userID]);
+  }, []);
 
   const [expandedRecipeID, setExpandedRecipeID] = useState("");
 
@@ -44,43 +44,51 @@ export const Profile = () => {
 
   return (
     <div className="container">
+      <div className="left-column">
       <h1>Profile</h1>
       <h2>Username: {userName}</h2>
-       <h2>Recipes Authored:</h2>
-       <ul>
-        {recipes.map((recipe) => (
-          <li key={recipe.id}>
-            <div
-              className="recipe-header"
-              onClick={() => handleExpandRecipe(recipe.id)}
-            >
-              <img
-                className="recipe-image"
-                src={recipe.imageUrl}
-                alt={recipe.name}
-              />
-              <h3 style={{ float: "left", marginLeft: "10px", wordWrap: "break-word" }}>{recipe.name}</h3>              <button>+</button>
-            </div>
-            {expandedRecipeID === recipe.id && (
-              <div className="recipe-details">
-                <p>Servings: {recipe.servings}</p>
-                <h4>Ingredients:</h4>
-                <ul>
-                  {recipe.ingredients.map((ingredient) => (
-                    <li key={ingredient.ingredientId}>
-                      {ingredient.quantity}
-                      {ingredient.name}
-                    </li>
-                  ))}
-                </ul>
-                <h4>Instructions:</h4>
-                <p>{recipe.instructions}</p>
-                <p>Cooking Time: {recipe.cookingTime}</p>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR82DN9JU-hbIhhkPR-AX8KiYzA4fBMVwjLAG82fz7GLg&s" alt="Default Profile Pic" />
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed at risus
+          ligula. Suspendisse nulla est, malesuada vitae tellus a, sagittis
+          malesuada enim. Maecenas ac tellus congue, blandit risus ut, bibendum
+          leo. Nulla varius felis vel neque aliquam eleifend. Mauris quis nisi
+          id urna luctus mollis. Your Bio Here ^^
+        </p>
+      </div>
+      <div className="right-column">
+        <h2>Recipes Authored:</h2>
+        <ul>
+          {recipes.map((recipe) => (
+            <li key={recipe.id}>
+              <div
+                className="recipe-header"
+                onClick={() => handleExpandRecipe(recipe.id)}
+              >
+                <img src={recipe.imageUrl} alt={recipe.name} />
+                <h3>{recipe.name}</h3>
+                <button>+</button>
               </div>
-            )}
-          </li>
-        ))}
-      </ul> 
+              {expandedRecipeID === recipe.id && (
+                <div className="recipe-details">
+                  <p>Servings: {recipe.servings}</p>
+                  <h4>Ingredients:</h4>
+                  <ul>
+                    {recipe.ingredients.map((ingredient) => (
+                      <li key={ingredient.ingredientId}>
+                        {ingredient.quantity} {ingredient.name}
+                      </li>
+                    ))}
+                  </ul>
+                  <h4>Instructions:</h4>
+                  <p>{recipe.instructions}</p>
+                  <p>Cooking Time: {recipe.cookingTime}</p>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
