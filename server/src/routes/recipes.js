@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
      
     
-    const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, numIngredients} = req.body;
+    const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, quantities, numIngredients} = req.body;
     try {
 
         
@@ -74,7 +74,7 @@ router.post("/", async (req, res) => {
                 data: {
                     recipeId: created.id,
                     ingredientId: someIngredient.id,
-                    quantity: "some",
+                    quantity: quantities[i],
                 }
             })
 
