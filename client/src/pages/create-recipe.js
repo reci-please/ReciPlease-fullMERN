@@ -31,9 +31,31 @@ export const CreateRecipe = () => {
 
     };
 
+    const handleNumbers = (event) => {
+
+        let name = event.target.name;
+        let num = parseInt(event.target.value);
+        console.log(event.target.name);
+        console.log(num);
+        setRecipe({ ...recipe, [name]:  num});
+
+    }
 
     
-    
+    const handleIngredientChange = (event, idx) => {
+        const { value } = event.target;
+        const ingredients = recipe.ingredients;
+        ingredients[idx] = value;
+        setRecipe({ ...recipe, ingredients });
+        let num = "numIngredients";
+        setRecipe({ ...recipe, [num]: ingredients.length });
+        
+
+    };
+
+    const addIngredient = () => {
+        setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
+    };
 
     
     const onSubmit = async (event) => {
@@ -56,15 +78,24 @@ export const CreateRecipe = () => {
                <label htmlFor="name">Name</label>
                <input type="text" id="name" name="name" onChange={handleChange}/>
                    <label htmlFor="servings">Servings</label>
-                      <input type="number" id="servings" name="servings" />
+                      <input type="number" id="servings" name="servings" onChange={handleNumbers} />
+                      <label htmlFor="ingredients">Ingredients</label>
+                {recipe.ingredients.map((ingredient, idx) => (
+                    <input
+                        key={idx}
+                        type="text"
+                        name='ingredients'
+                        value={ingredient}
+                        onChange={(event) => handleIngredientChange(event, idx)} />
+                ))}
+                <button onClick={addIngredient} type='button'>Add Ingredient</button>
                <label htmlFor="instructions">Instructions</label>
                <textarea name="instructions" id="instructions" onChange={handleChange}></textarea>
                <label htmlFor="imageUrl">Image URL</label>
                <input type="text" id="imageurl" name="imageUrl" onChange={handleChange}/>
                <label htmlFor="cookingTime">Cooking Time (minutes)</label>
-                      <input type="number" id="cookingTime" name="cookingTime"  />
-               <label htmlFor="numIngredients">Number of Ingredients</label>
-                   <input type="number" id="numIngredients" name="numIngredients"  />
+                      <input type="number" id="cookingTime" name="cookingTime" onChange={handleNumbers} />
+               
 
                    <button type='submit'>Create Recipe</button>
             
