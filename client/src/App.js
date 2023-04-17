@@ -6,6 +6,7 @@ import { Auth } from './pages/auth';
 import { CreateRecipe } from './pages/create-recipe';
 import { SavedRecipes } from './pages/saved-recipes';
 import { Search } from './pages/search';
+import { SearchMulti } from './pages/search_multi';
 import { Navbar } from "./components/navbar";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/create-recipe" element={<CreateRecipe />} />
         <Route path="/saved-recipes" element={<SavedRecipes />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/search_multi" element={<SearchMulti />} />
       </Routes>
     </Router> </div>
   );
