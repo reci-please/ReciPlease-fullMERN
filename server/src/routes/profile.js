@@ -5,22 +5,17 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 router.get("/", async (req, res) => {
+  const { userName } = req.body;
+
+  console.log("Inside router")
+  console.log("Username inside router is ")
   try {
-    const userId = req.query.userId;
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(userId)
+        username: userName
       },
-      select: {
-        username: true,
-        recipes: {
-          select: {
-            name: true,
-            imageUrl: true
-          }
-        }
-      }
     });
+    console.log("User found!")
     res.json(user);
   } catch (err) {
     console.error(err);

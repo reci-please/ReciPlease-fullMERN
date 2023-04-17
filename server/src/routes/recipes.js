@@ -100,6 +100,37 @@ router.put("/saveRecipe/:savedById/:recipeId", async (req, res) => {
     }
 });
 
+
+router.get("/authoredRecipes/ids/:userID", async (req, res) => {
+    console.log("Inside router")
+    try {
+        const user = await prisma.recipe.findMany({
+            where: {
+                authorId: req.params.userID,
+            }
+        });
+        console.log("rtr.Found user")
+        console.log(user.username)
+        let recipes = [];
+
+        for (let i = 0; i < user.length; i++) {
+            recipes.push(await prisma.recipe.findUnique({
+                where: {
+                    id: user[i].recipeId,
+                },
+                include: {
+                    ingredients: true,
+                }
+            }))
+        }
+
+        res.json(recipes);
+    } catch (err) {
+        res.json(err);
+    }
+});
+
+
 router.get("/savedRecipes/ids/:userID", async (req, res) => {
     try {
         const user = await prisma.savedOnUsers.findMany({
@@ -121,24 +152,6 @@ router.get("/savedRecipes/ids/:userID", async (req, res) => {
         }
 
         res.json(recipes);
-    } catch (err) {
-        res.json(err);
-    }
-});
-
-router.get("/savedRecipes/:userID", async (req, res) => {
-    try {
-        const user = await prisma.user.findUnique({
-            where: {
-                id: req.params.userID,
-            },
-            include: {
-                savedRecipes: true,
-            },
-            
-        });
-
-        res.json(user.savedRecipes);
     } catch (err) {
         res.json(err);
     }

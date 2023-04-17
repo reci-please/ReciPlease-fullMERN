@@ -1,0 +1,75 @@
+/* profile.css */
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h1 {
+    font-size: 36px;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 24px;
+    margin-top: 40px;
+  }
+  
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  li {
+    margin-top: 20px;
+    word-wrap: break-word
+  }
+  
+  li h3 {
+    font-size: 20px;
+    margin: 0;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+  }
+  
+  li p {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  li.expanded h3 {
+    border-bottom: none;
+  }
+  
+  li.expanded p {
+    margin-top: 0;
+  }
+
+  .recipe-image {
+    width: 30px;
+    height: 30px;
+  }
+  
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 28px;
+    }
+  
+    h2 {
+      font-size: 20px;
+    }
+  
+    li h3 {
+      font-size: 18px;
+    }
+  
+    li p {
+      font-size: 14px;
+    }
+  }
+  
