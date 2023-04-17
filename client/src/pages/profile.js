@@ -76,7 +76,7 @@ export const Profile = () => {
                   <ul>
                     {recipe.ingredients.map((ingredient) => (
                       <li key={ingredient.ingredientId}>
-                        {ingredient.quantity} {ingredient.name}
+                        {ingredient.ingredientId} -- {ingredient.quantity}
                       </li>
                     ))}
                   </ul>
