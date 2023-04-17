@@ -20,6 +20,7 @@ export const CreateRecipe = () => {
         cookingTime: 120,
         authorId: userID,
         ingredients: [],
+        quantities: [],
         numIngredients: 0,
 
     });
@@ -57,6 +58,19 @@ export const CreateRecipe = () => {
         setRecipe({ ...recipe, ingredients: [...recipe.ingredients, ""] });
     };
 
+    const addQuantity = () => {
+        setRecipe({ ...recipe, quantities: [...recipe.quantities, ""] });
+    }
+
+    const handleQuantityChange = (event, idx) => {
+        const { value } = event.target;
+        const quantities = recipe.quantities;
+        quantities[idx] = value;
+        setRecipe({ ...recipe, quantities });
+
+        console.log(recipe.quantities);
+    }
+
     
     const onSubmit = async (event) => {
        event.preventDefault();
@@ -80,15 +94,27 @@ export const CreateRecipe = () => {
                    <label htmlFor="servings">Servings</label>
                       <input type="number" id="servings" name="servings" onChange={handleNumbers} />
                       <label htmlFor="ingredients">Ingredients</label>
-                {recipe.ingredients.map((ingredient, idx) => (
+                      {recipe.ingredients.map((ingredient, idx) => (
                     <input
                         key={idx}
                         type="text"
                         name='ingredients'
                         value={ingredient}
                         onChange={(event) => handleIngredientChange(event, idx)} />
-                ))}
-                <button onClick={addIngredient} type='button'>Add Ingredient</button>
+                    
+                      ))}                    
+                      <button onClick={addIngredient} type='button'>Add Ingredient</button>
+                      <label htmlFor="quantities">Quantities</label>
+                      {recipe.quantities.map((quantity, idx) => (
+                    <input
+                        key={idx}
+                        type="text"
+                        name='quantities'
+                        value={quantity}
+                        onChange={(event) => handleQuantityChange(event, idx)} />
+                    
+                      ))}                    
+                <button onClick={addQuantity} type='button'>Add Quantity</button>
                <label htmlFor="instructions">Instructions</label>
                <textarea name="instructions" id="instructions" onChange={handleChange}></textarea>
                <label htmlFor="imageUrl">Image URL</label>
