@@ -12,24 +12,30 @@ export const SearchMulti = () => {
     const [recipes, setRecipes] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [ingredients, setIngredients] = useState([]);
+    const [ignore_ingredients, ignoreIngredients] = useState([]);
+
+    const [active, setActive] = useState();
 
     const progress = (value) => {
         document.getElementsByClassName('progress-bar')[0].style.width = `${value}%`;
     }
 
-    let step = document.getElementsByClassName('step');
+    let step = document.getElementsByClassName("step");
     let prevBtn = document.getElementById('prev-btn');
     let nextBtn = document.getElementById('next-btn');
     let submitBtn = document.getElementById('submit-btn');
+
     let form = document.getElementsByTagName('form')[0];
     let preloader = document.getElementById('preloader-wrapper');
-    let bodyElement = document.querySelector('body');
-    let succcessDiv = document.getElementById('success');
 
-    form.onsubmit = () => { return false }
+    let bodyElement = document.querySelector('body');
+    let successDiv = document.getElementById('success');
 
     let current_step = 0;
     let stepCount = 2;
+
+    console.log(step);
+
     step[current_step].classList.add('d-block');
     if(current_step === 0){
         prevBtn.classList.add('d-none');
@@ -56,7 +62,7 @@ export const SearchMulti = () => {
             }
         } else {
             if(current_step > stepCount){
-                form.onsubmit = () => { return true }
+                onSubmit();
             }
         }
         progress((100 / stepCount) * current_step);
@@ -96,7 +102,7 @@ export const SearchMulti = () => {
 
         const timer = ms => new Promise(res => setTimeout(res, ms));
 
-        timer(3000)
+        timer(1000)
             .then(() => {
                 bodyElement.classList.add('loaded');
             }).then(() =>{
@@ -106,8 +112,10 @@ export const SearchMulti = () => {
             prevBtn.classList.add('d-none');
             submitBtn.classList.remove('d-inline-block');
             submitBtn.classList.add('d-none');
-            succcessDiv.classList.remove('d-none');
-            succcessDiv.classList.add('d-block');
+            successDiv.classList.remove('d-none');
+            successDiv.classList.add('d-block');
+            onSubmit();
+
         })
 
     };
@@ -140,6 +148,19 @@ export const SearchMulti = () => {
 
             await axios.post("http://localhost:3001/search", { ingredients })
             .then(response => setRecipes(response.data));
+
+            /*Parse recipes*/
+            recipes.forEach((rec) => {
+                rec.ingredients.forEach((ing) => {
+                    if (ignore_ingredients.contains(ing)) {
+                        const index = recipes.indexOf(rec);
+                        if (index > -1) { // only splice array when item is found
+                            recipes.splice(index, 1); // 2nd parameter means remove one item only
+                        }
+                    }
+                })
+            })
+
 
             // recipes.forEach((rec) => {
             //     console.log("Recipe: " + rec);
@@ -208,7 +229,33 @@ export const SearchMulti = () => {
                                         <div className="mt-5">
                                             <h4 className="search-multi">Here are our top reccomendations for you:</h4>
                                             <p>[Insert list here]</p>
-                                            <a className="back-link" href="">See all your reccomendations ➜</a>
+                                            {recipes.map((recipe) => (
+                                            <div className="recipe-box" key={recipe.id}>
+                                                <h3>{recipe.name}</h3>
+                                                <img src={recipe.imageUrl} alt={recipe.name}/>
+                                                <p>Servings: {recipe.servings}</p>
+                                                <p>Cooking Time: {recipe.cookingTime} minutes</p>
+                                                <p>Instructions: {recipe.instructions}</p>
+                                                <p>Ingredients:</p>
+                                                <table tag="ingredient-table" border="1">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Ingredient</th>
+                                                        <th>Quantity</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {recipe.ingredients.map((ingredient) => (
+                                                        <tr key={ingredient.ingredientId}>
+                                                            <td><p>{ingredient.ingredientId}</p></td>
+                                                            <td><p>{ingredient.quantity}</p></td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            ))}
+                                            <a className="back-link" href="">See all your recommendations ➜</a>
                                         </div>
                                     </div>
                                 </div>
