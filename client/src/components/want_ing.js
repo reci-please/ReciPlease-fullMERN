@@ -29,19 +29,21 @@ function WantedIngredients({formData, setFormData}) {
       <div>
 
           <div className="q-box__question">
-              <input className="form-check-input question__input"
-                     id="q_1_input"
-                     name="q_1"
-                     type="text"
-                     placeholder="Add Ingredients"
-                     value={wantValue}
-                     onChange={() => handleInputChange}
-                     onKeyDown={() => handleKeyPress}/>
-              <ul>
-                  {formData.ingredients.map((ingr, index) => (
-                      <li className="form-check-input question__input" key={index}>{ingr}</li>
-                  ))}
-              </ul>
+              <form>
+                  <input className="form-check-input question__input"
+                         id="q_1_input"
+                         name="q_1"
+                         type="text"
+                         placeholder="Add Ingredients"
+                         value={wantValue}
+                         onChange={() => handleInputChange}
+                         onKeyDown={() => handleKeyPress}/>
+                  <ul>
+                      {ingredients.map((ingr, index) => (
+                          <li className="form-check-input question__input" key={index}>{ingr}</li>
+                      ))}
+                  </ul>
+              </form>
           </div>
 
       </div>

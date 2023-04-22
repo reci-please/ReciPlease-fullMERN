@@ -3,8 +3,8 @@ import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
-
 import Form from "../components/multiform";
+
 import WantedIngredients from "../components/want_ing";
 import AvoidIngredients from "../components/allergen";
 
@@ -26,14 +26,14 @@ export const SearchMulti = () => {
 
     const PageDisplay = () => {
         if (page === 0) {
-            return <WantedIngredients formData={formData} setFormData={setFormData()}/>;
+            return <WantedIngredients formData={formData} setFormData={setFormData}/>;
         } else if (page === 1) {
-            return <AvoidIngredients formData={formData} setFormData={setFormData()}/>;
+            return <AvoidIngredients formData={formData} setFormData={setFormData}/>;
         } else if (page === 2) {
-            return (<p>tester, should not see</p>);
+            return (<Form formData={formData} setFormData={setFormData}/>);
         } else {
             setPage(() => 0)
-            return <WantedIngredients formData={formData} setFormData={setFormData()}/>;
+            return <WantedIngredients formData={formData} setFormData={setFormData}/>;
         }
 
     }
@@ -41,36 +41,41 @@ export const SearchMulti = () => {
     return (
         <div className="search-multi">
             <div className="container d-flex justify-content-center align-items-center min-vh-100">
-                <div className="multi-form row g-0 justify-content-center">
+                <div className="row g-0 justify-content-center">
                     <div className="progress">
-                        <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="50"
-                             className="progress-bar progress-bar-striped progress-bar-animated bg-danger"
-                             role="progressbar" style={{width: `${(100/stepCount) * page}%`}}></div>
+                        <div aria-valuemax="100"
+                             aria-valuemin="0"
+                             aria-valuenow="50"
+                             className="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                             role="progressbar"
+                             style={{width: `${(100/stepCount) * page}%`, height: `10px`}}></div>
                     </div>
                     <div id="qbox-container">
-                        <div className="step">
-                            <div className="q-header"><h4 className="search-multi">{formQuestions[page]}</h4></div>
-                            <div className="q-body form-check ps-0 q-box">{PageDisplay()}</div>
-                        </div>
-                        <div id="q-box__buttons">
-                            <button id="prev-btn" type="button"
-                                    disabled={page === 0}
+                        <div id="steps-container">
+                            <div className="step">
+                                <div className="q-header"><h4 className="search-multi">{formQuestions[page]}</h4></div>
+                                <div className="q-body form-check ps-0 q-box">{PageDisplay()}</div>
+                            </div>
+                            <div id="q-box__buttons">
+                                <button id="prev-btn" type="button"
+                                        disabled={page === 0}
+                                        onClick={() => {
+                                            setPage((currPage) => currPage - 1)}
+                                        }>Previous
+                                </button>
+                                <button id="next-btn" type="button"
                                     onClick={() => {
-                                        setPage((currPage) => currPage - 1)}
-                                    }>Previous
-                            </button>
-                            <button id="next-btn" type="button"
-                                onClick={() => {
-                                    if (page === stepCount) {
-                                        alert("FORM SUBMITTED");
-                                        console.log(formData);
-                                    } else {
-                                        setPage((currPage) => currPage + 1);
-                                    }
-                                }}
-                            >
-                                {page === stepCount ? "Submit" : "Next"}
-                            </button>
+                                        if (page === stepCount) {
+                                            alert("FORM SUBMITTED");
+                                            console.log(formData);
+                                        } else {
+                                            setPage((currPage) => currPage + 1);
+                                        }
+                                    }}
+                                >
+                                    {page === stepCount ? "Submit" : "Next"}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>

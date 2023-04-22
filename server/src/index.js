@@ -7,7 +7,7 @@ import { userRouter } from "./routes/users.js";
 import { recipesRouter } from "./routes/recipes.js";
 import { ingredientRouter } from "./routes/ingredients.js";
 import { searchRouter } from "./routes/search.js";
-import { searchMultiRouter } from "./routes/search_multi.js";
+import { searchMultiRouter } from "./routes/search-multi.js";
 
 const app = express();
 app.use(express.json());

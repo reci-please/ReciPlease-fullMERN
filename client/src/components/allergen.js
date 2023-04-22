@@ -29,19 +29,21 @@ function AvoidIngredients({formData, setFormData}) {
         <div>
 
             <div className="q-box__question">
-                <input className="form-check-input question__input"
-                       id="q_2_input"
-                       name="q_2"
-                       type="text"
-                       placeholder="Add allergens"
-                       value={avoidValue}
-                       onChange={() => handleInputChange}
-                       onKeyDown={() => handleKeyPress}/>
-                <ul>
-                    {allergens.map((ingr, index) => (
-                        <li className="form-check-input question__input" key={index}>{ingr}</li>
-                    ))}
-                </ul>
+                <form>
+                    <input className="form-check-input question__input"
+                           id="q_2_input"
+                           name="q_2"
+                           type="text"
+                           placeholder="Add allergens"
+                           value={avoidValue}
+                           onChange={() => handleInputChange}
+                           onKeyDown={() => handleKeyPress}/>
+                    <ul>
+                        {allergens.map((ingr, index) => (
+                            <li className="form-check-input question__input" key={index}>{ingr}</li>
+                        ))}
+                    </ul>
+                </form>
             </div>
 
         </div>

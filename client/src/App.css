@@ -375,6 +375,7 @@ button#prev-btn:hover::after, button#next-btn:hover::after, button#submit-btn:ho
   border-radius: 0px !important;
 }
 .progress-bar {
+  animation: progress 0.4s ease-in-out forwards;
   background-color: #2e6200!important;
 }
 
