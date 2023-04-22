@@ -5,13 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
 
 export const Search = () => {
-    const [cookies , ] = useCookies(["access_token"]);
-    const userID = useGetUserID();
-    const navigate = useNavigate();
+    // const [cookies , ] = useCookies(["access_token"]);
+    // const userID = useGetUserID();
+    // const navigate = useNavigate();
 
     const [recipes, setRecipes] = useState([]);
     const [inputValue, setInputValue] = useState("");
-    const [ingredients, setIngredients] = useState([]);
+    const [requiredIngr, setRequiredIngr] = useState([]);
+    const [excludedIngr, setExcludedIngr] = useState([]);
 
     function handleInputChange(event) {
         setInputValue(event.target.value);
@@ -21,13 +22,19 @@ export const Search = () => {
         if (event.key === "Enter") {
             event.preventDefault();
             if(inputValue !== "") {
-                setIngredients([inputValue, ...ingredients]);
+                setRequiredIngr([inputValue, ...requiredIngr]);
                 setInputValue("");
             }
-        } else if (event.key === "Backspace" && inputValue === "" && ingredients.length !== 0) {
-            setInputValue(ingredients[0]);
-            setIngredients(ingredients.slice(1, ingredients.length));
+        } else if (event.key === "Backspace" && inputValue === "" && requiredIngr.length !== 0) {
+            setInputValue(requiredIngr[0]);
+            setRequiredIngr(requiredIngr.slice(1, requiredIngr.length));
             event.preventDefault();
+        } else if (event.key === "Escape") {
+            event.preventDefault();
+            if (inputValue !== "") {
+                setExcludedIngr([inputValue, ...excludedIngr]);
+                setInputValue("");
+            }
         }
     }
 
@@ -39,7 +46,7 @@ export const Search = () => {
             // console.log("Ingredients Type: " + typeof(ingredients));
             // console.log("Ingredients Type Decons: " + typeof({ingredients}));
 
-            await axios.post("http://localhost:3001/search", { ingredients })
+            await axios.post("http://localhost:3001/search", { requiredIngr, excludedIngr })
             .then(response => setRecipes(response.data));
 
             // recipes.forEach((rec) => {
@@ -65,7 +72,7 @@ export const Search = () => {
                     onKeyDown={handleKeyPress}
                 />
                 <ul>
-                    {ingredients.map((ingr, index) => (
+                    {requiredIngr.map((ingr, index) => (
                         <li key={index}>{ingr}</li>
                     ))}
                 </ul>

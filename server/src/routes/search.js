@@ -6,35 +6,35 @@ const prisma = new PrismaClient();
 
 router.post("/", async (req, res) => {
     try {
-        const ingr = req.body.ingredients;
+        const { requiredIngr, excludedIngr } = req.body;
 
-        //const { query, ingredients } = req.body;
-        // Note: when adding more filters/search terms, can add as follows:
-        // const { query, ingredients, exclusions } = req.body;
-
-        /* Check that something is passed */
-        // if (!query && (Array.isArray(ingredients) || ingredients.length == 0)) {
-        //     return res.status(400).send('Invalid search request');
-        // }
-
-        /* Check that ingredients array is not null or empty */
-        if (!Array.isArray(ingr)) {
-            console.log("Error: Invalid search request- ingredients is not an array");
-            return res.status(400).send("Error: Invalid search request- ingredients is not an array");
-        } else if (ingr.length == 0) {
-            console.log("Error: Invalid search request- ingredients array is empty");
-            return res.status(400).send("Error: Invalid search request- ingredients array is empty");
+        /* Check that required and excluded ingredients are arrays and both are not empty */
+        if (!Array.isArray(requiredIngr) || !Array.isArray(excludedIngr)) {
+            console.log("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
+            return res.status(400).send("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
+        } else if (requiredIngr.length == 0 && excludedIngr.length == 0) {
+            console.log("Error: Invalid search request- required ingredients and excluded ingredients are both empty.");
+            return res.status(400).send("Error: Invalid search request- required ingredients and excluded ingredients are both empty.");
         }
 
         const recipes = await prisma.recipe.findMany({
             where: {
-                AND: ingr.map(ingred => ({
+                AND: requiredIngr.map(ingred => ({
                     ingredients: {
                         some: {
                             ingredientId: ingred
                         }
                     }
-                }))
+                })),
+                NOT: {
+                    ingredients: {
+                        some: {
+                            ingredientId: {
+                                in: excludedIngr
+                            }
+                        }
+                    }
+                }
             },
             select: {
                 id: true,
