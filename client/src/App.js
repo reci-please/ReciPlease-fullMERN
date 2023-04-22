@@ -6,7 +6,7 @@ import { Auth } from './pages/auth';
 import { CreateRecipe } from './pages/create-recipe';
 import { SavedRecipes } from './pages/saved-recipes';
 import { Search } from './pages/search';
-import { SearchMulti } from './pages/search_multi';
+import { SearchMulti } from './pages/search-multi';
 import { Navbar } from "./components/navbar";
 
 function App() {
