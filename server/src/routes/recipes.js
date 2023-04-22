@@ -41,7 +41,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
      
     
-    const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, numIngredients} = req.body;
+    const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, quantities, numIngredients} = req.body;
     try {
 
         
@@ -56,24 +56,25 @@ router.post("/", async (req, res) => {
             }           
         });
 
-        for (let i = 0; i < numIngredients; i++) { 
+
+        for (let i = 0; i < numIngredients; i++) {
             const someIngredient = await prisma.ingredient.upsert({
                 where: {
                     id: ingredients[i],
                 },
                 update: {
-                    id: ingredients[i]
                 },
                 create: {
                     id: ingredients[i],
-                    quantity: ""
                 },
             });
+
 
             await prisma.ingredientsOnRecipes.create({
                 data: {
                     recipeId: created.id,
                     ingredientId: someIngredient.id,
+                    quantity: quantities[i],
                 }
             })
 
@@ -113,6 +114,9 @@ router.get("/savedRecipes/ids/:userID", async (req, res) => {
             recipes.push(await prisma.recipe.findUnique({
                 where: {
                     id: user[i].recipeId,
+                },
+                include: {
+                    ingredients: true,
                 }
             }))
         }
