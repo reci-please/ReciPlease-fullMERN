@@ -30,7 +30,7 @@ export const SearchMulti = () => {
         } else if (page === 1) {
             return <AvoidIngredients formData={formData} setFormData={setFormData}/>;
         } else if (page === 2) {
-            return (<Form formData={formData} setFormData={setFormData}/>);
+            return (<Form formData={formData}/>);
         } else {
             setPage(() => 0)
             return <WantedIngredients formData={formData} setFormData={setFormData}/>;
