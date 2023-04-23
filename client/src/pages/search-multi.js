@@ -22,7 +22,7 @@ export const SearchMulti = () => {
     const stepCount = 2;
     const formQuestions = ["Are there any ingredients you want to include?",
                                 "Are there any ingredients or allergens you want to avoid?",
-                                "Alright, finding recipes for you!\nHit submit to confirm your choices."]
+                                "Alright, lets confirm your choices:"]
 
     const PageDisplay = () => {
         if (page === 0) {
@@ -38,6 +38,10 @@ export const SearchMulti = () => {
 
     }
 
+    const onSubmit = async (event) => {
+        event.preventDefault();
+    };
+
     return (
         <div className="search-multi">
             <div className="container d-flex justify-content-center align-items-center min-vh-100">
@@ -51,14 +55,14 @@ export const SearchMulti = () => {
                              style={{width: `${(100/stepCount) * page}%`, height: `10px`}}></div>
                     </div>
                     <div id="qbox-container">
-                        <div id="steps-container">
+                        <div id="steps-container" className="row">
                             <div className="step">
                                 <div className="q-header"><h4 className="search-multi">{formQuestions[page]}</h4></div>
                                 <div className="q-body form-check ps-0 q-box">{PageDisplay()}</div>
                             </div>
                             <div id="q-box__buttons">
                                 <button id="prev-btn" type="button"
-                                        disabled={page === 0}
+                                        disabled={(page === 0)}
                                         onClick={() => {
                                             setPage((currPage) => currPage - 1)}
                                         }>Previous

@@ -40,14 +40,14 @@ export const Search = () => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        
+
         try {
             // console.log("Ingredients Requested: ", ingredients);
             // console.log("Ingredients Type: " + typeof(ingredients));
             // console.log("Ingredients Type Decons: " + typeof({ingredients}));
 
             await axios.post("http://localhost:3001/search", { requiredIngr, excludedIngr })
-            .then(response => setRecipes(response.data));
+                .then(response => setRecipes(response.data));
 
             // recipes.forEach((rec) => {
             //     console.log("Recipe: " + rec);
@@ -92,18 +92,18 @@ export const Search = () => {
                         <p>Ingredients:</p>
                         <table tag="ingredient-table" border="1">
                             <thead>
-                                <tr>
-                                    <th>Ingredient</th>
-                                    <th>Quantity</th>
-                                </tr>
+                            <tr>
+                                <th>Ingredient</th>
+                                <th>Quantity</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                {recipe.ingredients.map((ingredient) => (
-                                    <tr key={ingredient.ingredientId}>
-                                        <td><p>{ingredient.ingredientId}</p></td>
-                                        <td><p>{ingredient.quantity}</p></td>
-                                    </tr>
-                                ))}
+                            {recipe.ingredients.map((ingredient) => (
+                                <tr key={ingredient.ingredientId}>
+                                    <td><p>{ingredient.ingredientId}</p></td>
+                                    <td><p>{ingredient.quantity}</p></td>
+                                </tr>
+                            ))}
                             </tbody>
 
                         </table>

@@ -2,47 +2,55 @@ import React, {useState} from "react";
 
 function WantedIngredients({formData, setFormData}) {
 
-    const [wantValue, setWantValue] = useState("");
-    const [ingredients, setIngredients] = useState([]);
+    const [inputValue, setInputValue] = useState("");
+    const [requiredIngr, setRequiredIngr] = useState(formData.seeking);
 
-    const handleInputChange = (event) => {
-        setWantValue(event.target.value);
-    }
+    // function handleInputChange(event) {
+    //     setInputValue(event.target.value);
+    // }
 
-    const handleKeyPress = (event) => {
+    const handleInputChange = ({target:{value}}) => setInputValue(value);
+
+    function handleKeyPress(event) {
         if (event.key === "Enter") {
             event.preventDefault();
-            if(wantValue !== "") {
-                setIngredients([wantValue, ...ingredients]);
-                setWantValue("");
-                setFormData({...formData, seeking: ingredients});
+            if(inputValue !== "") {
+                setRequiredIngr([inputValue, ...requiredIngr]);
+                setInputValue("");
             }
-        } else if (event.key === "Backspace" && wantValue === "" && ingredients.length !== 0) {
-            setWantValue(ingredients[0]);
-            setIngredients(ingredients.slice(1, ingredients.length));
-            setFormData({...formData, seeking: ingredients});
+        } else if (event.key === "Backspace" && inputValue === "" && requiredIngr.length !== 0) {
+            setInputValue(requiredIngr[0]);
+            setRequiredIngr(requiredIngr.slice(1, requiredIngr.length));
             event.preventDefault();
         }
+        setFormData({...formData, seeking: requiredIngr});
     }
+
+    const onSubmit = async (event) => {
+        setFormData({...formData, seeking: requiredIngr})
+        event.preventDefault();
+    };
 
     return (
       <div>
 
           <div className="q-box__question">
-              <form>
-                  <input className="form-check-input question__input"
+              <form onSubmit={onSubmit} className="row align-items-center">
+                  <input className="form-control"
                          id="q_1_input"
                          name="q_1"
                          type="text"
                          placeholder="Add Ingredients"
-                         value={wantValue}
-                         onChange={() => handleInputChange}
-                         onKeyDown={() => handleKeyPress}/>
-                  <ul>
-                      {ingredients.map((ingr, index) => (
-                          <li className="form-check-input question__input" key={index}>{ingr}</li>
-                      ))}
-                  </ul>
+                         value={inputValue}
+                         onChange={handleInputChange}
+                         onKeyDown={handleKeyPress}/>
+                  <div className="m-auto overflow-auto list-flow">
+                      <ul>
+                          {requiredIngr.map((ingr, index) => (
+                              <li className="form-control form-list-items" key={index}>{ingr}</li>
+                          ))}
+                      </ul>
+                  </div>
               </form>
           </div>
 

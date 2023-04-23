@@ -279,7 +279,7 @@ body {
 
 /* GENERAL */
 .search-multi {
-  background: #f7f9ff;
+  /*background: #f7f9ff;*/
   font-size: 16px;
   font-size: 1rem;
   font-weight: 600;
@@ -308,7 +308,7 @@ label.search-multi {
   background-repeat: repeat;
   position: relative;
   padding: 62px;
-  min-height: 630px;
+  height: 630px;
   box-shadow: 10px 8px 21px 0px rgba(204, 204, 204, 0.75);
   -webkit-box-shadow: 10px 8px 21px 0px rgba(204, 204, 204, 0.75);
   -moz-box-shadow: 10px 8px 21px 0px rgba(204, 204, 204, 0.75);
@@ -321,9 +321,8 @@ label.search-multi {
   vertical-align: middle;
   align-items: center;
 }
-.step {
-  display: none;
-}
+
+
 .step h4 {
   margin: 0 0 26px 0;
   padding: 0;
@@ -341,7 +340,6 @@ button#prev-btn, button#next-btn, button#submit-btn {
   height: 50px;
   background: #7db258;
   margin: 0 auto;
-  margin-top: 40px;
   overflow: hidden;
   z-index: 1;
   cursor: pointer;
@@ -367,6 +365,17 @@ button#prev-btn:after, button#next-btn:after, button#submit-btn:after {
   z-index: -2;
   transition: transform .3s;
 }
+
+.form-list-items{
+  margin: 0.25rem;
+  padding: 0;
+}
+
+.list-flow {
+  max-height:350px;
+  padding-left: 0;
+}
+
 button#prev-btn:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
   transform: translateY(-80%);
   transition: transform .3s;
