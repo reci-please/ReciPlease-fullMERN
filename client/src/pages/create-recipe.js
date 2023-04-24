@@ -76,11 +76,11 @@ export const CreateRecipe = () => {
 
   return (
     <div class="login-box">
-      <h2>Create Recipe</h2>
+      <h2>Make Your Own Recipe</h2>
       <form>
         <div className="user-box">
           <input type="text" onChange={handleChange} />
-          <label htmlFor="name">Name</label>
+          <label htmlFor="name">Recipe Name</label>
         </div>
 
         <div className="user-box">
