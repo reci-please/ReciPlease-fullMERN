@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useCookies } from "react-cookie";
 import {useNavigate } from 'react-router-dom';
+import logo from "./img/logo.png"
 
 
 export const Navbar = () => { 
@@ -12,18 +13,28 @@ export const Navbar = () => {
         window.localStorage.removeItem("userID");
         navigate("/auth");
     }
+    var img = new Image();
+    img.src = "./img/logo.png"
 
-    return (<div className="navbar">
-        <Link to="/">Home</Link>
-        
+    return (<div><div className="navbar">
+        <ul>
+        <img src={logo} alt="logo" />
+        <li><Link to="/">Home</Link></li>
         {!cookies.access_token ? (
-            <Link to="/auth">Login/Register</Link>
+            <li><Link to="/auth">Login/Register</Link></li>
         ) : (<>
-            <Link to="/create-recipe">Create Recipe</Link>
-            <Link to="/saved-recipes">Saved Recipes</Link>
-            <Link to="/search">Search</Link>
-                <button onClick={logout}> Logout </button>
+        <div>
+            <li><Link to="/create-recipe">Create Recipe</Link></li>
+            <li><Link to="/saved-recipes">Saved Recipes</Link></li>
+            <li ><Link to="/search">Search</Link></li>
+            <li ><Link to="/profile">Learn</Link></li>
+                <li className="logout" ><button  onClick={logout}> Logout </button></li>
+            
+            <p className="barrier">____________________________________________________________________________________________________________________________________________</p>
+            </div>
             </>
         )}
+        </ul>
+    </div>
     </div>)
 }

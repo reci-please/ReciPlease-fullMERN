@@ -5,6 +5,7 @@ import { Auth } from './pages/auth';
 import { CreateRecipe } from './pages/create-recipe';
 import { SavedRecipes } from './pages/saved-recipes';
 import { Search } from './pages/search';
+import { Profile } from './pages/profile';
 import { Navbar } from "./components/navbar";
 
 function App() {
@@ -12,12 +13,13 @@ function App() {
     <div className="App">
       <Router>
         <Navbar/>
-      <Routes>
+      <Routes >
         <Route path="/" element={<Home />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/create-recipe" element={<CreateRecipe />} />
         <Route path="/saved-recipes" element={<SavedRecipes />} />
         <Route path="/search" element={<Search />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router> </div>
   );
