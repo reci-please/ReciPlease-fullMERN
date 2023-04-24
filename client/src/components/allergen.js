@@ -13,7 +13,7 @@ function AvoidIngredients({formData, setFormData}) {
             event.preventDefault();
             if(avoidValue !== "") {
                 // setAllergens([avoidValue, ...allergens]);
-                allergens.push(avoidValue);
+                allergens.unshift(avoidValue);
                 setAvoidValue("");
             }
         }else if (event.key === "Backspace" && avoidValue === "" && allergens.length !== 0) {

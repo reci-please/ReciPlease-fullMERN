@@ -10,6 +10,8 @@ router.post("/", async (req, res) => {
         const requiredIngr = ingredients.seeking;
         const excludedIngr = ingredients.avoiding;
 
+        console.log(ingredients)
+
         /* Check that required and excluded ingredients are arrays and both are not empty */
         if (!Array.isArray(requiredIngr) || !Array.isArray(excludedIngr)) {
             console.log("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
