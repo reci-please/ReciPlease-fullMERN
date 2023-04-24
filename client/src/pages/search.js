@@ -3,7 +3,7 @@ import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
-import WantedIngredients from "../components/want_ing";
+import WantedIngredients from "../components/want-ing";
 import AvoidIngredients from "../components/allergen";
 import Form from "../components/multiform";
 
