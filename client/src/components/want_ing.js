@@ -3,7 +3,9 @@ import React, {useState} from "react";
 function WantedIngredients({formData, setFormData}) {
 
     const [inputValue, setInputValue] = useState("");
-    const [requiredIngr, setRequiredIngr] = useState(formData.seeking);
+    // const [requiredIngr, setRequiredIngr] = useState(formData.seeking);
+
+    var requiredIngr = formData.seeking;
 
     // function handleInputChange(event) {
     //     setInputValue(event.target.value);
@@ -15,19 +17,19 @@ function WantedIngredients({formData, setFormData}) {
         if (event.key === "Enter") {
             event.preventDefault();
             if(inputValue !== "") {
-                setRequiredIngr([inputValue, ...requiredIngr]);
+                requiredIngr.unshift(inputValue);
+                // setRequiredIngr([inputValue, ...requiredIngr]);
                 setInputValue("");
             }
         } else if (event.key === "Backspace" && inputValue === "" && requiredIngr.length !== 0) {
             setInputValue(requiredIngr[0]);
-            setRequiredIngr(requiredIngr.slice(1, requiredIngr.length));
+            requiredIngr = requiredIngr.slice(1, requiredIngr.length);
             event.preventDefault();
         }
         setFormData({...formData, seeking: requiredIngr});
     }
 
     const onSubmit = async (event) => {
-        setFormData({...formData, seeking: requiredIngr})
         event.preventDefault();
     };
 
@@ -45,7 +47,7 @@ function WantedIngredients({formData, setFormData}) {
                          onChange={handleInputChange}
                          onKeyDown={handleKeyPress}/>
                   <div className="m-auto overflow-auto list-flow">
-                      <ul>
+                      <ul className="align-items-center p-2">
                           {requiredIngr.map((ingr, index) => (
                               <li className="form-control form-list-items" key={index}>{ingr}</li>
                           ))}

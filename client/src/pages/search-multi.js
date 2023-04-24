@@ -50,7 +50,7 @@ export const SearchMulti = () => {
                         <div aria-valuemax="100"
                              aria-valuemin="0"
                              aria-valuenow="50"
-                             className="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                             className="progress-bar progress-bar-striped progress-bar-animated"
                              role="progressbar"
                              style={{width: `${(100/stepCount) * page}%`, height: `10px`}}></div>
                     </div>

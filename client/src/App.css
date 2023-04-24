@@ -385,7 +385,7 @@ button#prev-btn:hover::after, button#next-btn:hover::after, button#submit-btn:ho
 }
 .progress-bar {
   animation: progress 0.4s ease-in-out forwards;
-  background-color: #2e6200!important;
+  background-color: #77aa55 !important;
 }
 
 .q__question {

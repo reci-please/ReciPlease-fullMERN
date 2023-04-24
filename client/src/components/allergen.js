@@ -3,7 +3,8 @@ import React, {useState} from "react";
 function AvoidIngredients({formData, setFormData}) {
 
     const [avoidValue, setAvoidValue] = useState("");
-    const [allergens, setAllergens] = useState(formData.avoiding);
+    // const [allergens, setAllergens] = useState(formData.avoiding);
+    var allergens = formData.avoiding;
 
     const handleInputChange = ({target:{value}}) => setAvoidValue(value);
 
@@ -11,12 +12,14 @@ function AvoidIngredients({formData, setFormData}) {
         if (event.key === "Enter") {
             event.preventDefault();
             if(avoidValue !== "") {
-                setAllergens([avoidValue, ...allergens]);
+                // setAllergens([avoidValue, ...allergens]);
+                allergens.push(avoidValue);
                 setAvoidValue("");
             }
         }else if (event.key === "Backspace" && avoidValue === "" && allergens.length !== 0) {
             setAvoidValue(allergens[0]);
-            setAllergens(allergens.slice(1, allergens.length));
+            // setAllergens(allergens.slice(1, allergens.length));
+            allergens = allergens.slice(1, allergens.length);
             event.preventDefault();
         }
         setFormData({...formData, avoiding: allergens});
