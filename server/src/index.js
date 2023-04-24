@@ -87,7 +87,7 @@ app.delete("/:id", async (req, res) => {
     res.json(deletedUser);
  });
 
-app.listen(port, () => { 
-    console.log("SERVER RUNNING ON PORT " + port);
+app.listen(3001, () => { 
+    console.log("SERVER RUNNING ON PORT " + 3001);
 })
 
