@@ -1,28 +1,25 @@
 import React, {useState} from "react";
 
-function AvoidIngredients({formData, setFormData}) {
+function ExcludedIngredients({formData, setFormData}) {
 
-    const [avoidValue, setAvoidValue] = useState("");
-    // const [allergens, setAllergens] = useState(formData.avoiding);
-    var allergens = formData.avoiding;
+    const [inputValue, setInputValue] = useState("");
+    var excludedIngr = formData.excluded;
 
-    const handleInputChange = ({target:{value}}) => setAvoidValue(value);
+    const handleInputChange = ({target:{value}}) => setInputValue(value);
 
     function handleKeyPress(event) {
         if (event.key === "Enter") {
             event.preventDefault();
-            if(avoidValue !== "") {
-                // setAllergens([avoidValue, ...allergens]);
-                allergens.unshift(avoidValue);
-                setAvoidValue("");
+            if(inputValue !== "") {
+                excludedIngr.unshift(inputValue);
+                setInputValue("");
             }
-        }else if (event.key === "Backspace" && avoidValue === "" && allergens.length !== 0) {
-            setAvoidValue(allergens[0]);
-            // setAllergens(allergens.slice(1, allergens.length));
-            allergens = allergens.slice(1, allergens.length);
+        } else if (event.key === "Backspace" && inputValue === "" && excludedIngr.length !== 0) {
+            setInputValue(excludedIngr[0]);
+            excludedIngr = excludedIngr.slice(1, excludedIngr.length);
             event.preventDefault();
         }
-        setFormData({...formData, avoiding: allergens});
+        setFormData({...formData, excluded: excludedIngr});
     }
 
     const onSubmit = async (event) => {
@@ -38,12 +35,12 @@ function AvoidIngredients({formData, setFormData}) {
                            name="q_2"
                            type="text"
                            placeholder="Add allergens"
-                           value={avoidValue}
+                           value={inputValue}
                            onChange={handleInputChange}
                            onKeyDown={handleKeyPress}/>
                     <div className="m-auto overflow-auto list-flow">
                         <ul>
-                            {allergens.map((ingr, index) => (
+                            {excludedIngr.map((ingr, index) => (
                                 <li className="form-control form-list-items" key={index}>{ingr}</li>
                             ))}
                         </ul>
@@ -55,4 +52,4 @@ function AvoidIngredients({formData, setFormData}) {
 
 }
 
-export default AvoidIngredients;
+export default ExcludedIngredients;

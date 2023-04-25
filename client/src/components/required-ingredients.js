@@ -1,15 +1,10 @@
 import React, {useState} from "react";
 
-function WantedIngredients({formData, setFormData}) {
+function RequiredIngredients({formData, setFormData}) {
 
     const [inputValue, setInputValue] = useState("");
-    // const [requiredIngr, setRequiredIngr] = useState(formData.seeking);
 
-    var requiredIngr = formData.seeking;
-
-    // function handleInputChange(event) {
-    //     setInputValue(event.target.value);
-    // }
+    var requiredIngr = formData.required;
 
     const handleInputChange = ({target:{value}}) => setInputValue(value);
 
@@ -18,7 +13,6 @@ function WantedIngredients({formData, setFormData}) {
             event.preventDefault();
             if(inputValue !== "") {
                 requiredIngr.unshift(inputValue);
-                // setRequiredIngr([inputValue, ...requiredIngr]);
                 setInputValue("");
             }
         } else if (event.key === "Backspace" && inputValue === "" && requiredIngr.length !== 0) {
@@ -26,7 +20,7 @@ function WantedIngredients({formData, setFormData}) {
             requiredIngr = requiredIngr.slice(1, requiredIngr.length);
             event.preventDefault();
         }
-        setFormData({...formData, seeking: requiredIngr});
+        setFormData({...formData, required: requiredIngr});
     }
 
     const onSubmit = async (event) => {
@@ -61,4 +55,4 @@ function WantedIngredients({formData, setFormData}) {
 
 }
 
-export default WantedIngredients;
+export default RequiredIngredients;

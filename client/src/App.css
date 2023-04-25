@@ -460,7 +460,7 @@ label.search-multi {
   background-repeat: repeat;
   position: relative;
   padding: 62px;
-  height: 630px;
+  height: fit-content;
   box-shadow: 10px 8px 21px 0px rgba(204, 204, 204, 0.75);
   -webkit-box-shadow: 10px 8px 21px 0px rgba(204, 204, 204, 0.75);
   -moz-box-shadow: 10px 8px 21px 0px rgba(204, 204, 204, 0.75);

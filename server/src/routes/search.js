@@ -7,18 +7,19 @@ const prisma = new PrismaClient();
 router.post("/", async (req, res) => {
     try {
         const ingredients = req.body.formData;
-        const requiredIngr = ingredients.seeking;
-        const excludedIngr = ingredients.avoiding;
+        const requiredIngr = ingredients.required;
+        const excludedIngr = ingredients.excluded;
 
-        console.log(ingredients)
+        console.log("Required Ingredients: " + requiredIngr);
+        console.log("Excluded Ingredients: " + excludedIngr);
 
         /* Check that required and excluded ingredients are arrays and both are not empty */
         if (!Array.isArray(requiredIngr) || !Array.isArray(excludedIngr)) {
             console.log("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
             return res.status(400).send("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
-        } else if (requiredIngr.length === 0) {
-            console.log("Error: No wanted ingredients passed.");
-            return res.status(400).send("Error: No wanted ingredients passed..");
+        } else if (requiredIngr.length === 0 && excludedIngr.length === 0) {
+            console.log("Error: No ingredients passed.");
+            return res.status(400).send("Error: No ingredients passed..");
         }
 
         const recipes = await prisma.recipe.findMany({
