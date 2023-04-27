@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://rhkxkraavnxqex193ywm:pscale_pw_oUH2d3TdJXZcsyQK0PM3Z09oDj7SO3m7cKXiFPTSic6@us-east.connect.psdb.cloud/reciplease-db?sslaccept=strict'"
+  url      = env("DATABASE_URL")
 
   relationMode = "prisma"
 }
