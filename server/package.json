@@ -8,12 +8,12 @@
     "start": "nodemon src/index.js"
   },
   "dependencies": {
+    "prisma": "4.13.0",
     "@prisma/client": "4.13.0",
     "bcrypt": "^5.1.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "jsonwebtoken": "^9.0.0",
-    "prisma": "4.13.0"
+    "jsonwebtoken": "^9.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"

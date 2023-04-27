@@ -26,7 +26,7 @@ model Recipe {
   imageUrl String
   cookingTime Int
   ingredients IngredientsOnRecipes[]
-  //ingredientQuantity Quantity[]
+  DRLabels DRLabelsOnRecipes[]
   
   author User @relation(fields: [authorId], references: [id])
   @@index([authorId])
@@ -39,6 +39,7 @@ model Recipe {
 model Ingredient {
   id String @id @unique
   recipesThatHaveIngredient IngredientsOnRecipes[]
+  DRLabels DRLabelsOnIngredients[]
 }
 
 model IngredientsOnRecipes {
@@ -69,6 +70,39 @@ model SavedOnUsers {
   @@index([savedById])
   @@index([recipeId])
 }
+
+model DietaryRestrictionLabel {
+  name String @id @unique
+  ingredientsThatHaveLabel DRLabelsOnIngredients[]
+  recipesThatHaveLabel DRLabelsOnRecipes[]
+}
+
+model DRLabelsOnIngredients {
+  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  ingredientId String
+
+  label DietaryRestrictionLabel @relation(fields: [labelName], references: [name])
+  labelName String
+
+  @@id([ingredientId, labelName])
+
+  @@index([ingredientId])
+  @@index([labelName])
+}
+
+model DRLabelsOnRecipes {
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+
+  label DietaryRestrictionLabel @relation(fields: [labelName], references: [name])
+  labelName String
+
+  @@id([recipeId, labelName])
+
+  @@index([recipeId])
+  @@index([labelName])
+}
+
 
 //model Quantity {
 //  id String @id
