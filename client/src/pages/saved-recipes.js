@@ -39,7 +39,9 @@ export const SavedRecipes = () => {
                         </div>
                     
                         <img src={recipe.imageUrl} alt={recipe.name} />
-                        <p>{ recipe.servings} Servings</p>
+                    <p>{recipe.servings} Servings</p>
+                    
+                    <p>Cooking Time: {recipe.cookingTime}</p>
                     <div className="instructions">
                         <h3>Ingredients:</h3>
                         
@@ -55,9 +57,9 @@ export const SavedRecipes = () => {
                     </li>
                 )}
                         </ul>
+                        <h4>Directions:</h4>
                         <p>{recipe.instructions}</p>
                         </div>
-                        <p>Cooking Time: {recipe.cookingTime}</p>
                     </li>
                 )}
             </ul>
