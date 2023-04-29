@@ -1,16 +1,10 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import mongoose, { connect } from 'mongoose';
-//import { RecipeModel } from "../models/Recipes.js";
 import { UserModel } from '../models/Users.js';
 import { verifyToken } from './users.js';
 
-
-
-
 const router = express.Router();
 const prisma = new PrismaClient();
-
 
 router.post("/ingredientCreate", async (req, res) => {
     const { id, quantity} = req.body;
@@ -27,8 +21,6 @@ router.post("/ingredientCreate", async (req, res) => {
     }
 })
 
-
-
 router.get("/", async (req, res) => {
     try {
         const response = await prisma.recipe.findMany();
@@ -39,7 +31,6 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-     
     
     const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, quantities, numIngredients} = req.body;
     try {
@@ -145,6 +136,4 @@ router.get("/savedRecipes/:userID", async (req, res) => {
     }
 });
 
-
 export { router as recipesRouter };
-

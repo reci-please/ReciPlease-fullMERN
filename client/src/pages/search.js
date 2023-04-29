@@ -3,106 +3,100 @@ import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from 'react-cookie';
+import RequiredIngredients from "../components/required-ingredients";
+import ExcludedIngredients from "../components/excluded-ingredients";
+import DisplayResults from '../components/display-results';
+import Form from "../components/multiform";
 
 export const Search = () => {
-    const [cookies , ] = useCookies(["access_token"]);
-    const userID = useGetUserID();
-    const navigate = useNavigate();
+    // const [cookies,] = useCookies(["access_token"]);
+    // const userID = useGetUserID();
+    // const navigate = useNavigate();
 
     const [recipes, setRecipes] = useState([]);
-    const [inputValue, setInputValue] = useState("");
-    const [ingredients, setIngredients] = useState([]);
+    const [page, setPage] = useState(0);
+    const [formData, setFormData] = useState({
+        required: [],
+        excluded: []
+    });
 
-    function handleInputChange(event) {
-        setInputValue(event.target.value);
-    }
+    // Page 0: Required Ingredients
+    // Page 1: Excluded Ingredients
+    // Page 2: Confirmation Page
+    // Page 3: Search Results
+    const stepCount = 3;
+    const formQuestions = ["Are there any ingredients you want to include?",
+        "Are there any ingredients or allergens you want to avoid?",
+        "Alright, lets confirm your choices:", "Search Results"]
 
-    function handleKeyPress(event) {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            if(inputValue !== "") {
-                setIngredients([inputValue, ...ingredients]);
-                setInputValue("");
-            }
-        } else if (event.key === "Backspace" && inputValue === "" && ingredients.length !== 0) {
-            setInputValue(ingredients[0]);
-            setIngredients(ingredients.slice(1, ingredients.length));
-            event.preventDefault();
+    const PageDisplay = () => {
+        if (page === 0) {
+            return <RequiredIngredients formData={formData} setFormData={setFormData}/>;
+        } else if (page === 1) {
+            return <ExcludedIngredients formData={formData} setFormData={setFormData}/>;
+        } else if (page === 2) {
+            return (<Form formData={formData}/>);
+        } else if (page === 3) {
+            return <DisplayResults recipes= {recipes}/>;
+        } else {
+            setPage(() => 0)
+            return <RequiredIngredients formData={formData} setFormData={setFormData}/>;
         }
+
     }
 
-    const onSubmit = async (event) => {
-        event.preventDefault();
-        
+    const onSubmit = async () => {
+        // event.preventDefault();
+        recipes.length = 0;
+
         try {
-            // console.log("Ingredients Requested: ", ingredients);
-            // console.log("Ingredients Type: " + typeof(ingredients));
-            // console.log("Ingredients Type Decons: " + typeof({ingredients}));
-
-            await axios.post("http://localhost:3001/search", { ingredients })
-            .then(response => setRecipes(response.data));
-
-            // recipes.forEach((rec) => {
-            //     console.log("Recipe: " + rec);
-            //     console.log("Recipe Stringify: " + JSON.stringify(rec));
-            // })
-
+            await axios.post("http://localhost:3001/search", {formData})
+                .then(response => setRecipes(response.data));
         } catch (err) {
             console.error(err);
         }
     };
 
     return (
-        <div className="Search">
-            <h2>Search</h2>
-            <form>
-
-                <input
-                    type="text"
-                    placeholder="Add Ingredients"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyPress}
-                />
-                <ul>
-                    {ingredients.map((ingr, index) => (
-                        <li key={index}>{ingr}</li>
-                    ))}
-                </ul>
-
-                <button type='submit' onClick={onSubmit}>Search</button>
-            </form>
-            <br></br>
-            <div>
-                <h2>Search Results</h2>
-                {recipes.map((recipe) => (
-                    <div className="recipe-box" key={recipe.id}>
-                        <h3>{recipe.name}</h3>
-                        <img src={recipe.imageUrl} alt={recipe.name}/>
-                        <p>Servings: {recipe.servings}</p>
-                        <p>Cooking Time: {recipe.cookingTime} minutes</p>
-                        <p>Instructions: {recipe.instructions}</p>
-                        <p>Ingredients:</p>
-                        <table tag="ingredient-table" border="1">
-                            <thead>
-                                <tr>
-                                    <th>Ingredient</th>
-                                    <th>Quantity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {recipe.ingredients.map((ingredient) => (
-                                    <tr key={ingredient.ingredientId}>
-                                        <td><p>{ingredient.ingredientId}</p></td>
-                                        <td><p>{ingredient.quantity}</p></td>
-                                    </tr>
-                                ))}
-                            </tbody>
-
-                        </table>
+        <div className="search-multi">
+            <div className="container d-flex justify-content-center align-items-center min-vh-100">
+                <div className="row g-0 justify-content-center">
+                    <div className="progress">
+                        <div aria-valuemax="100"
+                             aria-valuemin="0"
+                             aria-valuenow="50"
+                             className="progress-bar progress-bar-striped progress-bar-animated"
+                             role="progressbar"
+                             style={{width: `${(100/(stepCount - 1)) * page}%`, height: `auto`}}></div>
                     </div>
-                ))}
+                    <div id="qbox-container">
+                        <div id="steps-container" className="row">
+                            <div className="step">
+                                <div className="q-header"><h4 className="search-multi">{formQuestions[page]}</h4></div>
+                                <div className="q-body form-check ps-0 q-box">{PageDisplay()}</div>
+                            </div>
+                            <div id="q-box__buttons">
+                                <button id="prev-btn" type="button"
+                                        hidden={(page === 0)}
+                                        onClick={() => {
+                                            setPage((currPage) => currPage - 1)}
+                                        }>Previous
+                                </button>
+                                <button id="next-btn" type="button"
+                                        hidden={(page === stepCount)}
+                                        onClick={() => {
+                                            if (page === stepCount - 1) {
+                                                onSubmit();
+                                            }
+                                            setPage((currPage) => currPage + 1);
+                                        }}>
+                                    {page === stepCount - 1 ? "Submit" : "Next"}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};

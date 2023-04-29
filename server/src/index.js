@@ -21,8 +21,6 @@ app.use("/recipes", recipesRouter);
 app.use("/ingredient", ingredientRouter);
 app.use("/search", searchRouter);
 
-//mongoose.connect("mongodb+srv://officialreciplease:WpYgE1Qxf9nJn7ic@reciplease.gayiyzz.mongodb.net/test");
-
 app.post("/", async (req, res) => {
     const { username, password } = req.body;
 

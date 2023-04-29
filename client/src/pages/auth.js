@@ -11,14 +11,23 @@ export const Auth = () => {
           className="typer">
             Start making <Typewriter
           options={{
+            // strings: [
+            //   "Pasta " + "🍝".slice(0, 2),
+            //   "Salad " + "🥗".slice(0, 2),
+            //   "Omelettes " + "🍳".slice(0, 2),
+            //   "Dumplings " + "🥟".slice(0, 2),
+            //   "Tamales " + "🫔".slice(0, 2),
+            //   "Oysters " + "🦪".slice(0, 2),
+            //   "Hamburgers " + "🍔".slice(0, 2),
+            // ],
             strings: [
-              "Pasta 🍝",
-              "Salad 🥗",
-              "Omelettes 🍳",
-              "Dumplings 🥟",
-              "Tamales 🫔",
-              "Oysters 🦪",
-              "Hamburgers 🍔",
+              "Pasta",
+              "Salad",
+              "Omelettes" ,
+              "Dumplings" ,
+              "Tamales" ,
+              "Oysters" ,
+              "Hamburgers",
             ],
             autoStart: true,
             loop: true,
