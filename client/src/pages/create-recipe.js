@@ -68,7 +68,6 @@ export const CreateRecipe = () => {
         quantities[idx] = value;
         setRecipe({ ...recipe, quantities });
 
-        console.log(recipe.quantities);
     }
 
     
