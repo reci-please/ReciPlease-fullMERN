@@ -79,7 +79,9 @@ export const CreateRecipe = () => {
       <h2>Make Your Own Recipe</h2>
       <form>
         <div className="user-box">
-          <input type="text" onChange={handleChange} />
+          <input type="text" className="input"
+            id="name"
+            name="name" onChange={handleChange} />
           <label htmlFor="name">Recipe Name</label>
         </div>
 
