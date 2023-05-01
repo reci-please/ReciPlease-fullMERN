@@ -5,8 +5,8 @@ import { Auth } from './pages/auth';
 import { CreateRecipe } from './pages/create-recipe';
 import { SavedRecipes } from './pages/saved-recipes';
 import { Search } from './pages/search';
-import { Profile } from './pages/profile';
-import { FullRecipe } from './pages/full-recipe';
+import { Profile } from './pages/profile'
+import { FullRecipe } from './pages/recipe/[id]';
 import {SearchRelated } from './pages/search-related';
 import { Navbar } from "./components/navbar";
 
