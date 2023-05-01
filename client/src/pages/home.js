@@ -96,7 +96,7 @@ export const Home = () => {
            <li key={recipe.id}>
             {/* {isRecipeSaved(recipe.id) && <h1> ALREADY SAVED</h1>} */}
             <div>
-            <Link to={`/${recipe.id}`} style={{color: 'black', textDecoration: 'none'}}><h2>{recipe.name}</h2></Link>
+            <Link to={`/recipe/${recipe.id}`} style={{color: 'black', textDecoration: 'none'}}><h2>{recipe.name}</h2></Link>
               
               
               
