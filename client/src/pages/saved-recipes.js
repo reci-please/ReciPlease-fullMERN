@@ -44,15 +44,15 @@ export const SavedRecipes = () => {
             </div>
 
             <img src={recipe.imageUrl} alt={recipe.name} />
-            <p>{recipe.servings} Servings</p>
+            <p>{recipe.servings} {recipe.servings === 1 ? 'Serving' : 'Servings'}</p>
             <div>
               {/* <h3>Ingredients:</h3> */}
 
               <ul>
                 {recipe.ingredients.map((ingredient) => (
                   <li key={ingredient.ingredientId}>
-                    <h4>{ingredient.ingredientId}</h4>
-                    <p>{ingredient.quantity}</p>
+                    <h4>{ingredient.ingredientId.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</h4>
+                    <p>{ingredient.quantity.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p>
                   </li>
                 ))}
               </ul>

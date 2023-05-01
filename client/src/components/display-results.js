@@ -15,7 +15,7 @@ function DisplayResults({recipes}) {
                         <li key={recipe.id}>
                             <h3>{recipe.name}</h3>
                             <img src={recipe.imageUrl} alt={recipe.name}/>
-                            <p>Servings: {recipe.servings}</p>
+                            <p>{recipe.servings} {recipe.servings === 1 ? 'Serving' : 'Servings'} </p>
                             <p>Cooking Time: {recipe.cookingTime} minutes</p>
                             <p>Instructions: {recipe.instructions}</p>
                             <p>Ingredients:</p>
@@ -29,8 +29,8 @@ function DisplayResults({recipes}) {
                                 <tbody>
                                     {recipe.ingredients.map((ingredient) => (
                                         <tr key={ingredient.ingredientId}>
-                                            <td><p>{ingredient.ingredientId}</p></td>
-                                            <td><p>{ingredient.quantity}</p></td>
+                                            <td><p>{ingredient.ingredientId.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p></td>
+                                            <td><p>{ingredient.quantity.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p></td>
                                         </tr>
                                     ))}
                                 </tbody>
