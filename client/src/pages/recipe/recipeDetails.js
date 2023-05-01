@@ -14,7 +14,7 @@ export const FullRecipe = () => {
         const fetchRecipe = async () => {
             try {
                 const recipe = await axios.get("https://reciplease-j0mk.onrender.com/recipes/recipes/recipeId", id);
-                console.log(recipe.data);
+                console.log(recipe);
                 setRecipe(recipe);
             } catch (err) {
                 console.err(err);

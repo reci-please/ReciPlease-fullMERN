@@ -24,7 +24,7 @@ app.use("/search", searchRouter);
 app.use("/search-related", searchRelatedRouter);
 
 
-/*
+
 app.post("/", async (req, res) => {
     const { username, password } = req.body;
 
@@ -89,8 +89,8 @@ app.delete("/:id", async (req, res) => {
     res.json(deletedUser);
  });
 
+ 
 app.listen(port, () => { 
     console.log("SERVER RUNNING ON PORT " + port);
 })
 
-*/
