@@ -27,6 +27,7 @@ router.post("/register", async (req, res) => {
     data: {
       username: username,
       password: hashedPassword,
+      skillLvl: "low",
       }
     });
 
