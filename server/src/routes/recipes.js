@@ -35,6 +35,8 @@ router.get("/recipeId/:id", async (req, res) => {
         const recipe = await prisma.recipe.findUnique({
             where: {
                 id: req.params.id,
+            }, include: {
+                ingredients: true,
             }
         })
         res.json(recipe);
