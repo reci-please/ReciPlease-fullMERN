@@ -10,7 +10,10 @@ import clock from '../components/img/clock.svg';
 export const FullRecipe = () => {
 
     return (
-        <h1>Full Recipe</h1>
+        <div className="recipes">
+
+<h1>Full Recipe</h1>
+        </div>
     )
 
 };
