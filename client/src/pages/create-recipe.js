@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 
 export const CreateRecipe = () => {
+  const port = process.env.PORT;
+
   const [cookies] = useCookies(["access_token"]);
   const userID = useGetUserID();
 
@@ -66,7 +68,8 @@ export const CreateRecipe = () => {
     event.preventDefault();
     try {
       //await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
-      await axios.post("http://localhost:3001/recipes", recipe);
+      //await axios.post(`http://localhost:${port}/recipes`, recipe);
+      await axios.post(`https://reciplease-j0mk.onrender.com/recipes`, recipe);
       alert("Recipe Created");
       navigate("/");
     } catch (err) {
@@ -79,7 +82,9 @@ export const CreateRecipe = () => {
       <h2>Make Your Own Recipe</h2>
       <form>
         <div className="user-box">
-          <input type="text" onChange={handleChange} />
+          <input type="text" className="input"
+            id="name"
+            name="name" onChange={handleChange} />
           <label htmlFor="name">Recipe Name</label>
         </div>
 

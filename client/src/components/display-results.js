@@ -5,13 +5,17 @@ function DisplayResults({recipes}) {
     return (
         <div>
             <div className="q-box__question recipes">
-                {recipes.length === 0 ? <h5>No recipes found</h5> : ""}
+                {
+                recipes.length === 0 ? 
+                <h5>No recipes found. <br></br><br></br>
+                Would you like to perform a near-match search?</h5> : ""
+                }
                 <ul className="items">
                     {recipes.map((recipe) => (
                         <li key={recipe.id}>
                             <h3>{recipe.name}</h3>
                             <img src={recipe.imageUrl} alt={recipe.name}/>
-                            <p>Servings: {recipe.servings}</p>
+                            <p>{recipe.servings} {recipe.servings === 1 ? 'Serving' : 'Servings'} </p>
                             <p>Cooking Time: {recipe.cookingTime} minutes</p>
                             <p>Instructions: {recipe.instructions}</p>
                             <p>Ingredients:</p>
@@ -25,8 +29,8 @@ function DisplayResults({recipes}) {
                                 <tbody>
                                     {recipe.ingredients.map((ingredient) => (
                                         <tr key={ingredient.ingredientId}>
-                                            <td><p>{ingredient.ingredientId}</p></td>
-                                            <td><p>{ingredient.quantity}</p></td>
+                                            <td><p>{ingredient.ingredientId.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p></td>
+                                            <td><p>{ingredient.quantity.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</p></td>
                                         </tr>
                                     ))}
                                 </tbody>

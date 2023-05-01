@@ -4,7 +4,12 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Typewriter from "typewriter-effect";
 
+
+const port = process.env.PORT;
 export const Auth = () => {
+  
+  
+
   return (
     <div className="auth">
       <div 
@@ -52,7 +57,12 @@ const Login = () => {
   const onLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/auth/login", {
+      //const response = await axios.post(`http://localhost:3001/auth/login`, {
+      //  username,
+      //  password,
+      //});
+
+      const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/login`, {
         username,
         password,
       });
@@ -68,11 +78,20 @@ const Login = () => {
   const onRegisterSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:3001/auth/register", {
+      //await axios.post(`http://localhost:1000/auth/register`, {
+      //  username,
+      //  password,
+      //});
+
+      const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/register`, {
         username,
         password,
       });
-      alert("Registration Completed! Now login.");
+
+
+      setCookies("access_token", response.data.token);
+      window.localStorage.setItem("userID", response.data.userID);
+      navigate("/");
       window.location.reload();
     } catch (err) {
       alert("username already exists, please log in");

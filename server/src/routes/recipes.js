@@ -29,6 +29,22 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/recipeId/:id", async (req, res) => { 
+
+    try {
+        const recipe = await prisma.recipe.findUnique({
+            where: {
+                id: req.params.id,
+            }, include: {
+                ingredients: true,
+            }
+        })
+        res.json(recipe);
+    } catch (err) {
+        res.json(err);
+    }
+})
+
 router.post("/", async (req, res) => {
     
     const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, quantities, numIngredients} = req.body;
@@ -40,6 +56,7 @@ router.post("/", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
+                skillLvl: "low",
                 authorId: authorId
             }
         });
@@ -56,12 +73,12 @@ router.post("/", async (req, res) => {
         for (let i = 0; i < numIngredients; i++) {
             const someIngredient = await prisma.ingredient.upsert({
                 where: {
-                    id: ingredients[i],
+                    id: ingredients[i].toLowerCase(),
                 },
                 update: {
                 },
                 create: {
-                    id: ingredients[i],
+                    id: ingredients[i].toLowerCase(),
                 },
             });
 

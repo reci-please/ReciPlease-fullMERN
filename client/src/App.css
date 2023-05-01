@@ -125,6 +125,7 @@ input {
     outline: inherit;
 }
 
+
 /* .navbar .barrier {
   text-align: center;
   align-items: center;
@@ -484,7 +485,7 @@ label.search-multi {
   font-size: 1.4375rem;
   line-height: 1.6;
 }
-button#prev-btn, button#next-btn, button#submit-btn {
+button#prev-btn, button#next-btn, button#submit-btn, button#related-search {
   font-size: 17px;
   font-weight: bold;
   position: relative;
@@ -506,7 +507,7 @@ button#prev-btn, button#next-btn, button#submit-btn {
   border-bottom-right-radius: 5px;
   border-bottom-left-radius: 5px;
 }
-button#prev-btn:after, button#next-btn:after, button#submit-btn:after {
+button#prev-btn:after, button#next-btn:after, button#submit-btn:after, button#related-search:after {
   position: absolute;
   top: 90%;
   left: 0;
@@ -528,7 +529,7 @@ button#prev-btn:after, button#next-btn:after, button#submit-btn:after {
   padding-left: 0;
 }
 
-button#prev-btn:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after {
+button#prev-btn:hover::after, button#next-btn:hover::after, button#submit-btn:hover::after, button#related-search:hover::after {
   transform: translateY(-80%);
   transition: transform .3s;
 }

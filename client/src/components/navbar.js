@@ -18,7 +18,10 @@ export const Navbar = () => {
 
     return (<div><div className="navbar">
         <ul>
+        <a href="/">
         <img src={logo} alt="logo" />
+        </a>
+        
         <li><Link to="/">Home</Link></li>
         {!cookies.access_token ? (
             <li><Link to="/auth">Login/Register</Link></li>
