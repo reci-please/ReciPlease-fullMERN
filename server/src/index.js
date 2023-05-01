@@ -21,6 +21,8 @@ app.use("/recipes", recipesRouter);
 app.use("/ingredient", ingredientRouter);
 app.use("/search", searchRouter);
 
+
+/*
 app.post("/", async (req, res) => {
     const { username, password } = req.body;
 
@@ -89,3 +91,4 @@ app.listen(port, () => {
     console.log("SERVER RUNNING ON PORT " + port);
 })
 
+*/
