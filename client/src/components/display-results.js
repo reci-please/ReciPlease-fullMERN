@@ -5,7 +5,11 @@ function DisplayResults({recipes}) {
     return (
         <div>
             <div className="q-box__question recipes">
-                {recipes.length === 0 ? <h5>No recipes found</h5> : ""}
+                {
+                recipes.length === 0 ? 
+                <h5>No recipes found. <br></br><br></br>
+                Would you like to perform a near-match search?</h5> : ""
+                }
                 <ul className="items">
                     {recipes.map((recipe) => (
                         <li key={recipe.id}>

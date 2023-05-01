@@ -7,6 +7,7 @@ import { userRouter } from "./routes/users.js";
 import { recipesRouter } from "./routes/recipes.js";
 import { ingredientRouter } from "./routes/ingredients.js";
 import { searchRouter } from "./routes/search.js";
+import { searchRelatedRouter } from "./routes/searchRelated.js";
 
 const app = express();
 app.use(express.json());
@@ -20,6 +21,7 @@ app.use("/auth", userRouter);
 app.use("/recipes", recipesRouter);
 app.use("/ingredient", ingredientRouter);
 app.use("/search", searchRouter);
+app.use("/search-related", searchRelatedRouter);
 
 
 /*
