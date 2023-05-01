@@ -1,6 +1,5 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { UserModel } from '../models/Users.js';
 import { verifyToken } from './users.js';
 
 const router = express.Router();

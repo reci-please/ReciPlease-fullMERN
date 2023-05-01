@@ -1,6 +1,5 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { UserModel } from '../models/Users.js';
 import { verifyToken } from './users.js';
 
 const router = express.Router();
@@ -43,6 +42,7 @@ router.post("/", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
+                skillLvl: "low",
                 authorId: authorId
             }           
         });
@@ -51,12 +51,12 @@ router.post("/", async (req, res) => {
         for (let i = 0; i < numIngredients; i++) {
             const someIngredient = await prisma.ingredient.upsert({
                 where: {
-                    id: ingredients[i],
+                    id: ingredients[i].toLowerCase(),
                 },
                 update: {
                 },
                 create: {
-                    id: ingredients[i],
+                    id: ingredients[i].toLowerCase(),
                 },
             });
 

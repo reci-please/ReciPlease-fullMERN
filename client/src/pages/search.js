@@ -50,7 +50,25 @@ export const Search = () => {
         recipes.length = 0;
 
         try {
-            await axios.post("http://localhost:3001/search", {formData})
+            //await axios.post("http://localhost:3001/search", {formData})
+             //   .then(response => setRecipes(response.data));
+            
+            await axios.post("https://reciplease-j0mk.onrender.com/search", {formData})
+                .then(response => setRecipes(response.data));
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const onSubmitRelated = async () => {
+        // event.preventDefault();
+        recipes.length = 0;
+        console.log("Here 1");
+        try {
+          //  await axios.post("http://localhost:3001/search-related", {formData})
+           //     .then(response => setRecipes(response.data));
+            
+            await axios.post("https://reciplease-j0mk.onrender.com/search-related/", {formData})
                 .then(response => setRecipes(response.data));
         } catch (err) {
             console.error(err);
@@ -92,6 +110,14 @@ export const Search = () => {
                                         }}>
                                     {page === stepCount - 1 ? "Submit" : "Next"}
                                 </button>
+                                <button id="related-search" type="button"
+                                        hidden={(page != stepCount || recipes.length > 0)}
+                                        onClick={() => {
+                                            if (page === stepCount) {
+                                                onSubmitRelated();
+                                            }
+                                        }}>
+                                Yes</button>
                             </div>
                         </div>
                     </div>
