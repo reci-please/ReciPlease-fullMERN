@@ -31,12 +31,12 @@ router.get("/", async (req, res) => {
 
 router.get("/recipeId", async (req, res) => { 
 
-    const { recipeId } = req.body;
+    const { id } = req.body;
 
     try {
         const recipe = await prisma.recipe.findUnique({
             where: {
-                id: recipeId,
+                id: id,
             }
         })
         res.json(recipe);
