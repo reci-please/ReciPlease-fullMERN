@@ -19,7 +19,7 @@ export const Home = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`http://localhost:${port}/recipes`);
+        const response = await axios.get(`http://localhost:1000/recipes`);
         const temp = response.data;
         setRecipes(temp);
       } catch (err) {
@@ -38,7 +38,7 @@ export const Home = () => {
     const fetchSavedRecipe = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:${port}/recipes/savedRecipes/ids/${userID}`
+          `http://localhost:1000/recipes/savedRecipes/ids/${userID}`
         );
         console.log(response.data);
         pushToArray(response.data);
@@ -61,7 +61,7 @@ export const Home = () => {
       const recipe = recipeID;
 
       await axios.put(
-        `http://localhost:${port}/recipes/saveRecipe/${id}/${recipe}`
+        `http://localhost:1000/recipes/saveRecipe/${id}/${recipe}`
       );
       const temp = savedRecipes;
       temp.push(recipeID);

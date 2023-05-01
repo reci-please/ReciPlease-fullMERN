@@ -57,7 +57,7 @@ const Login = () => {
   const onLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:${port}/auth/login`, {
+      const response = await axios.post(`http://localhost:1000/auth/login`, {
         username,
         password,
       });
@@ -73,7 +73,7 @@ const Login = () => {
   const onRegisterSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post(`http://localhost:${port}/auth/register`, {
+      await axios.post(`http://localhost:1000/auth/register`, {
         username,
         password,
       });
