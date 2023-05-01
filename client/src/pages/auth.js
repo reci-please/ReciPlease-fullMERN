@@ -83,12 +83,15 @@ const Login = () => {
       //  password,
       //});
 
-      await axios.post(`https://reciplease-j0mk.onrender.com/auth/register`, {
+      const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/register`, {
         username,
         password,
       });
 
-      alert("Registration Completed! Now login.");
+
+      setCookies("access_token", response.data.token);
+      window.localStorage.setItem("userID", response.data.userID);
+      navigate("/");
       window.location.reload();
     } catch (err) {
       alert("username already exists, please log in");
