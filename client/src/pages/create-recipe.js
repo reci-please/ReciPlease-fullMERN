@@ -68,7 +68,8 @@ export const CreateRecipe = () => {
     event.preventDefault();
     try {
       //await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
-      await axios.post(`http://localhost:${port}/recipes`, recipe);
+      //await axios.post(`http://localhost:${port}/recipes`, recipe);
+      await axios.post(`https://reciplease-j0mk.onrender.com/recipes`, recipe);
       alert("Recipe Created");
       navigate("/");
     } catch (err) {

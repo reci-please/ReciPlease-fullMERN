@@ -10,9 +10,15 @@ export const SavedRecipes = () => {
   useEffect(() => {
     const fetchSavedRecipe = async () => {
       try {
+        //const response = await axios.get(
+        //  `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
+        //);
+
         const response = await axios.get(
-          `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
+          `https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`
         );
+
+
         const temp = response.data;
         setSavedRecipes(temp);
       } catch (err) {

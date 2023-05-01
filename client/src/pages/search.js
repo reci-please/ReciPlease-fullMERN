@@ -50,7 +50,10 @@ export const Search = () => {
         recipes.length = 0;
 
         try {
-            await axios.post("http://localhost:3001/search", {formData})
+            //await axios.post("http://localhost:3001/search", {formData})
+            //    .then(response => setRecipes(response.data));
+            
+            await axios.post("https://reciplease-j0mk.onrender.com/search", {formData})
                 .then(response => setRecipes(response.data));
         } catch (err) {
             console.error(err);
