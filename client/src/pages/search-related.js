@@ -8,7 +8,7 @@ import ExcludedIngredients from "../components/excluded-ingredients";
 import DisplayResults from '../components/display-results';
 import Form from "../components/multiform";
 
-export const Search = () => {
+export const SearchRelated = () => {
     // const [cookies,] = useCookies(["access_token"]);
     // const userID = useGetUserID();
     // const navigate = useNavigate();
@@ -48,11 +48,10 @@ export const Search = () => {
     const onSubmit = async () => {
         // event.preventDefault();
         recipes.length = 0;
-        console.log("Here normal search");
 
         try {
-          //  await axios.post("http://localhost:3001/search", {formData})
-           //     .then(response => setRecipes(response.data));
+            //await axios.post("http://localhost:3001/search", {formData})
+             //   .then(response => setRecipes(response.data));
             
             await axios.post("https://reciplease-j0mk.onrender.com/search", {formData})
                 .then(response => setRecipes(response.data));
@@ -66,7 +65,7 @@ export const Search = () => {
         recipes.length = 0;
         console.log("Here 1");
         try {
-           // await axios.post("http://localhost:3001/search-related", {formData})
+          //  await axios.post("http://localhost:3001/search-related", {formData})
            //     .then(response => setRecipes(response.data));
             
             await axios.post("https://reciplease-j0mk.onrender.com/search-related", {formData})

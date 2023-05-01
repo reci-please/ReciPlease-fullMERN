@@ -7,7 +7,7 @@ import { userRouter } from "./routes/users.js";
 import { recipesRouter } from "./routes/recipes.js";
 import { ingredientRouter } from "./routes/ingredients.js";
 import { searchRouter } from "./routes/search.js";
-import { searchRelatedRouter } from "./routes/searchRelated.js";
+import { searchRelatedRouter } from "./routes/search-related.js";
 
 const app = express();
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use("/search", searchRouter);
 app.use("/search-related", searchRelatedRouter);
 
 
-/*
+
 app.post("/", async (req, res) => {
     const { username, password } = req.body;
 
@@ -89,8 +89,8 @@ app.delete("/:id", async (req, res) => {
     res.json(deletedUser);
  });
 
+ 
 app.listen(port, () => { 
     console.log("SERVER RUNNING ON PORT " + port);
 })
 
-*/

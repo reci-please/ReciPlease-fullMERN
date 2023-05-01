@@ -84,4 +84,4 @@ router.post("/", async (req, res) => {
   });
   
 
-export { router as searchRelated };
+export { router as searchRelatedRouter };
