@@ -7,6 +7,7 @@ import { SavedRecipes } from './pages/saved-recipes';
 import { Search } from './pages/search';
 import { Profile } from './pages/profile';
 import { FullRecipe } from './pages/full-recipe';
+import {SearchRelated } from './pages/search-related';
 import { Navbar } from "./components/navbar";
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/full-recipe" element={<FullRecipe/>} />
+        <Route path="/search-related" element={<SearchRelated />} />
       </Routes>
     </Router> </div>
   );
