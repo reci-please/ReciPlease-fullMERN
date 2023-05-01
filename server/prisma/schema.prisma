@@ -27,6 +27,10 @@ model Recipe {
   imageUrl String
   cookingTime Int
   skillLvl String
+  totalScore Float
+  numReview Int
+
+
   ingredients IngredientsOnRecipes[]
   //ingredientQuantity Quantity[]
   

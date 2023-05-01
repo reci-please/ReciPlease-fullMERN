@@ -16,6 +16,7 @@ export const Home = () => {
 
   const userID = useGetUserID();
 
+
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -91,7 +92,8 @@ export const Home = () => {
       </div>
       <ul className="items">
         {recipes.map((recipe) => (
-          <li key={recipe.id}>
+          <a href="/full-recipe">
+           <li key={recipe.id}>
             {/* {isRecipeSaved(recipe.id) && <h1> ALREADY SAVED</h1>} */}
             <div>
               <h2>{recipe.name}</h2>
@@ -108,6 +110,8 @@ export const Home = () => {
             <h5><img className="clock" src={clock} alt="React Logo"/> {recipe.cookingTime} minutes</h5>
             <p>{recipe.instructions}</p>
           </li>
+          </a>
+          
         ))}
       </ul>
     </div>
