@@ -51,12 +51,12 @@ router.post("/", async (req, res) => {
         for (let i = 0; i < numIngredients; i++) {
             const someIngredient = await prisma.ingredient.upsert({
                 where: {
-                    id: ingredients[i],
+                    id: ingredients[i].toLowerCase(),
                 },
                 update: {
                 },
                 create: {
-                    id: ingredients[i],
+                    id: ingredients[i].toLowerCase(),
                 },
             });
 
