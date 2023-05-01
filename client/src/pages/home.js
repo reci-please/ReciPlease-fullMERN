@@ -12,12 +12,14 @@ export const Home = () => {
   const [cookies] = useCookies(["access_token"]);
   const [numSaved, setNumSaved] = useState(0);
 
+  const port = process.env.PORT;
+
   const userID = useGetUserID();
 
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/recipes");
+        const response = await axios.get(`http://localhost:${port}/recipes`);
         const temp = response.data;
         setRecipes(temp);
       } catch (err) {
@@ -36,7 +38,7 @@ export const Home = () => {
     const fetchSavedRecipe = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
+          `http://localhost:${port}/recipes/savedRecipes/ids/${userID}`
         );
         console.log(response.data);
         pushToArray(response.data);
@@ -59,7 +61,7 @@ export const Home = () => {
       const recipe = recipeID;
 
       await axios.put(
-        `http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`
+        `http://localhost:${port}/recipes/saveRecipe/${id}/${recipe}`
       );
       const temp = savedRecipes;
       temp.push(recipeID);

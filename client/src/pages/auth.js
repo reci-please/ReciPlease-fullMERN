@@ -4,7 +4,12 @@ import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
 import Typewriter from "typewriter-effect";
 
+
+const port = process.env.PORT;
 export const Auth = () => {
+  
+  
+
   return (
     <div className="auth">
       <div 
@@ -52,7 +57,7 @@ const Login = () => {
   const onLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3001/auth/login", {
+      const response = await axios.post(`http://localhost:${port}/auth/login`, {
         username,
         password,
       });
@@ -68,7 +73,7 @@ const Login = () => {
   const onRegisterSubmit = async (event) => {
     event.preventDefault();
     try {
-      await axios.post("http://localhost:3001/auth/register", {
+      await axios.post(`http://localhost:${port}/auth/register`, {
         username,
         password,
       });
