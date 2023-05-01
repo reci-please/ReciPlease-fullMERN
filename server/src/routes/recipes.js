@@ -42,6 +42,7 @@ router.post("/", async (req, res) => {
                 instructions: instructions,
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
+                skillLvl: "low",
                 authorId: authorId
             }           
         });
