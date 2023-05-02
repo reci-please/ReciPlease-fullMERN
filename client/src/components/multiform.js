@@ -5,6 +5,14 @@ function Form({formData}) {
     return (
         <div className="row align-items-baseline m-auto overflow-auto list-flow">
             <div className="col">
+                <h5>Your dietary restrictions:</h5>
+                <ul>
+                    {formData.dietRestric.map((drLabel, index) => (
+                        <li className="" key={index}>{drLabel}</li>
+                    ))}
+                </ul>
+            </div>
+            <div className="col">
                 <h5>Your required ingredients:</h5>
                 <ul>
                     {formData.required.map((ingr, index) => (

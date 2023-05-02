@@ -1,48 +1,57 @@
 import { useState } from 'react';
 import axios from "axios";
-import { useGetUserID } from "../hooks/useGetUserID";
-import { useNavigate } from "react-router-dom";
-import { useCookies } from 'react-cookie';
+import DietaryRestrictions from "../components/dietary-restrictions";
 import RequiredIngredients from "../components/required-ingredients";
 import ExcludedIngredients from "../components/excluded-ingredients";
 import DisplayResults from '../components/display-results';
 import Form from "../components/multiform";
 
 export const Search = () => {
-    // const [cookies,] = useCookies(["access_token"]);
-    // const userID = useGetUserID();
-    // const navigate = useNavigate();
 
     const [recipes, setRecipes] = useState([]);
+    const [dietRestricList, setDietRestrList] = useState([]);
     const [page, setPage] = useState(0);
     const [formData, setFormData] = useState({
+        dietRestric: [],
         required: [],
         excluded: []
     });
 
-    // Page 0: Required Ingredients
-    // Page 1: Excluded Ingredients
-    // Page 2: Confirmation Page
-    // Page 3: Search Results
-    const stepCount = 3;
-    const formQuestions = ["Are there any ingredients you want to include?",
+    // Page 0: Dietary Restrictions
+    // Page 1: Required Ingredients
+    // Page 2: Excluded Ingredients
+    // Page 3: Confirmation Page
+    // Page 4: Search Results
+    const stepCount = 4;
+    const formQuestions = ["Do you have any dietary restrictions?", "Are there any ingredients you want to include?",
         "Are there any ingredients or allergens you want to avoid?",
         "Alright, lets confirm your choices:", "Search Results"]
 
     const PageDisplay = () => {
         if (page === 0) {
+            getDietRestr();
+            return <DietaryRestrictions formData={formData} setFormData={setFormData} dietRestricList={dietRestricList}/>;
+        }
+        else if (page === 1) {
             return <RequiredIngredients formData={formData} setFormData={setFormData}/>;
-        } else if (page === 1) {
-            return <ExcludedIngredients formData={formData} setFormData={setFormData}/>;
         } else if (page === 2) {
-            return (<Form formData={formData}/>);
+            return <ExcludedIngredients formData={formData} setFormData={setFormData}/>;
         } else if (page === 3) {
+            return (<Form formData={formData}/>);
+        } else if (page === 4) {
             return <DisplayResults recipes= {recipes}/>;
         } else {
             setPage(() => 0)
-            return <RequiredIngredients formData={formData} setFormData={setFormData}/>;
+            return <DietaryRestrictions formData={formData} setFormData={setFormData}/>;
         }
+    }
 
+    const getDietRestr = async() => {
+        try {
+            await axios.get("https://reciplease-j0mk.onrender.com/search/diet-restric").then(response => setDietRestrList(response.data));
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     const onSubmit = async () => {
