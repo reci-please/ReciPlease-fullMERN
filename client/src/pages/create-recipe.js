@@ -11,6 +11,8 @@ export const CreateRecipe = () => {
   const [cookies] = useCookies(["access_token"]);
   const userID = useGetUserID();
 
+  console.log(userID);
+
   const navigate = useNavigate();
 
 
@@ -77,7 +79,7 @@ export const CreateRecipe = () => {
     event.preventDefault();
     try {
       //await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
-      //await axios.post(`http://localhost:${port}/recipes`, recipe);
+      //await axios.post(`http://localhost:3001/recipes`, recipe);
       await axios.post(`https://reciplease-j0mk.onrender.com/recipes`, recipe);
       alert("Recipe Created");
       navigate("/");
@@ -87,7 +89,7 @@ export const CreateRecipe = () => {
   };
 
   return (
-    <div class="login-box">
+    <div className="login-box">
       <h2>Make Your Own Recipe</h2>
       <form>
         <div className="user-box">
@@ -179,7 +181,7 @@ export const CreateRecipe = () => {
         </div>
 
         
-          <Dropdown placeHolder="Select skill level" options={options} />
+        
         
 
         {/* <button className="submit" type="submit" href="#">

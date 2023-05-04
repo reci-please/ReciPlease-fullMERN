@@ -63,8 +63,8 @@ const Login = () => {
       //});
 
       const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/login`, {
-        username,
-        password,
+       username,
+       password,
       });
 
       setCookies("access_token", response.data.token);
@@ -79,7 +79,7 @@ const Login = () => {
   const onRegisterSubmit = async (event) => {
     event.preventDefault();
     try {
-      //await axios.post(`http://localhost:1000/auth/register`, {
+      //const response = await axios.post(`http://localhost:1000/auth/register`, {
       //  username,
       //  password,
       //});

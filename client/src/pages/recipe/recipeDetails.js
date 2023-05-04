@@ -4,14 +4,26 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Rating } from "../../components/rating";
 import Dropdown from "../../components/dropdown";
+import { useNavigate } from "react-router-dom";
 
 
 
 export const FullRecipe = () => {
-    
+    const navigate = useNavigate();
     const id = useParams().recipeId.toString();
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
+    
+    const [toDelete, setToDelete] = useState({
+        id: id,
+        ingredients: ingredients,
+        numIngredients: ingredients.length,
+    });
+
+    //console.log(ingredients.length);
+    //for (let i = 0; i < ingredients.length; i++) {
+    //    console.log(ingredients[i].ingredientId);
+    //}
 
     const options = [
         { value: "beginner", label: "beginner" },
@@ -29,13 +41,37 @@ export const FullRecipe = () => {
                 setRecipe(recipe.data);
                 setIngredients(recipe.data.ingredients);
             } catch (err) {
-                console.err(err);
+                console.error(err);
             }
             
         };
 
         fetchRecipe();
     }, []);
+
+
+    const deleteRecipe = async () => {
+        const relationsDelete = [];
+
+        for (let i = 0; i < ingredients.length; i++) {
+            relationsDelete.push(ingredients[i].recipeId);
+        }
+
+        const numIngredients = ingredients.length;
+        try {
+
+            setToDelete({ ...toDelete, [ingredients]: relationsDelete });
+            setToDelete({ ...toDelete, [numIngredients]: numIngredients });
+
+            console.log("button activated");
+            //console.log(relationsDelete);
+            await axios.delete(`http://localhost:3001/recipes/${id}`);
+            navigate("/");
+            
+        } catch (err) {
+            console.error(err);
+        }
+    }
 
     
 
@@ -94,6 +130,7 @@ export const FullRecipe = () => {
                     </div>
                 </div>
             </div>
+            <button onClick={deleteRecipe} style={{backgroundColor:"red", fontSize:"25px"}}>Delete</button>
         </div>
     );
 };

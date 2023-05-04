@@ -51,8 +51,8 @@ export const Search = () => {
         console.log("Here normal search");
 
         try {
-          //  await axios.post("http://localhost:3001/search", {formData})
-           //     .then(response => setRecipes(response.data));
+            //await axios.post("http://localhost:3001/search", {formData})
+            //    .then(response => setRecipes(response.data));
             
             await axios.post("https://reciplease-j0mk.onrender.com/search", {formData})
                 .then(response => setRecipes(response.data));
@@ -66,8 +66,8 @@ export const Search = () => {
         recipes.length = 0;
         console.log("Here 1");
         try {
-           // await axios.post("http://localhost:3001/search-related", {formData})
-           //     .then(response => setRecipes(response.data));
+            //await axios.post("http://localhost:3001/search-related", {formData})
+            //    .then(response => setRecipes(response.data));
             
             await axios.post("https://reciplease-j0mk.onrender.com/search-related", {formData})
                 .then(response => setRecipes(response.data));

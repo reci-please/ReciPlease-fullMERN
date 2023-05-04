@@ -45,6 +45,35 @@ router.get("/recipeId/:id", async (req, res) => {
     }
 })
 
+//deletes recipes
+router.delete("/:id", async (req, res) => {
+    //id of recipe to be deleted
+    const id = req.params.id;
+    //const { ingredients, numIngredients } = req.body;
+
+    // deletes all relations that associate ingredients with recipe to be deleted
+    await prisma.ingredientsOnRecipes.deleteMany({
+        where: {
+            recipeId: {
+                contains: id,
+            }
+        }
+    });
+
+
+    // finally deletes the actual recipe from the database now that there is no more relations
+    await prisma.recipe.delete({
+        where: {
+            id: id,
+        },
+    });
+
+    
+    res.json({message: "success"});
+
+ });
+
+ // creates a recipe from scratch
 router.post("/", async (req, res) => {
     
     const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, quantities, numIngredients} = req.body;
@@ -59,6 +88,8 @@ router.post("/", async (req, res) => {
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
                 skillLvl: "low",
+                totalScore: 0,
+                numReview: 0,
                 authorId: authorId
             }           
         });
@@ -94,6 +125,9 @@ router.post("/", async (req, res) => {
     }
 });
 
+
+
+// saves a recipe to a user by creating a relation between the two
 router.put("/saveRecipe/:savedById/:recipeId", async (req, res) => {
     try {
         const connection = await prisma.savedOnUsers.create({
@@ -108,6 +142,8 @@ router.put("/saveRecipe/:savedById/:recipeId", async (req, res) => {
     }
 });
 
+
+// gets recipes saved by a particular user
 router.get("/savedRecipes/ids/:userID", async (req, res) => {
     try {
         const user = await prisma.savedOnUsers.findMany({
