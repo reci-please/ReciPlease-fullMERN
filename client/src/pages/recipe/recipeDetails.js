@@ -2,6 +2,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { Rating } from "../../components/rating";
+import Dropdown from "../../components/dropdown";
+
 
 
 export const FullRecipe = () => {
@@ -10,13 +13,19 @@ export const FullRecipe = () => {
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
 
+    const options = [
+        { value: "beginner", label: "beginner" },
+        { value: "intermediate", label: "intermediate" },
+        { value: "advanced", label: "advanced" }
+      ];
+
     useEffect(() => {
         const fetchRecipe = async () => {
             try {
                 
                 
                 const recipe = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/recipeId/${id}`);
-                //const recipe = await axios.get(`http://localhost:3001/recipes/recipeId`, {id});
+                //const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
                 setRecipe(recipe.data);
                 setIngredients(recipe.data.ingredients);
             } catch (err) {
@@ -33,6 +42,7 @@ export const FullRecipe = () => {
 
     return (
         <div className="recipes">
+            <Dropdown placeHolder="Select skill level" options={options} />
             <h1>{currRecipe.name}</h1>
             <img src={currRecipe.imageUrl} alt="whatever the food is" />
             <p>Time: { currRecipe.cookingTime} minutes</p>
@@ -49,6 +59,8 @@ export const FullRecipe = () => {
             </ul>
             <h3>Instructions</h3>
             <p>{currRecipe.instructions}</p>
+            <Rating />
+
         </div>
     );
 };

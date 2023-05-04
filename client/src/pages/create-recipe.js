@@ -3,6 +3,7 @@ import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import Dropdown from "../components/dropdown";
 
 export const CreateRecipe = () => {
   const port = process.env.PORT;
@@ -12,6 +13,13 @@ export const CreateRecipe = () => {
 
   const navigate = useNavigate();
 
+
+  const options = [
+    { value: "beginner", label: "beginner" },
+    { value: "intermediate", label: "intermediate" },
+    { value: "advanced", label: "advanced" }
+  ];
+
   const [recipe, setRecipe] = useState({
     name: "mole",
     servings: 1,
@@ -19,6 +27,7 @@ export const CreateRecipe = () => {
     imageUrl:
       "https://www.firstdayofhome.com/wp-content/uploads/2021/05/Chicken-Mole-Recipe-featureimg.jpg",
     cookingTime: 120,
+    skillLvl: "",
     authorId: userID,
     ingredients: [],
     quantities: [],
@@ -87,6 +96,7 @@ export const CreateRecipe = () => {
             name="name" onChange={handleChange} />
           <label htmlFor="name">Recipe Name</label>
         </div>
+        
 
         <div className="user-box">
           <input
@@ -167,6 +177,10 @@ export const CreateRecipe = () => {
           />
           <label htmlFor="cookingTime">Cooking Time (minutes)</label>
         </div>
+
+        
+          <Dropdown placeHolder="Select skill level" options={options} />
+        
 
         {/* <button className="submit" type="submit" href="#">
            Create Recipe

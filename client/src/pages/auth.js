@@ -71,6 +71,7 @@ const Login = () => {
       window.localStorage.setItem("userID", response.data.userID);
       navigate("/");
     } catch (err) {
+      alert("incorrect username or password");
       console.error(err);
     }
   };
