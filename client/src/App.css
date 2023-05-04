@@ -145,6 +145,19 @@ a {
   font-size: 25px;
 } */
 
+.ind-recipes{
+  border-bottom: solid #ea964c 4px;
+  border-radius: 18px;
+}
+
+.ind-recipes-instructions{
+  border-left: solid #ea964c 4px;
+  border-right: solid #ea964c 4px;
+  border-bottom: solid #ea964c 4px;
+  border-radius: 18px;
+}
+
+
 .recipes  {
   align-items: center;
   justify-content: center;
@@ -153,6 +166,7 @@ a {
   margin-top: 55px;
   padding-top: 23px;
 }
+
 .recipes .header  {
   align-items: center;
   justify-content: center;
@@ -184,7 +198,6 @@ a {
 .recipes ul {
   columns: 3;
 }
-
 
 .recipes li {
   border-radius: 18px;
