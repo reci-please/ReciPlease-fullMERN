@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
+import { Link } from 'react-router-dom';
 import clock from "../components/img/clock.svg";
+
 
 export const SavedRecipes = () => {
   const [savedRecipes, setSavedRecipes] = useState([]);
@@ -39,8 +41,9 @@ export const SavedRecipes = () => {
         {savedRecipes.map((recipe) => (
             console.log(recipe.imageUrl),
           <li key={recipe.id}>
-            <div>
-              <h2>{recipe.name}</h2>
+              <div>
+                <Link to={`/recipe/${recipe.id}`} style={{color: 'black', textDecoration:'none'}}><h2>{recipe.name}</h2></Link>
+            
             </div>
 
             <img src={recipe.imageUrl} alt={recipe.name} />
