@@ -10,17 +10,19 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @unique
   username String @unique
   password String
   skillLvl String
+
   createdRecipes Recipe[]
   savedRecipes SavedOnUsers[]
+  recipesReviewed RecipeReviews[]
   //savedRecipes Recipe[] @relation("saved")
 }
 
 model Recipe {
-  id String @id @default(uuid())
+  id String @id @default(uuid()) @unique
   name String
   servings Int
   instructions String
@@ -39,6 +41,7 @@ model Recipe {
   authorId String
 
   savedBy SavedOnUsers[]
+  reviewedBy RecipeReviews[]
  // savedBy User[] @relation("saved")
 }
 
@@ -75,6 +78,26 @@ model SavedOnUsers {
   @@index([savedById])
   @@index([recipeId])
 }
+
+model RecipeReviews {
+
+  createdAt DateTime @default(now())
+  reviewedBy User @relation(fields: [reviewedById], references: [id])
+  reviewedById String
+
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String
+
+  score Int
+  review String
+
+  @@id([reviewedById, recipeId])
+
+  @@index([reviewedById])
+  @@index([recipeId])
+
+}
+
 
 //model Quantity {
 //  id String @id

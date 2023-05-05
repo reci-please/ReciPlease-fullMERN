@@ -6,21 +6,20 @@ import { useCookies } from "react-cookie";
 import Dropdown from "../components/dropdown";
 
 export const CreateRecipe = () => {
-  const port = process.env.PORT;
+  //const port = process.env.PORT;
 
   const [cookies] = useCookies(["access_token"]);
   const userID = useGetUserID();
 
-  console.log(userID);
 
   const navigate = useNavigate();
 
 
-  const options = [
-    { value: "beginner", label: "beginner" },
-    { value: "intermediate", label: "intermediate" },
-    { value: "advanced", label: "advanced" }
-  ];
+  //const options = [
+  //  { value: "beginner", label: "beginner" },
+  //  { value: "intermediate", label: "intermediate" },
+  //  { value: "advanced", label: "advanced" }
+  //];
 
   const [recipe, setRecipe] = useState({
     name: "mole",
@@ -44,8 +43,6 @@ export const CreateRecipe = () => {
   const handleNumbers = (event) => {
     let name = event.target.name;
     let num = parseInt(event.target.value);
-    console.log(event.target.name);
-    console.log(num);
     setRecipe({ ...recipe, [name]: num });
   };
 
@@ -72,7 +69,7 @@ export const CreateRecipe = () => {
     quantities[idx] = value;
     setRecipe({ ...recipe, quantities });
 
-    console.log(recipe.quantities);
+    
   };
 
   const onSubmit = async (event) => {

@@ -188,4 +188,43 @@ router.get("/savedRecipes/:userID", async (req, res) => {
     }
 });
 
+// CRUD for reviews
+
+router.post("/review", async (req, res) => {
+
+    const { reviewedById, recipeId, score, fullReview } = req.body;
+
+    try {
+        const review = await prisma.recipeReviews.create({
+            data: {
+                reviewedById: reviewedById,
+                recipeId: recipeId,
+                score: score,
+                review: fullReview,
+            }
+        })
+
+        res.json({ message: "new review created" });
+    } catch (err) { 
+        res.json(err);
+    }
+
+});
+
+router.delete("/review", async (req, res) => {
+    try {
+        await prisma.recipeReviews.delete({
+            where: {
+                recipeId: "6e4a13c9-d161-4c86-85e2-8be4f2c06372",
+            }
+        });
+        res.json({message: "deleted all reviews"})
+    } catch (err) {
+        res.json(err);
+    }
+})
+
+
+
+
 export { router as recipesRouter };

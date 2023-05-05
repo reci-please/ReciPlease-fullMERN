@@ -97,6 +97,7 @@ const Login = () => {
     } catch (err) {
       alert("username already exists, please log in");
       console.error(err);
+      
       window.location.reload();
     }
   };

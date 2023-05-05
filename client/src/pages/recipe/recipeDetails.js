@@ -2,8 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Rating } from "../../components/rating";
-import Dropdown from "../../components/dropdown";
+import { useGetUserID } from "../../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 
 
@@ -11,6 +10,8 @@ import { useNavigate } from "react-router-dom";
 export const FullRecipe = () => {
     const navigate = useNavigate();
     const id = useParams().recipeId.toString();
+    const userID = useGetUserID();
+    console.log(userID);
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
     
@@ -20,16 +21,17 @@ export const FullRecipe = () => {
         numIngredients: ingredients.length,
     });
 
+    const [completeReview, setCompleteReview] = useState({
+        reviewedById: userID,
+        recipeId: id,
+        score: 0,
+        fullReview: "",
+    })
+
     //console.log(ingredients.length);
     //for (let i = 0; i < ingredients.length; i++) {
     //    console.log(ingredients[i].ingredientId);
     //}
-
-    const options = [
-        { value: "beginner", label: "beginner" },
-        { value: "intermediate", label: "intermediate" },
-        { value: "advanced", label: "advanced" }
-      ];
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -69,6 +71,38 @@ export const FullRecipe = () => {
             navigate("/");
             
         } catch (err) {
+            console.error(err);
+        }
+    }
+
+    const handleChange = (event) => {
+        let name = event.target.name;
+        let value;
+        if (name === "score") {
+             value = parseInt(event.target.value);
+        } else {
+             value = event.target.value;
+        }
+        
+        setCompleteReview({ ...completeReview, [name]: value });
+
+        
+
+    };
+
+
+    const onSubmit = async (event) => {
+        event.preventDefault();
+        console.log(userID);
+
+        console.log(completeReview);
+
+        try {
+            await axios.post("http://localhost:3001/recipes/review", completeReview);
+            alert("review created");
+
+
+        } catch (err) { 
             console.error(err);
         }
     }
@@ -115,7 +149,7 @@ export const FullRecipe = () => {
                 </div>
                 <div className="recipes ind-recipes-instructions m-sm-1 col-sm-4 p-2">
                     <div className="row p-2">
-                        <img src={currRecipe.imageUrl} alt="whatever the food is" alt={currRecipe.name}/>
+                        <img src={currRecipe.imageUrl} alt={currRecipe.name}/>
                     </div>
                     <h3>Ingredients:</h3>
                     <div className="row p-2">
@@ -129,6 +163,13 @@ export const FullRecipe = () => {
                         </ul>
                     </div>
                 </div>
+            </div>
+            <div>
+                <label htmlFor="score">Score: </label>
+                <input type="number" id="score" name="score" onChange={handleChange}/> /5
+                <label htmlFor="fullReview">Any thoughts?</label>
+                <input type="text" id="fullReview"  name="fullReview" onChange={handleChange}/>
+                <button type="submit" onClick={onSubmit}>Submit Review</button>
             </div>
             <button onClick={deleteRecipe} style={{backgroundColor:"red", fontSize:"25px"}}>Delete</button>
         </div>
