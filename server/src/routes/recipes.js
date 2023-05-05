@@ -195,14 +195,23 @@ router.post("/review", async (req, res) => {
     const { reviewedById, recipeId, score, fullReview } = req.body;
 
     try {
-        const review = await prisma.recipeReviews.create({
-            data: {
+        
+        const review = await prisma.recipeReviews.upsert({
+            where: {
+                reviewedById_recipeId: {
+                    reviewedById: reviewedById,
+                    recipeId: recipeId,
+                }
+            }, update: {
+                score: score,
+                review: fullReview,
+            }, create: {
                 reviewedById: reviewedById,
                 recipeId: recipeId,
                 score: score,
                 review: fullReview,
             }
-        })
+        });
 
         res.json({ message: "new review created" });
     } catch (err) { 
@@ -211,6 +220,19 @@ router.post("/review", async (req, res) => {
 
 });
 
+router.get("/review/:recipeID", async (req, res) => {
+    try {
+        const reviews = await prisma.recipeReviews.findMany({
+            where: { recipeId: req.params.recipeID, },
+            orderBy: {createdAt: 'desc'}
+        });
+        
+        res.json(reviews);
+    } catch (err) {
+        res.json(err);
+    }
+})
+
 router.delete("/review", async (req, res) => {
     try {
         await prisma.recipeReviews.delete({
@@ -218,11 +240,11 @@ router.delete("/review", async (req, res) => {
                 recipeId: "6e4a13c9-d161-4c86-85e2-8be4f2c06372",
             }
         });
-        res.json({message: "deleted all reviews"})
+        res.json({ message: "deleted all reviews" })
     } catch (err) {
         res.json(err);
     }
-})
+});
 
 
 

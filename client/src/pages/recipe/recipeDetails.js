@@ -10,11 +10,14 @@ import { useNavigate } from "react-router-dom";
 export const FullRecipe = () => {
     const navigate = useNavigate();
     const id = useParams().recipeId.toString();
-    const userID = useGetUserID();
-    console.log(userID);
+    //const userID = useGetUserID();
+    const userID = window.localStorage.getItem("userID");
+    
+    
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
-    
+    const [reviews, setReviews] = useState([]);
+
     const [toDelete, setToDelete] = useState({
         id: id,
         ingredients: ingredients,
@@ -48,7 +51,26 @@ export const FullRecipe = () => {
             
         };
 
+        //const pushToArray = (response) => {
+        //    for (let i = 0; i < response.length; i++) {
+        //      if (!tempReviews.includes(response[i])) {
+        //        tempReviews.push(response[i]);
+        //      }
+        //    }
+        //  };
+
+        const fetchReviews = async () => {
+            try {
+                const reviews = await axios.get(`http://localhost:3001/recipes/review/${id}`);
+                setReviews(reviews.data);
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         fetchRecipe();
+        fetchReviews();
     }, []);
 
 
@@ -131,8 +153,10 @@ export const FullRecipe = () => {
         // </div>
 
         <div className="recipes min-vw-100 w-80">
+            
         <div className="container-fluid">
             </div>
+            
             <div className="row m-2">
                 <div className="ind-recipes container-xl m-auto align-items-center justify-content-start gap-0 px-3 py-3 mw-100" style={{"width":"fit-content"}}>
                     <div className="px-4">
@@ -164,14 +188,36 @@ export const FullRecipe = () => {
                     </div>
                 </div>
             </div>
-            <div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+
+            
+                
+
+            </div>
+            
+                
                 <label htmlFor="score">Score: </label>
                 <input type="number" id="score" name="score" onChange={handleChange}/> /5
+                
+                
                 <label htmlFor="fullReview">Any thoughts?</label>
                 <input type="text" id="fullReview"  name="fullReview" onChange={handleChange}/>
-                <button type="submit" onClick={onSubmit}>Submit Review</button>
-            </div>
-            <button onClick={deleteRecipe} style={{backgroundColor:"red", fontSize:"25px"}}>Delete</button>
+                
+                
+                
+            <button type="submit" onClick={onSubmit} style={{ textAlign: "center", width: "100px" }}>Submit Review</button>
+            
+            <ul className="row p-2">
+                {reviews.map((review) => (
+                    <li key={review.reviewedById}>{review.reviewedById}: {review.score}, {review.review} </li>
+                ))}
+            </ul>
+
+            
+            <button onClick={deleteRecipe} style={{ backgroundColor: "red", fontSize: "25px" }}>Delete</button>
+            
+            
+            
         </div>
     );
 };

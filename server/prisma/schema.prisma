@@ -15,6 +15,7 @@ model User {
   password String
   skillLvl String
 
+
   createdRecipes Recipe[]
   savedRecipes SavedOnUsers[]
   recipesReviewed RecipeReviews[]
@@ -80,7 +81,6 @@ model SavedOnUsers {
 }
 
 model RecipeReviews {
-
   createdAt DateTime @default(now())
   reviewedBy User @relation(fields: [reviewedById], references: [id])
   reviewedById String

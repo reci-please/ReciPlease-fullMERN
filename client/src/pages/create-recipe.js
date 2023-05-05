@@ -9,8 +9,9 @@ export const CreateRecipe = () => {
   //const port = process.env.PORT;
 
   const [cookies] = useCookies(["access_token"]);
-  const userID = useGetUserID();
-
+  //const userID = useGetUserID();
+  const userID = window.localStorage.getItem("userID");
+  console.log(userID);
 
   const navigate = useNavigate();
 
