@@ -213,8 +213,8 @@ export const FullRecipe = () => {
                 ))}
             </ul>
 
+            {(currRecipe.authorId === userID) && <button onClick={deleteRecipe} style={{ backgroundColor: "red", fontSize: "25px" }}>Delete</button>}
             
-            <button onClick={deleteRecipe} style={{ backgroundColor: "red", fontSize: "25px" }}>Delete</button>
             
             
             
