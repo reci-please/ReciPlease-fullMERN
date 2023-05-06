@@ -13,11 +13,14 @@ export const FullRecipe = () => {
     //const userID = useGetUserID();
     const userID = window.localStorage.getItem("userID");
     const username = window.localStorage.getItem("username");
-    console.log(username);
+    
     
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
     const [reviews, setReviews] = useState([]);
+    const [avgScore, setAvgScore] = useState([]);
+
+
 
     const [toDelete, setToDelete] = useState({
         id: id,
@@ -42,10 +45,23 @@ export const FullRecipe = () => {
             try {
                 
                 
-                const recipe = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/recipeId/${id}`);
-                //const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
+
+                //const recipe = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/recipeId/${id}`);
+                const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
+
+                
+                console.log(recipe.data);
+                let tempAvgScore = recipe.data.avgScore;
                 setRecipe(recipe.data);
                 setIngredients(recipe.data.ingredients);
+                if (tempAvgScore === 0) {
+                    setAvgScore("unrated");
+                } else {
+                    setAvgScore(tempAvgScore);
+                }
+
+                
+                //console.log(avgScore);
             } catch (err) {
                 console.error(err);
             }
@@ -62,16 +78,19 @@ export const FullRecipe = () => {
 
         const fetchReviews = async () => {
             try {
-                const reviews = await axios.get(`http://localhost:3001/recipes/review/${id}`);
-                setReviews(reviews.data);
+                const response = await axios.get(`http://localhost:3001/recipes/review/${id}`);
+                let tempDataArray = response.data;
+                setReviews(tempDataArray);
 
             } catch (err) {
                 console.error(err);
             }
         }
 
-        fetchRecipe();
+       
+
         fetchReviews();
+        fetchRecipe();
     }, []);
 
 
@@ -116,13 +135,25 @@ export const FullRecipe = () => {
 
     const onSubmit = async (event) => {
         event.preventDefault();
-        console.log(userID);
-
-        console.log(completeReview);
+        let hasReview = false;
 
         try {
-            await axios.post("http://localhost:3001/recipes/review", completeReview);
-            alert("review created");
+            for (let i = 0; i < reviews.length; i++) {
+                if (reviews[i].reviewedById === username) {
+                    hasReview = true;
+                    break;
+                }
+            }
+
+            if (!hasReview) {
+                await axios.post("http://localhost:3001/recipes/review", completeReview);
+                alert("review created");
+            } else {
+                await axios.put("http://localhost:3001/recipes/review", completeReview);
+                alert("review updated");
+            }
+            
+            
 
 
         } catch (err) { 
@@ -162,8 +193,10 @@ export const FullRecipe = () => {
                 <div className="ind-recipes container-xl m-auto align-items-center justify-content-start gap-0 px-3 py-3 mw-100" style={{"width":"fit-content"}}>
                     <div className="px-4">
                         <h1>{currRecipe.name}</h1>
-                            <h3>Cooking Time: {currRecipe.cookingTime} minutes  |  Serves: {currRecipe.servings} {currRecipe.servings === 1 ? "Person" : "People"}</h3>
-                            <h6>Cooking Skill: {currRecipe.skillLvl}</h6>
+                        <h3>Cooking Time: {currRecipe.cookingTime} minutes  |  Serves: {currRecipe.servings} {currRecipe.servings === 1 ? "Person" : "People"}</h3>
+                        <h4>Average Score: {avgScore}/5</h4>
+                        <h6>Cooking Skill: {currRecipe.skillLvl}</h6>
+                        
                     </div>
                 </div>
             </div>

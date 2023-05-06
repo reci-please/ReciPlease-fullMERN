@@ -88,6 +88,7 @@ router.post("/", async (req, res) => {
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
                 skillLvl: "low",
+                avgScore: 0,
                 totalScore: 0,
                 numReview: 0,
                 authorId: authorId
@@ -195,23 +196,40 @@ router.post("/review", async (req, res) => {
     const { reviewedById, recipeId, score, fullReview } = req.body;
 
     try {
-        
-        const review = await prisma.recipeReviews.upsert({
+
+        const recipe = await prisma.recipe.findUnique({
             where: {
-                reviewedById_recipeId: {
-                    reviewedById: reviewedById,
-                    recipeId: recipeId,
-                }
-            }, update: {
-                score: score,
-                review: fullReview,
-            }, create: {
+                id: recipeId,
+            }
+        })
+        
+        const review = await prisma.recipeReviews.create({
+            data: {
                 reviewedById: reviewedById,
                 recipeId: recipeId,
                 score: score,
                 review: fullReview,
             }
         });
+
+        let newTotal = recipe.totalScore + score;
+        let newNumPeople = recipe.numReview + 1;
+
+        console.log(newTotal);
+        console.log(newNumPeople);
+
+        const newRecipe = await prisma.recipe.update({
+            where: {
+                id: recipeId,
+            }, 
+            data: {
+                totalScore: newTotal,
+                numReview: newNumPeople,
+                avgScore: (newTotal/newNumPeople),
+            }
+        })
+
+        console.log(newRecipe);
 
         res.json({ message: "new review created" });
     } catch (err) { 
@@ -220,13 +238,66 @@ router.post("/review", async (req, res) => {
 
 });
 
+router.put("/review", async (req, res) => {
+    const { reviewedById, recipeId, score, fullReview } = req.body;
+
+    try {
+        const recipe = await prisma.recipe.findUnique({
+            where: {
+                id: recipeId,
+            }
+        })
+    
+        const oldReview = await prisma.recipeReviews.findUnique({
+            where: {
+                reviewedById_recipeId: {
+                    reviewedById: reviewedById,
+                    recipeId: recipeId,
+                }
+            }
+        })
+    
+        let newTotalScore = recipe.totalScore - oldReview.score + score;
+    
+        await prisma.recipe.update({
+            where: {
+                id: recipeId,
+            },
+            data: {
+                totalScore: newTotalScore,
+                avgScore: (newTotalScore/recipe.numReview),
+            }
+        })
+    
+        const review = await prisma.recipeReviews.update({
+            where: {
+                reviewedById_recipeId: {
+                    reviewedById: reviewedById,
+                    recipeId: recipeId,
+                }
+            }, data: {
+                score: score,
+                review: fullReview,
+            },
+        });
+
+        res.json({ message: "updated review" });
+    } catch (err) {
+        res.json(err);
+    }
+
+    
+
+
+})
+
 router.get("/review/:recipeID", async (req, res) => {
     try {
         const reviews = await prisma.recipeReviews.findMany({
             where: { recipeId: req.params.recipeID, },
             orderBy: {createdAt: 'desc'}
         });
-        
+
         res.json(reviews);
     } catch (err) {
         res.json(err);
