@@ -32,7 +32,7 @@ router.post("/register", async (req, res) => {
     });
   
   const token = jwt.sign({ id: user.id }, "secret");
-  res.json({ token, userID: user.id });
+  res.json({ token, userID: user.id, userName: user.username });
   
 });
 
@@ -60,7 +60,7 @@ router.post("/login", async (req, res) => {
       .json({ message: "Username or password is incorrect" });
   }
   const token = jwt.sign({ id: user.id }, "secret");
-  res.json({ token, userID: user.id });
+  res.json({ token, userID: user.id, userName: user.username });
 });
 
 export { router as userRouter };

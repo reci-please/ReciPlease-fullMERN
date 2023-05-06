@@ -12,7 +12,8 @@ export const FullRecipe = () => {
     const id = useParams().recipeId.toString();
     //const userID = useGetUserID();
     const userID = window.localStorage.getItem("userID");
-    
+    const username = window.localStorage.getItem("username");
+    console.log(username);
     
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
@@ -25,7 +26,7 @@ export const FullRecipe = () => {
     });
 
     const [completeReview, setCompleteReview] = useState({
-        reviewedById: userID,
+        reviewedById: username,
         recipeId: id,
         score: 0,
         fullReview: "",

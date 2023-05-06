@@ -57,18 +57,19 @@ const Login = () => {
   const onLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      //const response = await axios.post(`http://localhost:3001/auth/login`, {
-      //  username,
-      //  password,
-      //});
-
-      const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/login`, {
-       username,
-       password,
+      const response = await axios.post(`http://localhost:3001/auth/login`, {
+        username,
+        password,
       });
+
+      //const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/login`, {
+      // username,
+      // password,
+      //});
 
       setCookies("access_token", response.data.token);
       window.localStorage.setItem("userID", response.data.userID);
+      window.localStorage.setItem("username", response.data.userName);
       navigate("/");
     } catch (err) {
       alert("incorrect username or password");
@@ -92,6 +93,7 @@ const Login = () => {
 
       setCookies("access_token", response.data.token);
       window.localStorage.setItem("userID", response.data.userID);
+      window.localStorage.setItem("username", response.data.userName);
       navigate("/");
       window.location.reload();
     } catch (err) {
