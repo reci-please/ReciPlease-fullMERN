@@ -50,7 +50,7 @@ export const FullRecipe = () => {
                 const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
 
                 
-                console.log(recipe.data);
+                //console.log(recipe.data);
                 let tempAvgScore = recipe.data.avgScore;
                 setRecipe(recipe.data);
                 setIngredients(recipe.data.ingredients);

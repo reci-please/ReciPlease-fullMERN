@@ -57,7 +57,10 @@ const Login = () => {
   const onLoginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3001/auth/login`, {
+      if (username.length === 0 || password.length === 0) {
+        alert("please fill in password and login");
+      } else {
+        const response = await axios.post(`http://localhost:3001/auth/login`, {
         username,
         password,
       });
@@ -71,6 +74,8 @@ const Login = () => {
       window.localStorage.setItem("userID", response.data.userID);
       window.localStorage.setItem("username", response.data.userName);
       navigate("/");
+      }
+      
     } catch (err) {
       alert("incorrect username or password");
       console.error(err);
@@ -80,7 +85,12 @@ const Login = () => {
   const onRegisterSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3001/auth/register`, {
+
+      if (username.length === 0 || password.length === 0) {
+        alert("please fill in password and login");
+      } else {
+
+        const response = await axios.post(`http://localhost:3001/auth/register`, {
         username,
         password,
       });
@@ -95,7 +105,10 @@ const Login = () => {
       window.localStorage.setItem("userID", response.data.userID);
       window.localStorage.setItem("username", response.data.userName);
       navigate("/");
-      window.location.reload();
+      }
+
+
+      
     } catch (err) {
       alert("username already exists, please log in");
       console.error(err);
