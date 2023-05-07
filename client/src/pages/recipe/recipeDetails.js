@@ -1,10 +1,12 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import {ScrollRestoration, useParams} from "react-router-dom";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import {Box, Rating} from "@mui/material";
+import RestaurantMenuIcon from '@mui/icons-material/RestaurantMenu';
+import RestaurantOutlinedIcon from '@mui/icons-material/RestaurantMenu';
 import * as PropTypes from "prop-types";
 
 
@@ -27,11 +29,10 @@ export const FullRecipe = () => {
     const [currRecipe, setRecipe] = useState([]);
     const [ingredients, setIngredients] = useState([]);
     const [reviews, setReviews] = useState([]);
-    const [avgScore, setAvgScore] = useState([]);
+    const [avgScore, setAvgScore] = useState(0.0);
 
-    const [hover, setHover] = useState(-0.25);
-    const [userRating, setUserRating] = useState([]);
-    const [userReview, setUserReview] = useState([]);
+    const [userRating, setUserRating] = useState(0.0);
+    const [userReview, setUserReview] = useState("");
     const [showSelfComment, setSCVis] = useState(false);
 
 
@@ -44,7 +45,7 @@ export const FullRecipe = () => {
     const [completeReview, setCompleteReview] = useState({
         reviewedById: username,
         recipeId: id,
-        score: 0,
+        score: 0.0,
         fullReview: "",
     })
 
@@ -84,12 +85,12 @@ export const FullRecipe = () => {
                 let tempDataArray = response.data;
                 setReviews(tempDataArray);
 
-                console.log("Reviews: " + tempDataArray);
                 for (let i = 0; i < tempDataArray.length; i++) {
                     if (tempDataArray[i].reviewedById === username) {
                         console.log("User Score: " + tempDataArray[i].score);
+                        console.log("User Review: " + tempDataArray[i].review.toString());
                         setUserRating(tempDataArray[i].score);
-                        setUserReview(tempDataArray[i].fullReview);
+                        setUserReview(tempDataArray[i].review);
                         return;
                     }
                 }
@@ -197,6 +198,8 @@ export const FullRecipe = () => {
                                     value={avgScore}
                                     readOnly
                                     precision={0.25}
+                                    emptyIcon={<RestaurantOutlinedIcon fontSize="inherit" />}
+                                    icon={<RestaurantMenuIcon fontSize="inherit" />}
                                 />
                                 <Box sx={{ ml: 2 }}>{avgScore}</Box>
                             </Box>
@@ -214,8 +217,10 @@ export const FullRecipe = () => {
                                     id="score"
                                     name="score"
                                     value={userRating}
-                                    precision={0.25}
+                                    precision={1}
                                     size="large"
+                                    emptyIcon={<RestaurantOutlinedIcon fontSize="inherit" />}
+                                    icon={<RestaurantMenuIcon fontSize="inherit" />}
                                     onChange={(event, newValue) => {
                                         console.log(newValue);
                                         setUserRating(newValue);
@@ -223,19 +228,23 @@ export const FullRecipe = () => {
                                         console.log("going to handle:");
                                         handleChange(event);
                                     }}
-                                    onChangeActive={(event, newHover) => {
-                                        setHover(newHover);
-                                    }}
                                 />
-                                {userRating !== null && (
+                                {userRating !== null ? (
                                     <Box sx={{ ml: 2 }}>{userRating}</Box>
-                                )}
+                                ) : <Box sx={{ ml: 2 }}>Enter a Rating</Box>}
                             </Box>
                             {showSelfComment !== false && (
                                 <div>
-                                    <Box><label htmlFor="userReview"><h5 style={{marginBottom: 0}}>Any thoughts?</h5></label></Box>
-                                    <Box><textarea cols={40} id="fullReview" name="fullReview" onChange={handleChange}></textarea>
-                                        {/*<input type="textarea" id="fullReview" name="userReview" className="m-0" onChange={handleChange}/>*/}
+                                    <Box><label htmlFor="userReview"><h5 style={{marginBottom: 0}}>{userReview.length === 0 ? "Any Thoughts?" : "What's Changed?"}</h5></label></Box>
+                                    <Box>
+                                        <textarea
+                                            cols={40}
+                                            id="fullReview"
+                                            name="fullReview"
+                                            defaultValue={userReview}
+                                            onChange={handleChange}
+                                            className="p-1"
+                                        ></textarea>
                                     </Box>
                                     <button type="submit" onClick={onSubmit} style={{ textAlign: "center", width: "fit-content"}} defaultValue={userReview}>Submit Review</button>
 
@@ -277,12 +286,44 @@ export const FullRecipe = () => {
 
             {/*<label htmlFor="fullReview">Any thoughts?</label>*/}
             {/*<input type="text" id="fullReview"  name="fullReview" onChange={handleChange}/>*/}
-            <ul className="row p-2">
-                {reviews.map((review) => (
-                    <li key={review.reviewedById}>{review.reviewedById}: {review.score}, {review.review} </li>
-                ))}
-            </ul>
 
+            <section>
+                <div className="container p-3">
+                    <div className="row d-flex justify-content-center">
+                        <div className="col-md-12 col-lg-10">
+                            <h3 className="mb-2">Recent comments</h3>
+                            <div className="card text-dark">
+                                {reviews.map((review) => (
+                                    <div>
+                                        <div className="card-body p-4">
+                                            <div className="d-flex flex-start">
+                                                <div style={{textAlign: "left"}}>
+                                                    <h6 className="fw-bold mb-1">{review.reviewedById}</h6>
+                                                    <div className="d-flex align-items-center mb-3">
+                                                        <Rating
+                                                            name="read-only"
+                                                            value={review.score}
+                                                            readOnly
+                                                            precision={0.25}
+                                                            emptyIcon={<RestaurantOutlinedIcon fontSize="inherit" />}
+                                                            icon={<RestaurantMenuIcon fontSize="inherit" />}
+                                                        />
+                                                    </div>
+                                                    <p className="mb-0" style={{"white-space": "pre-line"}}>
+                                                        {review.review}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr className="my-0"/>
+                                    </div>
+                                    ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             {(currRecipe.authorId === userID) && <button onClick={deleteRecipe} style={{ backgroundColor: "red", fontSize: "25px" }}>Delete</button>}
         </div>
     </div>
