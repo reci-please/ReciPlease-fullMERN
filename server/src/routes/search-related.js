@@ -5,7 +5,7 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 router.post("/", async (req, res) => {
-    console.log("Here 2");
+    console.info("In search-related router");
     try {
       const ingredients = req.body.formData;
       const requiredIngr = ingredients.required;
@@ -31,25 +31,29 @@ router.post("/", async (req, res) => {
   
       const recipes = await prisma.recipe.findMany({
         where: {
-          AND: requiredIngr.map((ingred) => ({
+          AND: {
             ingredients: {
-              some: {
-                name: {
-                  contains: ingred,
-                  mode: "insensitive",
-                },
-              },
-            },
-          })),
+              some: {  //maybe every
+                ingredient: {
+                  id: {
+                    in: 
+                      requiredIngr.map(ingredientName => 
+                      ingredientName.toLowerCase())
+                  }
+                }
+              }
+            }
+          },
           NOT: {
             ingredients: {
               some: {
-                name: {
-                  contains: {
-                    mode: "insensitive",
-                    in: excludedIngr,
-                  },
-                },
+                ingredient: {
+                  id: {
+                    in: 
+                    excludedIngr.map(ingredientName => 
+                      ingredientName.toLowerCase())
+                  }
+                }
               },
             },
           },
@@ -70,13 +74,18 @@ router.post("/", async (req, res) => {
         },
       });
   
-      console.log("Results:");
+      console.info("Results:");
       recipes.forEach((rec) => {
-        console.log("Recipe: " + rec);
-        console.log("Recipe Stringify: " + JSON.stringify(rec));
+        console.info("Recipe: " + rec);
+        console.info("Recipe Stringify: " + JSON.stringify(rec));
       });
   
-      res.json(recipes);
+      if (Array.isArray(recipes)) {
+        res.json(recipes);
+      } else {
+        res.json([recipes]);
+      }
+      
     } catch (err) {
       console.error(err);
       res.json(err);

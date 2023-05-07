@@ -1,7 +1,32 @@
 import React, {useState} from "react";
 
 function DisplayResults({recipes}) {
-
+    let failed = false;
+    if (recipes === undefined || recipes === null) {
+        console.error("recipes is undefined or null");
+        failed = true;
+    } else if (!Array.isArray(recipes)) {
+        console.error("recipes is not an array");
+        console.log("Recipes in display: ", recipes);
+        failed = true;
+    } else if (Array.isArray(recipes) && recipes.length === 0) {
+        console.error("recipes is empty");
+        console.log("Recipes in display2: ", recipes);
+        failed = true;
+    }
+    if (failed) {
+        return (
+            <div>
+                <div className="q-box__question recipes">
+                    {
+                    recipes.length === 0 ? 
+                    <h5>No recipes found. <br></br></h5> : ""
+                    }
+                </div>
+            </div>
+        )
+    }
+    
     return (
         <div>
             <div className="q-box__question recipes">
