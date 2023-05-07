@@ -5,21 +5,17 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 router.post("/", async (req, res) => {
-  console.log("route normal search");
     try {
         const ingredients = req.body.formData;
         const requiredIngr = ingredients.required;
         const excludedIngr = ingredients.excluded;
 
-        console.log("Required Ingredients: " + requiredIngr);
-        console.log("Excluded Ingredients: " + excludedIngr);
-
         /* Check that required and excluded ingredients are arrays and both are not empty */
         if (!Array.isArray(requiredIngr) || !Array.isArray(excludedIngr)) {
-            console.log("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
+            console.error("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
             return res.status(400).send("Error: Invalid search request- required ingredients or excluded ingredients is not an array.");
         } else if (requiredIngr.length === 0 && excludedIngr.length === 0) {
-            console.log("Error: No ingredients passed.");
+            console.error("Error: No ingredients passed.");
             return res.status(400).send("Error: No ingredients passed..");
         }
 
@@ -57,96 +53,75 @@ router.post("/", async (req, res) => {
                 },
             }
         });
-
-        console.log("Results:");
-        recipes.forEach((rec) => {
-            console.log("Recipe: " + rec);
-            console.log("Recipe Stringify: " + JSON.stringify(rec));
-        })
-
         res.json(recipes);
-
     } catch(err) {
         console.error(err);
         res.json(err);
     }
 });
 
- router.post("/related", async (req, res) => {
-     console.log("Here 2");
-     try {
-       const ingredients = req.body.formData;
-       const requiredIngr = ingredients.required;
-       const excludedIngr = ingredients.excluded;
+router.post("/related", async (req, res) => {
+    try {
+        const ingredients = req.body.formData;
+        const requiredIngr = ingredients.required;
+        const excludedIngr = ingredients.excluded;
 
-       console.log("Required Ingredients: " + requiredIngr);
-       console.log("Excluded Ingredients: " + excludedIngr);
- 
-       /* Check that required and excluded ingredients are arrays and both are not empty */
-       if (!Array.isArray(requiredIngr) || !Array.isArray(excludedIngr)) {
-         console.log(
-           "Error: Invalid search request- required ingredients or excluded ingredients is not an array."
-         );
-         return res
-           .status(400)
-           .send(
-             "Error: Invalid search request- required ingredients or excluded ingredients is not an array."
-           );
-       } else if (requiredIngr.length === 0 && excludedIngr.length === 0) {
-         console.log("Error: No ingredients passed.");
-         return res.status(400).send("Error: No ingredients passed..");
-       }
-  
-       const recipes = await prisma.recipe.findMany({
-        where: {
-            AND: requiredIngr.map(ingred => ({
-                ingredients: {
-                    some: {
-                        ingredientId: {
-                            // check if any part of ingred is present in ingredientId
-                            contains: ingred.toLowerCase()
-                        }
-                    }
-                }
-            })),
-            NOT: {
-                ingredients: {
-                    some: {
-                        ingredientId: {
-                            in: excludedIngr
-                        }
-                    }
-                }
-            }
-        },
-        select: {
-            id: true,
-            name: true,
-            servings: true,
-            instructions: true,
-            imageUrl: true,
-            cookingTime: true,
-            ingredients: {
-                select: {
-                    ingredientId: true,
-                    quantity: true,
-                },
-            },
+        /* Check that required and excluded ingredients are arrays and both are not empty */
+        if (!Array.isArray(requiredIngr) || !Array.isArray(excludedIngr)) {
+            console.error(
+            "Error: Invalid search request- required ingredients or excluded ingredients is not an array."
+        );
+        return res
+          .status(400)
+          .send(
+            "Error: Invalid search request- required ingredients or excluded ingredients is not an array."
+        );
+        } else if (requiredIngr.length === 0 && excludedIngr.length === 0) {
+            console.error("Error: No ingredients passed.");
+            return res.status(400).send("Error: No ingredients passed..");
         }
-    });
+        const recipes = await prisma.recipe.findMany({
+            where: {
+                AND: requiredIngr.map(ingred => ({
+                    ingredients: {
+                        some: {
+                            ingredientId: {
+                                // check if any part of ingred is present in ingredientId
+                                contains: ingred.toLowerCase()
+                            }
+                        }
+                    }
+                })),
+                NOT: {
+                    ingredients: {
+                        some: {
+                            ingredientId: {
+                                in: excludedIngr
+                            }
+                        }
+                    }
+                }
+            },
+            select: {
+                id: true,
+                name: true,
+                servings: true,
+                instructions: true,
+                imageUrl: true,
+                cookingTime: true,
+                ingredients: {
+                    select: {
+                        ingredientId: true,
+                        quantity: true,
+                    },
+                },
+            }
+        });
+        res.json(recipes);
+    } catch (err) {
+        console.error(err);
+        res.json(err);
+    }
+});
   
-       console.log("Results:");
-       recipes.forEach((rec) => {
-         console.log("Recipe: " + rec);
-         console.log("Recipe Stringify: " + JSON.stringify(rec));
-       });
-  
-       res.json(recipes);
-     } catch (err) {
-       console.error(err);
-       res.json(err);
-     }
-   });
-  
-
 export { router as searchRouter };
