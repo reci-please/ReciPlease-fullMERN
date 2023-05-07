@@ -3,6 +3,9 @@ import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { Link } from 'react-router-dom';
 import clock from "../components/img/clock.svg";
+import {Rating} from "@mui/material";
+import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantMenu";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 
 
 export const SavedRecipes = () => {
@@ -12,13 +15,13 @@ export const SavedRecipes = () => {
   useEffect(() => {
     const fetchSavedRecipe = async () => {
       try {
-        //const response = await axios.get(
-        //  `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
-        //);
-
         const response = await axios.get(
-          `https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`
+         `http://localhost:3001/recipes/savedRecipes/ids/${userID}`
         );
+
+        // const response = await axios.get(
+        //   `https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`
+        // );
 
 
         const temp = response.data;
@@ -47,7 +50,20 @@ export const SavedRecipes = () => {
             </div>
 
             <img src={recipe.imageUrl} alt={recipe.name} />
-            <p>{recipe.servings} {recipe.servings === 1 ? 'Serving' : 'Servings'}</p>
+            <Rating
+                sx={{
+                  ml: 2,
+                  fontSize: "3rem"
+                }}
+                name="read-only"
+                size="large"
+                value={recipe.avgScore}
+                readOnly
+                precision={0.25}
+                emptyIcon={<RestaurantOutlinedIcon fontSize="inherit" />}
+                icon={<RestaurantMenuIcon fontSize="inherit" />}
+            />
+            <h5>{recipe.servings} {recipe.servings === 1 ? 'Serving' : 'Servings'}</h5>
             <div>
               {/* <h3>Ingredients:</h3> */}
 
@@ -59,11 +75,10 @@ export const SavedRecipes = () => {
                   </li>
                 ))}
               </ul>
-              <p className="instructions">{recipe.instructions}</p>
             </div>
             <h5>
-              <img className="clock" src={clock} alt="React Logo" />{" "}
-              {recipe.cookingTime} minutes
+              <img className="clock" src={clock} alt="clock" />
+              {" "}{recipe.cookingTime} minutes
             </h5>
           </li>
         ))}

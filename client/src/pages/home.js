@@ -114,7 +114,7 @@ export const Home = () => {
             <div className="instructions"></div>
             <img src={recipe.imageUrl} alt={recipe.name} />
             
-            <h5><img className="clock" src={clock} alt="React Logo"/> {recipe.cookingTime} minutes</h5>
+            <h5><img className="clock" src={clock} alt="clock"/> {recipe.cookingTime} minutes</h5>
            <Rating
                sx={{
                  ml: 2,
