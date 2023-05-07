@@ -4,9 +4,18 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useGetUserID } from "../../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
+import {Box, Rating} from "@mui/material";
+import * as PropTypes from "prop-types";
 
 
+function StarIcon(props) {
+    return null;
+}
 
+StarIcon.propTypes = {
+    style: PropTypes.shape({opacity: PropTypes.number}),
+    fontSize: PropTypes.string
+};
 export const FullRecipe = () => {
     const navigate = useNavigate();
     const id = useParams().recipeId.toString();
@@ -20,6 +29,10 @@ export const FullRecipe = () => {
     const [reviews, setReviews] = useState([]);
     const [avgScore, setAvgScore] = useState([]);
 
+    const [hover, setHover] = useState(-0.25);
+    const [userRating, setUserRating] = useState([]);
+    const [userReview, setUserReview] = useState([]);
+    const [showSelfComment, setSCVis] = useState(false);
 
 
     const [toDelete, setToDelete] = useState({
@@ -43,9 +56,6 @@ export const FullRecipe = () => {
     useEffect(() => {
         const fetchRecipe = async () => {
             try {
-                
-                
-
                 //const recipe = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/recipeId/${id}`);
                 const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
 
@@ -68,31 +78,30 @@ export const FullRecipe = () => {
             
         };
 
-        //const pushToArray = (response) => {
-        //    for (let i = 0; i < response.length; i++) {
-        //      if (!tempReviews.includes(response[i])) {
-        //        tempReviews.push(response[i]);
-        //      }
-        //    }
-        //  };
-
         const fetchReviews = async () => {
             try {
                 const response = await axios.get(`http://localhost:3001/recipes/review/${id}`);
                 let tempDataArray = response.data;
                 setReviews(tempDataArray);
 
+                console.log("Reviews: " + tempDataArray);
+                for (let i = 0; i < tempDataArray.length; i++) {
+                    if (tempDataArray[i].reviewedById === username) {
+                        console.log("User Score: " + tempDataArray[i].score);
+                        setUserRating(tempDataArray[i].score);
+                        setUserReview(tempDataArray[i].fullReview);
+                        return;
+                    }
+                }
+
             } catch (err) {
                 console.error(err);
             }
         }
 
-       
-
         fetchReviews();
         fetchRecipe();
     }, []);
-
 
     const deleteRecipe = async () => {
         const relationsDelete = [];
@@ -121,14 +130,12 @@ export const FullRecipe = () => {
         let name = event.target.name;
         let value;
         if (name === "score") {
-             value = parseInt(event.target.value);
+            value = parseInt(event.target.value);
         } else {
-             value = event.target.value;
+            value = event.target.value;
         }
-        
-        setCompleteReview({ ...completeReview, [name]: value });
 
-        
+        setCompleteReview({ ...completeReview, [name]: value });
 
     };
 
@@ -152,8 +159,8 @@ export const FullRecipe = () => {
                 await axios.put("http://localhost:3001/recipes/review", completeReview);
                 alert("review updated");
             }
-            
-            
+
+            window.location.reload();
 
 
         } catch (err) { 
@@ -161,45 +168,85 @@ export const FullRecipe = () => {
         }
     }
 
-    
-
-
     return (
-        // <div className="recipes">
-        //     <h1>{currRecipe.name}</h1>
-        //     <img src={currRecipe.imageUrl} alt="whatever the food is" />
-        //     <p>Time: { currRecipe.cookingTime} minutes</p>
-        //     <p>Cooking Skill: {currRecipe.skillLvl}</p>
-        //     <h2>Servings: {currRecipe.servings}</h2>
-        //     <ul>
-        //         {ingredients.map((ingredient) => (
-        //             <li key={ingredient.ingredientId}>
-        //                 <p>{ingredient.ingredientId} : { ingredient.quantity}</p>
-        //             </li>
-        //
-        //
-        // ))}
-        //     </ul>
-        //     <h3>Instructions</h3>
-        //     <p>{currRecipe.instructions}</p>
-        // </div>
-
-        <div className="recipes min-vw-100 w-80">
-            
+    <div className="recipes min-vw-100 w-80">
         <div className="container-fluid">
-            </div>
-            
-            <div className="row m-2">
-                <div className="ind-recipes container-xl m-auto align-items-center justify-content-start gap-0 px-3 py-3 mw-100" style={{"width":"fit-content"}}>
+            <div className="row m-2 justify-content-center align-items-end d-sm-flex" style={{display: "table-row"}}>
+                <div className="ind-recipes mb-0 gap-0 px-3 py-3 mw-100 mh-100" style={{"width":"fit-content", display: "table-cell"}}>
                     <div className="px-4">
                         <h1>{currRecipe.name}</h1>
                         <h3>Cooking Time: {currRecipe.cookingTime} minutes  |  Serves: {currRecipe.servings} {currRecipe.servings === 1 ? "Person" : "People"}</h3>
-                        <h4>Average Score: {avgScore}/5</h4>
                         <h6>Cooking Skill: {currRecipe.skillLvl}</h6>
-                        
+
+                    </div>
+                </div>
+                <div className="ind-recipes gap-0 px-3 py-3 mw-100 mh-100" style={{"width":"fit-content", display: "table-cell"}}>
+                    <div className="px-4 mh-100">
+                        <div>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Box><h4>Average Score:</h4></Box>
+                                <Rating
+                                    sx={{ ml: 2 }}
+                                    name="read-only"
+                                    size="large"
+                                    value={avgScore}
+                                    readOnly
+                                    precision={0.25}
+                                />
+                                <Box sx={{ ml: 2 }}>{avgScore}</Box>
+                            </Box>
+                        </div>
+                        <div>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Box><h4>Your Score:</h4></Box>
+                                <Rating
+                                    sx={{ ml: 2 }}
+                                    id="score"
+                                    name="score"
+                                    value={userRating}
+                                    precision={0.25}
+                                    size="large"
+                                    onChange={(event, newValue) => {
+                                        console.log(newValue);
+                                        setUserRating(newValue);
+                                        setSCVis(true);
+                                        console.log("going to handle:");
+                                        handleChange(event);
+                                    }}
+                                    onChangeActive={(event, newHover) => {
+                                        setHover(newHover);
+                                    }}
+                                />
+                                {userRating !== null && (
+                                    <Box sx={{ ml: 2 }}>{userRating}</Box>
+                                )}
+                            </Box>
+                            {showSelfComment !== false && (
+                                <div>
+                                    <Box><label htmlFor="userReview"><h5 style={{marginBottom: 0}}>Any thoughts?</h5></label></Box>
+                                    <Box><textarea cols={40} id="fullReview" name="fullReview" onChange={handleChange}></textarea>
+                                        {/*<input type="textarea" id="fullReview" name="userReview" className="m-0" onChange={handleChange}/>*/}
+                                    </Box>
+                                    <button type="submit" onClick={onSubmit} style={{ textAlign: "center", width: "fit-content"}} defaultValue={userReview}>Submit Review</button>
+
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
+
+
             <div className="row m-2 justify-content-center">
                 <div className="recipes ind-recipes-instructions m-sm-1 col-sm-7 p-2 35">
                         <h3 className="align-content-center">Instructions:</h3>
@@ -222,25 +269,14 @@ export const FullRecipe = () => {
                     </div>
                 </div>
             </div>
-            <div style={{ display: "flex", flexDirection: "column" }}>
 
-            
-                
 
-            </div>
-            
-                
-                <label htmlFor="score">Score: </label>
-                <input type="number" id="score" name="score" onChange={handleChange}/> /5
-                
-                
-                <label htmlFor="fullReview">Any thoughts?</label>
-                <input type="text" id="fullReview"  name="fullReview" onChange={handleChange}/>
-                
-                
-                
-            <button type="submit" onClick={onSubmit} style={{ textAlign: "center", width: "100px" }}>Submit Review</button>
-            
+            {/*<label htmlFor="score">Score: </label>*/}
+            {/*<input type="number" id="score" name="score" onChange={handleChange}/> /5*/}
+
+
+            {/*<label htmlFor="fullReview">Any thoughts?</label>*/}
+            {/*<input type="text" id="fullReview"  name="fullReview" onChange={handleChange}/>*/}
             <ul className="row p-2">
                 {reviews.map((review) => (
                     <li key={review.reviewedById}>{review.reviewedById}: {review.score}, {review.review} </li>
@@ -248,10 +284,7 @@ export const FullRecipe = () => {
             </ul>
 
             {(currRecipe.authorId === userID) && <button onClick={deleteRecipe} style={{ backgroundColor: "red", fontSize: "25px" }}>Delete</button>}
-            
-            
-            
-            
         </div>
+    </div>
     );
 };
