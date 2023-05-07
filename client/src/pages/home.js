@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { SavedRecipes } from "./saved-recipes";
 import { Container, Row, Col } from "react-grid-system";
 import clock from '../components/img/clock.svg';
+import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantMenu";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import {Rating} from "@mui/material";
 
 export const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -21,8 +24,8 @@ export const Home = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        //const response = await axios.get(`http://localhost:3001/recipes`);
-        const response = await axios.get("https://reciplease-j0mk.onrender.com/recipes")
+        const response = await axios.get(`http://localhost:3001/recipes`);
+        // const response = await axios.get("https://reciplease-j0mk.onrender.com/recipes")
         const temp = response.data;
         setRecipes(temp);
       } catch (err) {
@@ -40,8 +43,8 @@ export const Home = () => {
 
     const fetchSavedRecipe = async () => {
       try {
-        //const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
-        const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`);
+        const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
+        // const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`);
         console.log(response.data);
         pushToArray(response.data);
         setNumSaved(savedRecipes.length);
@@ -62,8 +65,8 @@ export const Home = () => {
       const id = userID;
       const recipe = recipeID;
 
-      //await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
-      await axios.put(`https://reciplease-j0mk.onrender.com/recipes/saveRecipe/${id}/${recipe}`);
+      await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
+      // await axios.put(`https://reciplease-j0mk.onrender.com/recipes/saveRecipe/${id}/${recipe}`);
       const temp = savedRecipes;
       temp.push(recipeID);
       setSavedRecipes(temp);
@@ -93,6 +96,7 @@ export const Home = () => {
       </div>
       <ul className="items">
         {recipes.map((recipe) => (
+
            <li key={recipe.id}>
             {/* {isRecipeSaved(recipe.id) && <h1> ALREADY SAVED</h1>} */}
             <div>
@@ -111,7 +115,19 @@ export const Home = () => {
             <img src={recipe.imageUrl} alt={recipe.name} />
             
             <h5><img className="clock" src={clock} alt="React Logo"/> {recipe.cookingTime} minutes</h5>
-            <p>{recipe.instructions}</p>
+           <Rating
+               sx={{
+                 ml: 2,
+                 fontSize: "3rem"
+               }}
+               name="read-only"
+               size="large"
+               value={recipe.avgScore}
+               readOnly
+               precision={0.25}
+               emptyIcon={<RestaurantOutlinedIcon fontSize="inherit" />}
+               icon={<RestaurantMenuIcon fontSize="inherit" />}
+           />
           </li>
           
         ))}

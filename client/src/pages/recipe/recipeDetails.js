@@ -14,10 +14,6 @@ function StarIcon(props) {
     return null;
 }
 
-StarIcon.propTypes = {
-    style: PropTypes.shape({opacity: PropTypes.number}),
-    fontSize: PropTypes.string
-};
 export const FullRecipe = () => {
     const navigate = useNavigate();
     const id = useParams().recipeId.toString();
@@ -65,6 +61,7 @@ export const FullRecipe = () => {
                 let tempAvgScore = recipe.data.avgScore;
                 setRecipe(recipe.data);
                 setIngredients(recipe.data.ingredients);
+
                 if (tempAvgScore === 0) {
                     setAvgScore("unrated");
                 } else {
@@ -91,6 +88,8 @@ export const FullRecipe = () => {
                         console.log("User Review: " + tempDataArray[i].review.toString());
                         setUserRating(tempDataArray[i].score);
                         setUserReview(tempDataArray[i].review);
+                        setCompleteReview({ ...completeReview, ['score']: tempDataArray[i].score });
+                        setCompleteReview({ ...completeReview, ['fullReview']: tempDataArray[i].review });
                         return;
                     }
                 }
@@ -173,7 +172,7 @@ export const FullRecipe = () => {
     <div className="recipes min-vw-100 w-80">
         <div className="container-fluid">
             <div className="row m-2 justify-content-center align-items-end d-sm-flex" style={{display: "table-row"}}>
-                <div className="ind-recipes mb-0 gap-0 px-3 py-3 mw-100 mh-100" style={{"width":"fit-content", display: "table-cell"}}>
+                <div className="ind-recipes mb-0 gap-0 px-3 py-3 mw-100 mh-100 pb-2" style={{"width":"fit-content", display: "table-cell"}}>
                     <div className="px-4">
                         <h1>{currRecipe.name}</h1>
                         <h3>Cooking Time: {currRecipe.cookingTime} minutes  |  Serves: {currRecipe.servings} {currRecipe.servings === 1 ? "Person" : "People"}</h3>
@@ -181,7 +180,7 @@ export const FullRecipe = () => {
 
                     </div>
                 </div>
-                <div className="ind-recipes gap-0 px-3 py-3 mw-100 mh-100" style={{"width":"fit-content", display: "table-cell"}}>
+                <div className="ind-recipes gap-0 px-3 py-3 mw-100 mh-100 pb-2" style={{"width":"fit-content", display: "table-cell"}}>
                     <div className="px-4 mh-100">
                         <div>
                             <Box
@@ -246,7 +245,7 @@ export const FullRecipe = () => {
                                             className="p-1"
                                         ></textarea>
                                     </Box>
-                                    <button type="submit" onClick={onSubmit} style={{ textAlign: "center", width: "fit-content"}} defaultValue={userReview}>Submit Review</button>
+                                    <button type="submit" className="mb-0" onClick={onSubmit} style={{ textAlign: "center", width: "fit-content"}} defaultValue={userReview}>Submit Review</button>
 
                                 </div>
                             )}
