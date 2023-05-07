@@ -7,7 +7,6 @@ import { SavedRecipes } from './pages/saved-recipes';
 import { Search } from './pages/search';
 import { Profile } from './pages/profile'
 import { FullRecipe } from './pages/recipe/recipeDetails';
-import {SearchRelated } from './pages/search-related';
 import { Navbar } from "./components/navbar";
 
 function App() {
@@ -23,7 +22,6 @@ function App() {
         <Route path="/search" element={<Search />} />
         <Route path="/profile" element={<Profile />} />
         <Route path='/recipe/:recipeId' element={<FullRecipe/>} />
-        <Route path="/search-related" element={<SearchRelated />} />
       </Routes>
     </Router> </div>
   );
