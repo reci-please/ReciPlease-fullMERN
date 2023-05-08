@@ -3,14 +3,24 @@ import axios from "axios";
 import { useGetUserID } from "../hooks/useGetUserID";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
+import Dropdown from "../components/dropdown";
 
 export const CreateRecipe = () => {
-  const port = process.env.PORT;
+  //const port = process.env.PORT;
 
   const [cookies] = useCookies(["access_token"]);
-  const userID = useGetUserID();
+  //const userID = useGetUserID();
+  const userID = window.localStorage.getItem("userID");
+  
 
   const navigate = useNavigate();
+
+
+  //const options = [
+  //  { value: "beginner", label: "beginner" },
+  //  { value: "intermediate", label: "intermediate" },
+  //  { value: "advanced", label: "advanced" }
+  //];
 
   const [recipe, setRecipe] = useState({
     name: "mole",
@@ -19,6 +29,7 @@ export const CreateRecipe = () => {
     imageUrl:
       "https://www.firstdayofhome.com/wp-content/uploads/2021/05/Chicken-Mole-Recipe-featureimg.jpg",
     cookingTime: 120,
+    skillLvl: "",
     authorId: userID,
     ingredients: [],
     quantities: [],
@@ -33,8 +44,6 @@ export const CreateRecipe = () => {
   const handleNumbers = (event) => {
     let name = event.target.name;
     let num = parseInt(event.target.value);
-    console.log(event.target.name);
-    console.log(num);
     setRecipe({ ...recipe, [name]: num });
   };
 
@@ -61,14 +70,14 @@ export const CreateRecipe = () => {
     quantities[idx] = value;
     setRecipe({ ...recipe, quantities });
 
-    console.log(recipe.quantities);
+    
   };
 
   const onSubmit = async (event) => {
     event.preventDefault();
     try {
       //await axios.post(`http://localhost:3001/recipes/${userID}`, recipe, { headers: { authorization:  cookies.access_token} });
-      //await axios.post(`http://localhost:${port}/recipes`, recipe);
+      // await axios.post(`http://localhost:3001/recipes`, recipe);
       await axios.post(`https://reciplease-j0mk.onrender.com/recipes`, recipe);
       alert("Recipe Created");
       navigate("/");
@@ -78,7 +87,7 @@ export const CreateRecipe = () => {
   };
 
   return (
-    <div class="login-box">
+    <div className="login-box">
       <h2>Make Your Own Recipe</h2>
       <form>
         <div className="user-box">
@@ -87,6 +96,7 @@ export const CreateRecipe = () => {
             name="name" onChange={handleChange} />
           <label htmlFor="name">Recipe Name</label>
         </div>
+        
 
         <div className="user-box">
           <input
@@ -167,6 +177,10 @@ export const CreateRecipe = () => {
           />
           <label htmlFor="cookingTime">Cooking Time (minutes)</label>
         </div>
+
+        
+        
+        
 
         {/* <button className="submit" type="submit" href="#">
            Create Recipe

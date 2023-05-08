@@ -6,6 +6,10 @@ import { Link } from 'react-router-dom';
 import { SavedRecipes } from "./saved-recipes";
 import { Container, Row, Col } from "react-grid-system";
 import clock from '../components/img/clock.svg';
+import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantMenu";
+import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
+import {Button, IconButton, Rating} from "@mui/material";
+import CasinoIcon from '@mui/icons-material/Casino';
 
 export const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -21,7 +25,7 @@ export const Home = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        //const response = await axios.get(`http://localhost:3001/recipes`);
+        // const response = await axios.get(`http://localhost:3001/recipes`);
         const response = await axios.get("https://reciplease-j0mk.onrender.com/recipes")
         const temp = response.data;
         setRecipes(temp);
@@ -40,7 +44,7 @@ export const Home = () => {
 
     const fetchSavedRecipe = async () => {
       try {
-        //const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
+        // const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
         const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`);
         console.log(response.data);
         pushToArray(response.data);
@@ -62,7 +66,7 @@ export const Home = () => {
       const id = userID;
       const recipe = recipeID;
 
-      //await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
+      // await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
       await axios.put(`https://reciplease-j0mk.onrender.com/recipes/saveRecipe/${id}/${recipe}`);
       const temp = savedRecipes;
       temp.push(recipeID);
@@ -72,6 +76,27 @@ export const Home = () => {
       console.error(err);
     }
   };
+
+  const randomRecipeRedirect = async () => {
+
+    try {
+
+      /**
+       * NEEDS TO BE IMPLIMENTED
+       * */
+      console.log("here");
+      // const recipeID = await axios.get(`http://localhost:3001/recipes/[insert new link]`);
+      //await axios.get(`https://reciplease-j0mk.onrender.com/recipes/[insert new link]`);
+
+      // let path = `http://localhost:3001/recipe/` + recipeID;
+      //let path = `https://reciplease-j0mk.onrender.com/recipe/` + recipeID;
+      //window.history.push(path);
+
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
 
   const isRecipeSaved = (id) => {
     let state = false;
@@ -91,8 +116,21 @@ export const Home = () => {
         <h1 className="header"> Recipes </h1>
         <h2 className="arrow"> → </h2>{" "}
       </div>
+      <div className="m-3 mb-0 mw-100 mh-100">
+
+
+        <IconButton
+            aria-label="random"
+            size="large"
+            onClick={() => randomRecipeRedirect()}
+        >
+          <CasinoIcon sx={{fontSize: "20px", marginRight: "0.5rem"}} />
+          Try your luck?
+        </IconButton>
+      </div>
       <ul className="items">
         {recipes.map((recipe) => (
+
            <li key={recipe.id}>
             {/* {isRecipeSaved(recipe.id) && <h1> ALREADY SAVED</h1>} */}
             <div>
@@ -110,8 +148,20 @@ export const Home = () => {
             <div className="instructions"></div>
             <img src={recipe.imageUrl} alt={recipe.name} />
             
-            <h5><img className="clock" src={clock} alt="React Logo"/> {recipe.cookingTime} minutes</h5>
-            <p>{recipe.instructions}</p>
+            <h5><img className="clock" src={clock} alt="clock"/> {recipe.cookingTime} minutes</h5>
+           <Rating
+               sx={{
+                 ml: 2,
+                 fontSize: "3rem"
+               }}
+               name="read-only"
+               size="large"
+               value={recipe.avgScore}
+               readOnly
+               precision={0.25}
+               emptyIcon={<RestaurantOutlinedIcon fontSize="inherit" />}
+               icon={<RestaurantMenuIcon fontSize="inherit" />}
+           />
           </li>
           
         ))}

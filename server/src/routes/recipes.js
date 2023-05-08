@@ -45,6 +45,35 @@ router.get("/recipeId/:id", async (req, res) => {
     }
 })
 
+//deletes recipes
+router.delete("/:id", async (req, res) => {
+    //id of recipe to be deleted
+    const id = req.params.id;
+    //const { ingredients, numIngredients } = req.body;
+
+    // deletes all relations that associate ingredients with recipe to be deleted
+    await prisma.ingredientsOnRecipes.deleteMany({
+        where: {
+            recipeId: {
+                contains: id,
+            }
+        }
+    });
+
+
+    // finally deletes the actual recipe from the database now that there is no more relations
+    await prisma.recipe.delete({
+        where: {
+            id: id,
+        },
+    });
+
+    
+    res.json({message: "success"});
+
+ });
+
+ // creates a recipe from scratch
 router.post("/", async (req, res) => {
     
     const {name, servings, instructions, imageUrl, cookingTime, authorId, ingredients, quantities, numIngredients} = req.body;
@@ -59,6 +88,9 @@ router.post("/", async (req, res) => {
                 imageUrl: imageUrl,
                 cookingTime: cookingTime,
                 skillLvl: "low",
+                avgScore: 0,
+                totalScore: 0,
+                numReview: 0,
                 authorId: authorId
             }           
         });
@@ -94,6 +126,9 @@ router.post("/", async (req, res) => {
     }
 });
 
+
+
+// saves a recipe to a user by creating a relation between the two
 router.put("/saveRecipe/:savedById/:recipeId", async (req, res) => {
     try {
         const connection = await prisma.savedOnUsers.create({
@@ -108,6 +143,8 @@ router.put("/saveRecipe/:savedById/:recipeId", async (req, res) => {
     }
 });
 
+
+// gets recipes saved by a particular user
 router.get("/savedRecipes/ids/:userID", async (req, res) => {
     try {
         const user = await prisma.savedOnUsers.findMany({
@@ -151,5 +188,136 @@ router.get("/savedRecipes/:userID", async (req, res) => {
         res.json(err);
     }
 });
+
+// CRUD for reviews
+
+router.post("/review", async (req, res) => {
+
+    const { reviewedById, recipeId, score, fullReview } = req.body;
+
+    try {
+
+        const recipe = await prisma.recipe.findUnique({
+            where: {
+                id: recipeId,
+            }
+        })
+        
+        const review = await prisma.recipeReviews.create({
+            data: {
+                reviewedById: reviewedById,
+                recipeId: recipeId,
+                score: score,
+                review: fullReview,
+            }
+        });
+
+        let newTotal = recipe.totalScore + score;
+        let newNumPeople = recipe.numReview + 1;
+
+        console.log(newTotal);
+        console.log(newNumPeople);
+
+        const newRecipe = await prisma.recipe.update({
+            where: {
+                id: recipeId,
+            }, 
+            data: {
+                totalScore: newTotal,
+                numReview: newNumPeople,
+                avgScore: (newTotal/newNumPeople),
+            }
+        })
+
+        console.log(newRecipe);
+
+        res.json({ message: "new review created" });
+    } catch (err) { 
+        res.json(err);
+    }
+
+});
+
+router.put("/review", async (req, res) => {
+    const { reviewedById, recipeId, score, fullReview } = req.body;
+
+    try {
+        const recipe = await prisma.recipe.findUnique({
+            where: {
+                id: recipeId,
+            }
+        })
+    
+        const oldReview = await prisma.recipeReviews.findUnique({
+            where: {
+                reviewedById_recipeId: {
+                    reviewedById: reviewedById,
+                    recipeId: recipeId,
+                }
+            }
+        })
+    
+        let newTotalScore = recipe.totalScore - oldReview.score + score;
+    
+        await prisma.recipe.update({
+            where: {
+                id: recipeId,
+            },
+            data: {
+                totalScore: newTotalScore,
+                avgScore: (newTotalScore/recipe.numReview),
+            }
+        })
+    
+        const review = await prisma.recipeReviews.update({
+            where: {
+                reviewedById_recipeId: {
+                    reviewedById: reviewedById,
+                    recipeId: recipeId,
+                }
+            }, data: {
+                score: score,
+                review: fullReview,
+            },
+        });
+
+        res.json({ message: "updated review" });
+    } catch (err) {
+        res.json(err);
+    }
+
+    
+
+
+})
+
+router.get("/review/:recipeID", async (req, res) => {
+    try {
+        const reviews = await prisma.recipeReviews.findMany({
+            where: { recipeId: req.params.recipeID, },
+            orderBy: {createdAt: 'desc'}
+        });
+
+        res.json(reviews);
+    } catch (err) {
+        res.json(err);
+    }
+})
+
+router.delete("/review", async (req, res) => {
+    try {
+        await prisma.recipeReviews.delete({
+            where: {
+                recipeId: "6e4a13c9-d161-4c86-85e2-8be4f2c06372",
+            }
+        });
+        res.json({ message: "deleted all reviews" })
+    } catch (err) {
+        res.json(err);
+    }
+});
+
+
+
 
 export { router as recipesRouter };

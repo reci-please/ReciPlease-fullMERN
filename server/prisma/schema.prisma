@@ -3,199 +3,79 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
-
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
 model User {
-  id String @id @default(uuid())
-  username String @unique
-  password String
-  skillLvl String
-  createdRecipes Recipe[]
-  savedRecipes SavedOnUsers[]
-  //savedRecipes Recipe[] @relation("saved")
+  id              String          @id @unique @default(uuid())
+  username        String          @unique
+  password        String
+  skillLvl        String
+  createdRecipes  Recipe[]
+  savedRecipes    SavedOnUsers[]
+  recipesReviewed RecipeReviews[]
 }
 
 model Recipe {
-  id String @id @default(uuid())
-  name String
-  servings Int
+  id           String                 @id @unique @default(uuid())
+  name         String
+  servings     Int
   instructions String
-  imageUrl String
-  cookingTime Int
-  skillLvl String
-  totalScore Float
-  numReview Int
+  imageUrl     String
+  cookingTime  Int
+  skillLvl     String
+  avgScore     Float
+  totalScore   Int
+  numReview    Int
+  authorId     String
+  ingredients  IngredientsOnRecipes[]
+  author       User                   @relation(fields: [authorId], references: [id])
+  savedBy      SavedOnUsers[]
+  reviewedBy   RecipeReviews[]
 
-
-  ingredients IngredientsOnRecipes[]
-  //ingredientQuantity Quantity[]
-  
-  author User @relation(fields: [authorId], references: [id])
   @@index([authorId])
-  authorId String
-
-  savedBy SavedOnUsers[]
- // savedBy User[] @relation("saved")
 }
 
 model Ingredient {
-  id String @id @unique
+  id                        String                 @id @unique
   recipesThatHaveIngredient IngredientsOnRecipes[]
 }
 
 model IngredientsOnRecipes {
-  recipe Recipe @relation(fields: [recipeId], references: [id])
-  recipeId String
-
-  ingredient Ingredient @relation(fields: [ingredientId], references: [id])
+  recipeId     String
   ingredientId String
-
-  quantity String
+  quantity     String
+  recipe       Recipe     @relation(fields: [recipeId], references: [id])
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
 
   @@id([recipeId, ingredientId])
-
   @@index([recipeId])
   @@index([ingredientId])
-  
 }
 
 model SavedOnUsers {
-  savedBy User @relation(fields: [savedById], references: [id])
   savedById String
-  
-  recipe Recipe @relation(fields: [recipeId], references: [id])
-  recipeId String
+  recipeId  String
+  savedBy   User   @relation(fields: [savedById], references: [id])
+  recipe    Recipe @relation(fields: [recipeId], references: [id])
 
   @@id([savedById, recipeId])
-
   @@index([savedById])
   @@index([recipeId])
 }
 
-//model Quantity {
-//  id String @id
-//  recipe Recipe @relation(fields: [recipeId], references: [id])
-//  @@index([recipeId])
-//  recipeId String
-//}
+model RecipeReviews {
+  createdAt    DateTime @default(now())
+  reviewedById String
+  recipeId     String
+  score        Int
+  review       String
+  reviewedBy   User     @relation(fields: [reviewedById], references: [username])
+  recipe       Recipe   @relation(fields: [recipeId], references: [id])
 
-
-//model Account {
-//  id                String  @id
-//  userId            String
-//  type              String
-//  provider          String
-//  providerAccountId String
-//  refresh_token     String?
-//  access_token      String?
-//  expires_at        Int?
-//  token_type        String?
-//  scope             String?
-//  id_token          String?
-//  session_state     String?
-//
-//  @@unique([provider, providerAccountId])
-//}
-//
-//model Example {
-//  id        String   @id
-//  createdAt DateTime @default(now())
-//  updatedAt DateTime
-//}
-//
-//model FilterTags {
-//  id                String  @id
-//  vegan             Boolean @default(false)
-//  vegetarian        Boolean @default(false)
-//  pescatarian       Boolean @default(false)
-//  kosher            Boolean @default(false)
-//  halal             Boolean @default(false)
-//  noLactose         Boolean @default(false)
-//  noGluten          Boolean @default(false)
-//  keto              Boolean @default(false)
-//  paleo             Boolean @default(false)
-//  dairyFree         Boolean @default(false)
-//  noNuts            Boolean @default(false)
-//  noTreeNuts        Boolean @default(false)
-//  noPeanuts         Boolean @default(false)
-//  noEggs            Boolean @default(false)
-//  noFishOrShellfish Boolean @default(false)
-//  recipeId          String
-//  userId            String?
-//
-//  @@index([vegan, vegetarian, pescatarian, kosher, halal, noEggs, noFishOrShellfish, noGluten, noLactose, noNuts, noPeanuts, noTreeNuts, paleo, dairyFree, keto])
-//}
-//
-//model Ingredient {
-//  id            String @id
-//  name          String
-//  quantityInt   Int
-//  quatityString String
-//  userId        String
-//}
-//
-//model Recipe {
-//  id         String @id
-//  name       String
-//  time       Int
-//  difficulty Float
-//  avgRating  Float
-//  authorID   String
-//
-//  @@index([authorID, time, avgRating, difficulty])
-//}
-//
-//model Session {
-//  id           String   @id
-//  sessionToken String   @unique
-//  userId       String
-//  expires      DateTime
-//}
-//
-//model User {
-//  id            String    @id
-//  name          String?
-//  email         String?   @unique
-//  emailVerified DateTime?
-//  image         String?
-//}
-//
-//model VerificationToken {
-//  identifier String
-//  token      String   @unique
-//  expires    DateTime
-//
-//  @@unique([identifier, token])
-//}
-//
-//model IngredientToRecipe {
-//  A String
-//  B String
-//
-//  @@unique([A, B], map: "_IngredientToRecipe_AB_unique")
-//  @@index([B], map: "_IngredientToRecipe_B_index")
-//  @@map("_IngredientToRecipe")
-//}
-//
-//model IngredientToUser {
-//  A String
-//  B String
-//
-//  @@unique([A, B], map: "_IngredientToUser_AB_unique")
-//  @@index([B], map: "_IngredientToUser_B_index")
-//  @@map("_IngredientToUser")
-//}
-//
-//model liked {
-//  A String
-//  B String
-//
-//  @@unique([A, B], map: "_liked_AB_unique")
-//  @@index([B], map: "_liked_B_index")
-//  @@map("_liked")
-//}
-//
+  @@id([reviewedById, recipeId])
+  @@index([reviewedById])
+  @@index([recipeId])
+}

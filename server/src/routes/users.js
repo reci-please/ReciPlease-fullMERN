@@ -23,15 +23,16 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       username: username,
       password: hashedPassword,
       skillLvl: "low",
       }
     });
-
-    res.json({ message: "User registered successfully" });
+  
+  const token = jwt.sign({ id: user.id }, "secret");
+  res.json({ token, userID: user.id, userName: user.username });
   
 });
 
@@ -59,7 +60,7 @@ router.post("/login", async (req, res) => {
       .json({ message: "Username or password is incorrect" });
   }
   const token = jwt.sign({ id: user.id }, "secret");
-  res.json({ token, userID: user.id });
+  res.json({ token, userID: user.id, userName: user.username });
 });
 
 export { router as userRouter };
