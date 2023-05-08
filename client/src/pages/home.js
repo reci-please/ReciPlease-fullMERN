@@ -86,11 +86,11 @@ export const Home = () => {
        * */
       console.log("here");
       // const recipeID = await axios.get(`http://localhost:3001/recipes/[insert new link]`);
-      await axios.get(`https://reciplease-j0mk.onrender.com/recipes/[insert new link]`);
+      //await axios.get(`https://reciplease-j0mk.onrender.com/recipes/[insert new link]`);
 
       // let path = `http://localhost:3001/recipe/` + recipeID;
-      let path = `https://reciplease-j0mk.onrender.com/recipe/` + recipeID;
-      window.history.push(path);
+      //let path = `https://reciplease-j0mk.onrender.com/recipe/` + recipeID;
+      //window.history.push(path);
 
     } catch (err) {
       console.error(err);
