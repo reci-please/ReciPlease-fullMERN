@@ -80,7 +80,13 @@ export const FullRecipe = () => {
             try {
                 // const response = await axios.get(`http://localhost:3001/recipes/review/${id}`);
                 const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/review/${id}`);
-                let tempDataArray = response.data;
+                //let tempDataArray = response.data;
+                let tempDataArray = [];
+
+                for (let i = 0; i < response.data.length; i++) {
+                    tempDataArray.push(response.data[i]);
+                }
+                
                 setReviews(tempDataArray);
 
                 for (let i = 0; i < tempDataArray.length; i++) {
