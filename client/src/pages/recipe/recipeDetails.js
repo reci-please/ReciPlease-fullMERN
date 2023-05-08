@@ -170,8 +170,9 @@ export const FullRecipe = () => {
                 alert("review updated");
             }
 
-            window.location.reload();
-
+            //window.history.pushState(`/recipe/${id}`);
+            //window.location.reload();
+            navigate("/");
 
         } catch (err) { 
             console.error(err);

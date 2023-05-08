@@ -119,14 +119,14 @@ export const Home = () => {
       <div className="m-3 mb-0 mw-100 mh-100">
 
 
-        <IconButton
+        {/* <IconButton
             aria-label="random"
             size="large"
             onClick={() => randomRecipeRedirect()}
         >
           <CasinoIcon sx={{fontSize: "20px", marginRight: "0.5rem"}} />
           Try your luck?
-        </IconButton>
+        </IconButton> */}
       </div>
       <ul className="items">
         {recipes.map((recipe) => (
