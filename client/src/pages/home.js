@@ -8,7 +8,8 @@ import { Container, Row, Col } from "react-grid-system";
 import clock from '../components/img/clock.svg';
 import RestaurantOutlinedIcon from "@mui/icons-material/RestaurantMenu";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
-import {Rating} from "@mui/material";
+import {Button, IconButton, Rating} from "@mui/material";
+import CasinoIcon from '@mui/icons-material/Casino';
 
 export const Home = () => {
   const [recipes, setRecipes] = useState([]);
@@ -76,6 +77,23 @@ export const Home = () => {
     }
   };
 
+  const randomRecipeRedirect = async () => {
+
+    try {
+      console.log("here");
+      const recipeID = await axios.get(`http://localhost:3001/recipes/[insert new link]`);
+      // await axios.get(`https://reciplease-j0mk.onrender.com/recipes/[insert new link]`);
+
+      let path = `http://localhost:3001/recipe/` + recipeID;
+      // let path = `http://reciplease-j0mk.onrender.com/recipe/` + recipeID;
+      window.history.push(path);
+
+    } catch (err) {
+      console.error(err);
+    }
+
+  }
+
   const isRecipeSaved = (id) => {
     let state = false;
     for (let i = 0; i < numSaved; i++) {
@@ -93,6 +111,18 @@ export const Home = () => {
       <div className="buffer">
         <h1 className="header"> Recipes </h1>
         <h2 className="arrow"> → </h2>{" "}
+      </div>
+      <div className="m-3 mb-0 mw-100 mh-100">
+
+
+        <IconButton
+            aria-label="random"
+            size="large"
+            onClick={() => randomRecipeRedirect()}
+        >
+          <CasinoIcon sx={{fontSize: "20px", marginRight: "0.5rem"}} />
+          Try your luck?
+        </IconButton>
       </div>
       <ul className="items">
         {recipes.map((recipe) => (
