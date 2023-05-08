@@ -64,7 +64,7 @@ export const Search = () => {
     const onSubmitRelated = async () => {
         // event.preventDefault();
         recipes.length = 0;
-        console.log("Here 1");
+        //console.log("Here 1");
         try {
         //    await axios.post("http://localhost:3001/search/related", {formData})
           //      .then(response => setRecipes(response.data));
