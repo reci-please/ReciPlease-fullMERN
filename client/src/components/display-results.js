@@ -1,20 +1,34 @@
 import React, {useState} from "react";
 
 function DisplayResults({recipes}) {
-
+    let failed = false;
+    if (recipes === undefined || recipes === null) {
+        failed = true;
+    } else if (!Array.isArray(recipes)) {     
+        failed = true;
+    } else if (Array.isArray(recipes) && recipes.length === 0) {
+        console.log("recipes is empty");
+        failed = true;
+    }
+    if (failed) {
+        return (
+            <div>
+                <div className="q-box__question recipes">   
+                    <h5>No recipes found. <br></br><br></br>
+                    Would you like to perform a near-match search?</h5>          
+                </div>
+            </div>
+        )
+    }
+    //else
     return (
         <div>
             <div className="q-box__question recipes">
-                {
-                recipes.length === 0 ? 
-                <h5>No recipes found. <br></br><br></br>
-                Would you like to perform a near-match search?</h5> : ""
-                }
                 <ul className="items">
                     {recipes.map((recipe) => (
                         <li key={recipe.id}>
-                            <h3>{recipe.name}</h3>
-                            <img src={recipe.imageUrl} alt={recipe.name}/>
+                        <h3>{recipe.name.toLocaleLowerCase().replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                        <img src={recipe.imageUrl} alt={recipe.name}/>
                             <p>{recipe.servings} {recipe.servings === 1 ? 'Serving' : 'Servings'} </p>
                             <p>Cooking Time: {recipe.cookingTime} minutes</p>
                             <p>Instructions: {recipe.instructions}</p>
