@@ -53,8 +53,8 @@ export const FullRecipe = () => {
     useEffect(() => {
         const fetchRecipe = async () => {
             try {
-                //const recipe = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/recipeId/${id}`);
-                const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
+                const recipe = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/recipeId/${id}`);
+                // const recipe = await axios.get(`http://localhost:3001/recipes/recipeId/${id}`);
 
                 
                 //console.log(recipe.data);
@@ -78,7 +78,8 @@ export const FullRecipe = () => {
 
         const fetchReviews = async () => {
             try {
-                const response = await axios.get(`http://localhost:3001/recipes/review/${id}`);
+                // const response = await axios.get(`http://localhost:3001/recipes/review/${id}`);
+                const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/review/${id}`);
                 let tempDataArray = response.data;
                 setReviews(tempDataArray);
 
@@ -118,7 +119,8 @@ export const FullRecipe = () => {
 
             console.log("button activated");
             //console.log(relationsDelete);
-            await axios.delete(`http://localhost:3001/recipes/${id}`);
+            // await axios.delete(`http://localhost:3001/recipes/${id}`);
+            await axios.delete(`https://reciplease-j0mk.onrender.com/recipes/${id}`);
             navigate("/");
             
         } catch (err) {
@@ -153,10 +155,12 @@ export const FullRecipe = () => {
             }
 
             if (!hasReview) {
-                await axios.post("http://localhost:3001/recipes/review", completeReview);
+                // await axios.post("http://localhost:3001/recipes/review", completeReview);
+                await axios.post("https://reciplease-j0mk.onrender.com/recipes/review", completeReview);
                 alert("review created");
             } else {
-                await axios.put("http://localhost:3001/recipes/review", completeReview);
+                // await axios.put("http://localhost:3001/recipes/review", completeReview);
+                await axios.put("https://reciplease-j0mk.onrender.com/recipes/review", completeReview);
                 alert("review updated");
             }
 

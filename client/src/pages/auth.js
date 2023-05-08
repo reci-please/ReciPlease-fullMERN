@@ -60,15 +60,15 @@ const Login = () => {
       if (username.length === 0 || password.length === 0) {
         alert("please fill in password and login");
       } else {
-        const response = await axios.post(`http://localhost:3001/auth/login`, {
-        username,
-        password,
-      });
+      //   const response = await axios.post(`http://localhost:3001/auth/login`, {
+      //   username,
+      //   password,
+      // });
 
-      //const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/login`, {
-      // username,
-      // password,
-      //});
+      const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/login`, {
+      username,
+      password,
+      });
 
       setCookies("access_token", response.data.token);
       window.localStorage.setItem("userID", response.data.userID);
@@ -90,15 +90,15 @@ const Login = () => {
         alert("please fill in password and login");
       } else {
 
-        const response = await axios.post(`http://localhost:3001/auth/register`, {
-        username,
-        password,
-      });
+      //   const response = await axios.post(`http://localhost:3001/auth/register`, {
+      //   username,
+      //   password,
+      // });
 
-      //const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/register`, {
-      //  username,
-      //  password,
-      //});
+      const response = await axios.post(`https://reciplease-j0mk.onrender.com/auth/register`, {
+       username,
+       password,
+      });
 
 
       setCookies("access_token", response.data.token);

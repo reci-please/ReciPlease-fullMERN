@@ -25,8 +25,8 @@ export const Home = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/recipes`);
-        // const response = await axios.get("https://reciplease-j0mk.onrender.com/recipes")
+        // const response = await axios.get(`http://localhost:3001/recipes`);
+        const response = await axios.get("https://reciplease-j0mk.onrender.com/recipes")
         const temp = response.data;
         setRecipes(temp);
       } catch (err) {
@@ -44,8 +44,8 @@ export const Home = () => {
 
     const fetchSavedRecipe = async () => {
       try {
-        const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
-        // const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`);
+        // const response = await axios.get(`http://localhost:3001/recipes/savedRecipes/ids/${userID}`);
+        const response = await axios.get(`https://reciplease-j0mk.onrender.com/recipes/savedRecipes/ids/${userID}`);
         console.log(response.data);
         pushToArray(response.data);
         setNumSaved(savedRecipes.length);
@@ -66,8 +66,8 @@ export const Home = () => {
       const id = userID;
       const recipe = recipeID;
 
-      await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
-      // await axios.put(`https://reciplease-j0mk.onrender.com/recipes/saveRecipe/${id}/${recipe}`);
+      // await axios.put(`http://localhost:3001/recipes/saveRecipe/${id}/${recipe}`);
+      await axios.put(`https://reciplease-j0mk.onrender.com/recipes/saveRecipe/${id}/${recipe}`);
       const temp = savedRecipes;
       temp.push(recipeID);
       setSavedRecipes(temp);
@@ -80,12 +80,16 @@ export const Home = () => {
   const randomRecipeRedirect = async () => {
 
     try {
-      console.log("here");
-      const recipeID = await axios.get(`http://localhost:3001/recipes/[insert new link]`);
-      // await axios.get(`https://reciplease-j0mk.onrender.com/recipes/[insert new link]`);
 
-      let path = `http://localhost:3001/recipe/` + recipeID;
-      // let path = `http://reciplease-j0mk.onrender.com/recipe/` + recipeID;
+      /**
+       * NEEDS TO BE IMPLIMENTED
+       * */
+      console.log("here");
+      // const recipeID = await axios.get(`http://localhost:3001/recipes/[insert new link]`);
+      await axios.get(`https://reciplease-j0mk.onrender.com/recipes/[insert new link]`);
+
+      // let path = `http://localhost:3001/recipe/` + recipeID;
+      let path = `https://reciplease-j0mk.onrender.com/recipe/` + recipeID;
       window.history.push(path);
 
     } catch (err) {
