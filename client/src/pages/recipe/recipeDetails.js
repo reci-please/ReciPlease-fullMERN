@@ -269,7 +269,7 @@ export const FullRecipe = () => {
             <div className="row m-2 justify-content-center">
                 <div className="recipes ind-recipes-instructions m-sm-1 col-sm-7 p-2 35">
                         <h3 className="align-content-center">Instructions:</h3>
-                        <h5 style={{"text-align":"left", "padding":"0.2rem"}}>{currRecipe.instructions}</h5>
+                        <h5 style={{"text-align":"left", "padding":"0.2rem", "white-space": "pre-wrap"}}>{currRecipe.instructions}</h5>
                 </div>
                 <div className="recipes ind-recipes-instructions m-sm-1 col-sm-4 p-2">
                     <div className="row p-2">
